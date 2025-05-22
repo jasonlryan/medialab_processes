@@ -1,0 +1,486 @@
+{
+  "id": "Process_ChannelSelection",
+  "name": "Channel Selection Process",
+  "description": "Process for evaluating, analyzing, and implementing campaign briefs for channel selection",
+  "type": "process",
+  "lanes": [
+    {
+      "id": "Lane_ClientTeam",
+      "name": "Client Team",
+      "elements": [
+        {
+          "id": "StartEvent_ProcessStart",
+          "name": "Process Initiated",
+          "type": "startEvent",
+          "description": "Starting point when a client brief is received"
+        },
+        {
+          "id": "Task_SendBriefingTemplate",
+          "name": "Send briefing template to client",
+          "type": "task",
+          "description": "Initiate the process by sending the briefing template to the client"
+        },
+        {
+          "id": "Task_ClassifyBrief",
+          "name": "Brief Classification",
+          "type": "task",
+          "description": "Classify brief as Optimise / Innovate / Transform based on complexity, ambition and budget",
+          "tool": "Powerhouse program"
+        },
+        {
+          "id": "Task_SetSLA",
+          "name": "Planning Process",
+          "type": "task",
+          "description": "Set out SLA, format for response and Gantt chart for response timeline detailing key milestones and R&R"
+        },
+        {
+          "id": "Task_ArrangeKickoff",
+          "name": "Arrange Kickoff Meeting",
+          "type": "task",
+          "description": "Arrange a kick off meeting with key team members (inc Specialists) to discuss brief, Gantt chart & R&R for response"
+        },
+        {
+          "id": "Task_CollateQuestions",
+          "name": "Collate Initial Questions",
+          "type": "task",
+          "description": "Collate initial questions from the key team to address any gaps or ambiguities in the brief and seek clarification from clients"
+        },
+        {
+          "id": "Task_ShareAnswers",
+          "name": "Share Answers",
+          "type": "task",
+          "description": "Share answers to initial questions from client with key team"
+        },
+        {
+          "id": "Task_PastPerformance",
+          "name": "Past Performance Analysis",
+          "type": "task",
+          "description": "Investigate any relevant past performance using Apollo / PCAs / client documentation and summarise key points",
+          "tool": "Apollo"
+        },
+        {
+          "id": "Task_CompetitorAnalysis",
+          "name": "Competitor Analysis",
+          "type": "task",
+          "description": "Investigate any relevant competitor campaigns using Nielsen AdIntel / SimilarWeb and summarise key points",
+          "tool": "Nielsen AdIntel / SimilarWeb"
+        },
+        {
+          "id": "Task_CategoryTrends",
+          "name": "Category Trends Analysis",
+          "type": "task",
+          "description": "Investigate any relevant category trends using Mintel / WARC / Google and summarise key points",
+          "tool": "Mintel / WARC / Google"
+        },
+        {
+          "id": "Task_BrandHealth",
+          "name": "Brand Health Analysis",
+          "type": "task",
+          "description": "Investigate any relevant brand health trends using YouGov / client documentation and summarise key points",
+          "tool": "YouGov / Client Data"
+        },
+        {
+          "id": "Task_AudienceProfile",
+          "name": "Audience Profile Development",
+          "type": "task",
+          "description": "Develop a profile of the target audience(s) using YouGov Profiles and develop pen portrait and summary of lifestyle and media consumption",
+          "tool": "YouGov Profiles"
+        },
+        {
+          "id": "Task_AudienceTrends",
+          "name": "Audience Trends Analysis",
+          "type": "task",
+          "description": "Investigate any relevant audience trends using Mintel / WARC / Google and summarise key points",
+          "tool": "Mintel / WARC / Google"
+        },
+        {
+          "id": "Task_SummarizeChannels",
+          "name": "Channel Summarization",
+          "type": "task",
+          "description": "Summarise candidate channels based on Strategy using Touchpoints / BARB to create an indicative channel plan",
+          "tool": "Touchpoints / BARB"
+        },
+        {
+          "id": "Task_BriefSpecialists",
+          "name": "Brief Specialists",
+          "type": "task",
+          "description": "Brief Specialists (inc Mediabridge/Whistl/Radioworks) on summary of previous stages to build out detailed channel plans and supporting rationale slides"
+        },
+        {
+          "id": "Task_CreateScorecard",
+          "name": "Create Channel Scorecard",
+          "type": "task",
+          "description": "Assess recommendations from Specialists strategic framework and create a channel scorecard slide using Touchpoints / BARB / Platform Data",
+          "tool": "Touchpoints / BARB / Platform Data"
+        },
+        {
+          "id": "Task_DevelopTestingRoadmap",
+          "name": "Develop Testing Roadmap",
+          "type": "task",
+          "description": "Develop testing roadmap from strategic framework inc hypotheses, channel, KPI(s), phasing and measurement"
+        },
+        {
+          "id": "Task_BriefMediaOwners",
+          "name": "Brief Media Owners",
+          "type": "task",
+          "description": "Assess recommendations from Specialists and agree R&R for any further details needed from media owners to complete plans and rationale"
+        },
+        {
+          "id": "Task_PresentResponse",
+          "name": "Present Response",
+          "type": "task",
+          "description": "Present response to brief and full media recommendation (PowerPoint) to client"
+        },
+        {
+          "id": "Task_PopulateMediaPlan",
+          "name": "Populate Media Plan",
+          "type": "task",
+          "description": "Populate detailed media plan, incorporating any feedback from the client to the response to brief"
+        },
+        {
+          "id": "Task_RequestSpecs",
+          "name": "Request Specifications",
+          "type": "task",
+          "description": "Request specs needed for full asset/placement list inc supply deadline for campaign"
+        },
+        {
+          "id": "Task_CollateSpecs",
+          "name": "Collate Specifications",
+          "type": "task",
+          "description": "Collate specs needed for full asset/placement list inc supply deadlines for campaign and share with client and/or creative agency to ensure it is achievable"
+        },
+        {
+          "id": "Task_ShareMediaPlan",
+          "name": "Share Media Plan",
+          "type": "task",
+          "description": "Share detailed media plan with client for written approval and PO (if a PO client)",
+          "tool": "Apollo"
+        },
+        {
+          "id": "Task_ConfirmApproval",
+          "name": "Confirm Approval",
+          "type": "task",
+          "description": "Confirm plan approval and receipt of PO to wider team inc Specialists and Mediabridge/Whistl/Radioworks to move towards activation"
+        },
+        {
+          "id": "EndEvent_ProcessEnd",
+          "name": "Process Complete",
+          "type": "endEvent",
+          "description": "Channel selection process is complete and ready for activation"
+        }
+      ]
+    },
+    {
+      "id": "Lane_Strategist",
+      "name": "Strategist",
+      "elements": [
+        {
+          "id": "Task_DevelopStrategy",
+          "name": "Strategic Framework Development",
+          "type": "task",
+          "description": "Develop strategic framework that builds on Diagnosis & Audience Insight phases, addresses the objectives in the brief"
+        },
+        {
+          "id": "Task_AgreeMediaRoles",
+          "name": "Media Role Agreement",
+          "type": "task",
+          "description": "Agree the role/s for media based on strategic framework"
+        }
+      ]
+    },
+    {
+      "id": "Lane_ApolloTeam",
+      "name": "Apollo Team",
+      "elements": [
+        {
+          "id": "Task_ConsultApollo",
+          "name": "Consult Apollo on Testing",
+          "type": "task",
+          "description": "Consult Apollo on testing roadmap to ensure it is achievable, and any associated costs/implications"
+        },
+        {
+          "id": "Task_DevelopEvaluationFramework",
+          "name": "Develop Evaluation Framework",
+          "type": "task",
+          "description": "Develop evaluation framework for assessing performance of campaign, inc projections/forecasts from Apollo (where modelling is available)",
+          "tool": "Apollo"
+        },
+        {
+          "id": "Task_SavePO",
+          "name": "Save PO to Sharepoint",
+          "type": "task",
+          "description": "Save PO to Sharepoint and add details to PO tracker once received (if a PO client)"
+        }
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "id": "Phase_Initiation",
+      "name": "Initiation",
+      "type": "phase",
+      "description": "Initial steps to set up the channel selection process",
+      "elements": [
+        {
+          "id": "StartEvent_ProcessStart",
+          "name": "Process Initiated",
+          "type": "startEvent",
+          "reference": true
+        },
+        {
+          "id": "Task_SendBriefingTemplate",
+          "name": "Send briefing template to client",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_ClassifyBrief",
+          "name": "Brief Classification",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_SetSLA",
+          "name": "Planning Process",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_ArrangeKickoff",
+          "name": "Arrange Kickoff Meeting",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_CollateQuestions",
+          "name": "Collate Initial Questions",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_ShareAnswers",
+          "name": "Share Answers",
+          "type": "task",
+          "reference": true
+        }
+      ]
+    },
+    {
+      "id": "Phase_Diagnosis",
+      "name": "Diagnosis",
+      "type": "phase",
+      "description": "Analyze past performance, competitors, category trends, and brand health",
+      "elements": [
+        {
+          "id": "Task_PastPerformance",
+          "name": "Past Performance Analysis",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_CompetitorAnalysis",
+          "name": "Competitor Analysis",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_CategoryTrends",
+          "name": "Category Trends Analysis",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_BrandHealth",
+          "name": "Brand Health Analysis",
+          "type": "task",
+          "reference": true
+        }
+      ]
+    },
+    {
+      "id": "Phase_AudienceInsight",
+      "name": "Audience & Insight",
+      "type": "phase",
+      "description": "Develop audience profiles and investigate audience trends",
+      "elements": [
+        {
+          "id": "Task_AudienceProfile",
+          "name": "Audience Profile Development",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_AudienceTrends",
+          "name": "Audience Trends Analysis",
+          "type": "task",
+          "reference": true
+        }
+      ]
+    },
+    {
+      "id": "Phase_Strategy",
+      "name": "Strategy",
+      "type": "phase",
+      "description": "Develop strategic framework and agree on media roles",
+      "elements": [
+        {
+          "id": "Task_DevelopStrategy",
+          "name": "Strategic Framework Development",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_AgreeMediaRoles",
+          "name": "Media Role Agreement",
+          "type": "task",
+          "reference": true
+        }
+      ]
+    },
+    {
+      "id": "Phase_Execution",
+      "name": "Execution",
+      "type": "phase",
+      "description": "Develop channel plans, scorecard, testing roadmap, and brief media owners",
+      "elements": [
+        {
+          "id": "Task_SummarizeChannels",
+          "name": "Channel Summarization",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_BriefSpecialists",
+          "name": "Brief Specialists",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_CreateScorecard",
+          "name": "Create Channel Scorecard",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_DevelopTestingRoadmap",
+          "name": "Develop Testing Roadmap",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_ConsultApollo",
+          "name": "Consult Apollo on Testing",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_BriefMediaOwners",
+          "name": "Brief Media Owners",
+          "type": "task",
+          "reference": true
+        }
+      ]
+    },
+    {
+      "id": "Phase_Evaluation",
+      "name": "Evaluation",
+      "type": "phase",
+      "description": "Develop evaluation framework for assessing performance",
+      "elements": [
+        {
+          "id": "Task_DevelopEvaluationFramework",
+          "name": "Develop Evaluation Framework",
+          "type": "task",
+          "reference": true
+        }
+      ]
+    },
+    {
+      "id": "Phase_Finalization",
+      "name": "Finalization",
+      "type": "phase",
+      "description": "Finalization of the channel selection process",
+      "elements": [
+        {
+          "id": "Task_PresentResponse",
+          "name": "Present Response",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_PopulateMediaPlan",
+          "name": "Populate Media Plan",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_RequestSpecs",
+          "name": "Request Specifications",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_CollateSpecs",
+          "name": "Collate Specifications",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_ShareMediaPlan",
+          "name": "Share Media Plan",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_SavePO",
+          "name": "Save PO to Sharepoint",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_ConfirmApproval",
+          "name": "Confirm Approval",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "EndEvent_ProcessEnd",
+          "name": "Process Complete",
+          "type": "endEvent",
+          "reference": true
+        }
+      ]
+    }
+  ],
+  "flows": [
+    { "id": "Flow_Start_SendBrief", "sourceRef": "StartEvent_ProcessStart", "targetRef": "Task_SendBriefingTemplate" },
+    { "id": "Flow_SendBrief_ClassifyBrief", "sourceRef": "Task_SendBriefingTemplate", "targetRef": "Task_ClassifyBrief" },
+    { "id": "Flow_ClassifyBrief_SetSLA", "sourceRef": "Task_ClassifyBrief", "targetRef": "Task_SetSLA" },
+    { "id": "Flow_SetSLA_ArrangeKickoff", "sourceRef": "Task_SetSLA", "targetRef": "Task_ArrangeKickoff" },
+    { "id": "Flow_ArrangeKickoff_CollateQuestions", "sourceRef": "Task_ArrangeKickoff", "targetRef": "Task_CollateQuestions" },
+    { "id": "Flow_CollateQuestions_ShareAnswers", "sourceRef": "Task_CollateQuestions", "targetRef": "Task_ShareAnswers" },
+    { "id": "Flow_ShareAnswers_PastPerformance", "sourceRef": "Task_ShareAnswers", "targetRef": "Task_PastPerformance" },
+    { "id": "Flow_PastPerformance_CompetitorAnalysis", "sourceRef": "Task_PastPerformance", "targetRef": "Task_CompetitorAnalysis" },
+    { "id": "Flow_CompetitorAnalysis_CategoryTrends", "sourceRef": "Task_CompetitorAnalysis", "targetRef": "Task_CategoryTrends" },
+    { "id": "Flow_CategoryTrends_BrandHealth", "sourceRef": "Task_CategoryTrends", "targetRef": "Task_BrandHealth" },
+    { "id": "Flow_BrandHealth_AudienceProfile", "sourceRef": "Task_BrandHealth", "targetRef": "Task_AudienceProfile" },
+    { "id": "Flow_AudienceProfile_AudienceTrends", "sourceRef": "Task_AudienceProfile", "targetRef": "Task_AudienceTrends" },
+    { "id": "Flow_AudienceTrends_DevelopStrategy", "sourceRef": "Task_AudienceTrends", "targetRef": "Task_DevelopStrategy" },
+    { "id": "Flow_DevelopStrategy_AgreeMediaRoles", "sourceRef": "Task_DevelopStrategy", "targetRef": "Task_AgreeMediaRoles" },
+    { "id": "Flow_AgreeMediaRoles_SummarizeChannels", "sourceRef": "Task_AgreeMediaRoles", "targetRef": "Task_SummarizeChannels" },
+    { "id": "Flow_SummarizeChannels_BriefSpecialists", "sourceRef": "Task_SummarizeChannels", "targetRef": "Task_BriefSpecialists" },
+    { "id": "Flow_BriefSpecialists_CreateScorecard", "sourceRef": "Task_BriefSpecialists", "targetRef": "Task_CreateScorecard" },
+    { "id": "Flow_CreateScorecard_DevelopTestingRoadmap", "sourceRef": "Task_CreateScorecard", "targetRef": "Task_DevelopTestingRoadmap" },
+    { "id": "Flow_DevelopTestingRoadmap_ConsultApollo", "sourceRef": "Task_DevelopTestingRoadmap", "targetRef": "Task_ConsultApollo" },
+    { "id": "Flow_ConsultApollo_BriefMediaOwners", "sourceRef": "Task_ConsultApollo", "targetRef": "Task_BriefMediaOwners" },
+    { "id": "Flow_BriefMediaOwners_DevelopEvaluationFramework", "sourceRef": "Task_BriefMediaOwners", "targetRef": "Task_DevelopEvaluationFramework" },
+    { "id": "Flow_DevelopEvaluationFramework_PresentResponse", "sourceRef": "Task_DevelopEvaluationFramework", "targetRef": "Task_PresentResponse" },
+    { "id": "Flow_PresentResponse_PopulateMediaPlan", "sourceRef": "Task_PresentResponse", "targetRef": "Task_PopulateMediaPlan" },
+    { "id": "Flow_PopulateMediaPlan_RequestSpecs", "sourceRef": "Task_PopulateMediaPlan", "targetRef": "Task_RequestSpecs" },
+    { "id": "Flow_RequestSpecs_CollateSpecs", "sourceRef": "Task_RequestSpecs", "targetRef": "Task_CollateSpecs" },
+    { "id": "Flow_CollateSpecs_ShareMediaPlan", "sourceRef": "Task_CollateSpecs", "targetRef": "Task_ShareMediaPlan" },
+    { "id": "Flow_ShareMediaPlan_SavePO", "sourceRef": "Task_ShareMediaPlan", "targetRef": "Task_SavePO" },
+    { "id": "Flow_SavePO_ConfirmApproval", "sourceRef": "Task_SavePO", "targetRef": "Task_ConfirmApproval" },
+    { "id": "Flow_ConfirmApproval_End", "sourceRef": "Task_ConfirmApproval", "targetRef": "EndEvent_ProcessEnd" }
+    ]
+} 

@@ -21,8 +21,10 @@
     
     #canvas {
       height: calc(100% - 60px); /* Adjusted for header */
+      width: 70%; /* Make room for outline panel */
       margin: 0;
       padding: 0;
+      float: left;
     }
     
     .app-header {
@@ -123,6 +125,277 @@
       padding: 10px;
       text-align: center;
     }
+
+    /* Outline Panel Styles */
+    #outline-panel {
+      float: right;
+      width: 30%;
+      height: calc(100% - 60px); /* Adjusted for header */
+      overflow-y: auto;
+      background-color: #f5f5f5;
+      border-left: 1px solid #ddd;
+      box-sizing: border-box;
+      padding: 15px;
+    }
+
+    #outline-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #0A1721;
+      border-bottom: 2px solid #13A6EA;
+      padding-bottom: 5px;
+    }
+
+    #outline {
+      font-size: 14px;
+    }
+
+    #outline ul {
+      list-style-type: none;
+      padding-left: 20px;
+    }
+
+    #outline > ul {
+      padding-left: 0;
+    }
+
+    #outline li {
+      margin: 8px 0;
+      padding: 5px;
+      border-radius: 4px;
+      transition: background-color 0.2s;
+    }
+
+    #outline li:hover {
+      background-color: #e0e0e0;
+    }
+
+    .element-type {
+      font-size: 12px;
+      color: #666;
+      margin-left: 5px;
+    }
+
+    .subprocess-header {
+      font-weight: bold;
+      color: #13A6EA;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .subprocess-header:before {
+      content: '▶';
+      display: inline-block;
+      margin-right: 5px;
+      transition: transform 0.2s;
+    }
+
+    .subprocess-header.expanded:before {
+      transform: rotate(90deg);
+    }
+
+    .subprocess-children {
+      display: none;
+    }
+
+    .subprocess-children.visible {
+      display: block;
+    }
+
+    .task-element {
+      background-color: rgba(255, 220, 100, 0.2);
+      border-left: 3px solid rgba(255, 220, 100, 0.7);
+    }
+
+    .event-element {
+      background-color: rgba(200, 230, 255, 0.2);
+      border-left: 3px solid rgba(200, 230, 255, 0.7);
+    }
+
+    .gateway-element {
+      background-color: rgba(200, 200, 200, 0.2);
+      border-left: 3px solid rgba(200, 200, 200, 0.7);
+    }
+
+    .subprocess-element {
+      background-color: rgba(200, 255, 200, 0.2);
+      border-left: 3px solid rgba(200, 255, 200, 0.7);
+    }
+
+    .element-documentation {
+      font-size: 12px;
+      color: #666;
+      margin-top: 3px;
+      font-style: italic;
+      margin-left: 5px;
+    }
+
+    /* JSON Textual View Styles */
+    .json-outline {
+      font-family: Arial, sans-serif;
+    }
+
+    .process-title {
+      font-size: 20px;
+      margin: 0 0 10px 0;
+      color: #0A1721;
+      border-bottom: 2px solid #13A6EA;
+      padding-bottom: 5px;
+    }
+
+    .process-description {
+      color: #555;
+      font-style: italic;
+      margin-bottom: 15px;
+    }
+
+    .lane-section {
+      margin-bottom: 20px;
+      border-left: 4px solid #eaeaea;
+      padding-left: 10px;
+    }
+
+    .lane-header {
+      font-size: 16px;
+      margin: 0 0 10px 0;
+      color: #444;
+      font-weight: bold;
+      background-color: #f0f0f0;
+      padding: 5px 10px;
+      border-radius: 4px;
+    }
+
+    .lane-elements {
+      list-style-type: none;
+      padding-left: 15px;
+      margin: 0;
+    }
+
+    .element {
+      margin: 8px 0;
+      padding: 5px;
+      border-radius: 4px;
+    }
+
+    .element-header, 
+    .subprocess-header {
+      display: flex;
+      align-items: center;
+      font-weight: 500;
+    }
+
+    .subprocess-header.expandable {
+      cursor: pointer;
+      font-weight: bold;
+      color: #13A6EA;
+    }
+
+    .subprocess-header.expandable:before {
+      content: '▶';
+      display: inline-block;
+      margin-right: 5px;
+      transition: transform 0.2s;
+    }
+
+    .subprocess-header.expanded:before {
+      transform: rotate(90deg);
+    }
+
+    .subprocess-children {
+      display: none;
+      padding-left: 20px;
+      list-style-type: none;
+      border-left: 2px dashed #ccc;
+      margin-left: 10px;
+      margin-top: 5px;
+    }
+
+    .subprocess-children.visible {
+      display: block;
+    }
+    
+    /* Element type-specific styling */
+    .startEvent-element {
+      background-color: rgba(144, 238, 144, 0.2);
+      border-left: 3px solid rgba(144, 238, 144, 0.7);
+    }
+    
+    .endEvent-element {
+      background-color: rgba(255, 99, 71, 0.2);
+      border-left: 3px solid rgba(255, 99, 71, 0.7);
+    }
+    
+    .task-element {
+      background-color: rgba(255, 220, 100, 0.2);
+      border-left: 3px solid rgba(255, 220, 100, 0.7);
+    }
+    
+    .subProcess-element {
+      background-color: rgba(200, 255, 200, 0.2);
+      border-left: 3px solid rgba(200, 255, 200, 0.7);
+      margin-bottom: 15px;
+    }
+
+    /* View Selector Styles */
+    .view-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .view-btn {
+      background-color: #f0f0f0;
+      color: #333;
+      border: 1px solid #ddd;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .view-btn.active {
+      background-color: #13A6EA;
+      color: white;
+      border-color: #13A6EA;
+    }
+
+    /* Phase View Styles */
+    .phase-section {
+      margin-bottom: 25px;
+      background-color: rgba(200, 255, 200, 0.1);
+      border-radius: 6px;
+      padding: 15px;
+      border-left: 5px solid rgba(100, 200, 100, 0.7);
+    }
+
+    .phase-header {
+      font-size: 16px;
+      margin: 0 0 10px 0;
+      color: #13A6EA;
+      font-weight: bold;
+    }
+
+    .phase-description {
+      color: #555;
+      font-style: italic;
+      margin-bottom: 15px;
+      padding-left: 5px;
+      border-left: 2px solid #eaeaea;
+    }
+
+    .phase-elements {
+      list-style-type: none;
+      padding-left: 15px;
+      margin: 0;
+    }
+
+    /* Reference elements in phases */
+    .element[data-reference="true"] {
+      opacity: 0.9;
+      border-style: dashed;
+    }
   </style>
 </head>
 <body>
@@ -148,6 +421,12 @@
   </div>
   
   <div id="canvas"></div>
+
+  <!-- Outline Panel -->
+  <div id="outline-panel">
+    <div id="outline-title">HIERARCHICAL PROCESS VIEW</div>
+    <div id="outline"></div>
+  </div>
 
   <!-- Load our custom BPMN styling script -->
   <script src="/scripts/apply-bpmn-styles.js"></script>
@@ -189,6 +468,179 @@
       scanBpmnDirectory();
     });
 
+    // Function to build the hierarchical tree of BPMN elements
+    function buildElementTree() {
+      const elementRegistry = bpmnViewer.get('elementRegistry');
+      const all = elementRegistry.getAll();
+      const byId = {};
+      
+      // First pass: create node objects for all elements
+      all.forEach(element => {
+        byId[element.id] = {
+          element: element,
+          children: []
+        };
+      });
+      
+      // Second pass: establish parent-child relationships
+      all.forEach(element => {
+        const businessObject = element.businessObject;
+        if (businessObject.$parent && byId[businessObject.$parent.id]) {
+          byId[businessObject.$parent.id].children.push(byId[element.id]);
+        }
+      });
+      
+      // Find root elements (those without parents or with special types)
+      const roots = all.filter(element => {
+        const bo = element.businessObject;
+        return !bo.$parent || bo.$type === 'bpmn:Process' || bo.$type === 'bpmn:Collaboration';
+      }).map(element => byId[element.id]);
+      
+      return roots;
+    }
+    
+    // Function to determine element type class
+    function getElementTypeClass(element) {
+      const type = element.type.replace(/^bpmn:/, '').toLowerCase();
+      
+      if (type.includes('task')) return 'task-element';
+      if (type.includes('event')) return 'event-element';
+      if (type.includes('gateway')) return 'gateway-element';
+      if (type.includes('subprocess')) return 'subprocess-element';
+      
+      return '';
+    }
+    
+    // Recursive function to render a node and its children
+    function renderElementNode(node, container) {
+      const element = node.element;
+      const bo = element.businessObject;
+      const name = bo.name || element.id;
+      const type = bo.$type.replace(/^bpmn:/, '');
+      const isSubProcess = type.toLowerCase().includes('subprocess');
+      const hasChildren = node.children.length > 0;
+      
+      const li = document.createElement('li');
+      li.className = getElementTypeClass(element);
+      
+      // Create the element header
+      const header = document.createElement('div');
+      if (isSubProcess && hasChildren) {
+        header.className = 'subprocess-header';
+        header.textContent = name;
+        
+        // Add click handler to toggle children visibility
+        header.addEventListener('click', function() {
+          this.classList.toggle('expanded');
+          const childrenContainer = li.querySelector('.subprocess-children');
+          if (childrenContainer) {
+            childrenContainer.classList.toggle('visible');
+          }
+        });
+      } else {
+        header.textContent = name;
+      }
+      
+      // Add the element type
+      const typeSpan = document.createElement('span');
+      typeSpan.className = 'element-type';
+      typeSpan.textContent = `(${type})`;
+      header.appendChild(typeSpan);
+      
+      li.appendChild(header);
+      
+      // Add documentation if available
+      if (bo.documentation && bo.documentation.length > 0) {
+        const docText = bo.documentation[0].text;
+        if (docText) {
+          const docDiv = document.createElement('div');
+          docDiv.className = 'element-documentation';
+          docDiv.textContent = docText;
+          li.appendChild(docDiv);
+        }
+      }
+      
+      // Add children if any
+      if (hasChildren) {
+        const childrenContainer = document.createElement('ul');
+        childrenContainer.className = isSubProcess ? 'subprocess-children' : '';
+        
+        // Sort children by type and name for better organization
+        const sortedChildren = [...node.children].sort((a, b) => {
+          const aType = a.element.type;
+          const bType = b.element.type;
+          
+          // First sort by type
+          if (aType !== bType) {
+            // Events first, then gateways, then tasks, then subprocesses
+            const typeOrder = { 'event': 1, 'gateway': 2, 'task': 3, 'subprocess': 4 };
+            const getTypeCategory = (type) => {
+              if (type.includes('Event')) return typeOrder.event;
+              if (type.includes('Gateway')) return typeOrder.gateway;
+              if (type.includes('Task')) return typeOrder.task;
+              if (type.includes('SubProcess')) return typeOrder.subprocess;
+              return 5; // Other elements
+            };
+            
+            return getTypeCategory(aType) - getTypeCategory(bType);
+          }
+          
+          // Then sort by name if types are the same
+          const aName = a.element.businessObject.name || a.element.id;
+          const bName = b.element.businessObject.name || b.element.id;
+          return aName.localeCompare(bName);
+        });
+        
+        sortedChildren.forEach(child => {
+          renderElementNode(child, childrenContainer);
+        });
+        
+        li.appendChild(childrenContainer);
+        
+        // If it's a subprocess, add expanded class to show its children by default
+        if (isSubProcess) {
+          header.classList.add('expanded');
+          childrenContainer.classList.add('visible');
+        }
+      }
+      
+      container.appendChild(li);
+    }
+    
+    // Function to render the element hierarchy
+    function renderOutline() {
+      const outlineContainer = document.getElementById('outline');
+      outlineContainer.innerHTML = '';
+      
+      const tree = buildElementTree();
+      if (tree.length === 0) {
+        outlineContainer.innerHTML = '<div class="empty-message">No elements found in the diagram</div>';
+        return;
+      }
+      
+      const ul = document.createElement('ul');
+      
+      // Get main process elements (usually one)
+      const processes = tree.filter(node => 
+        node.element.type === 'bpmn:Process' || 
+        node.element.type === 'bpmn:Participant' ||
+        node.element.type === 'bpmn:Collaboration'
+      );
+      
+      if (processes.length > 0) {
+        processes.forEach(process => {
+          renderElementNode(process, ul);
+        });
+      } else {
+        // Fallback if no process is found
+        tree.forEach(root => {
+          renderElementNode(root, ul);
+        });
+      }
+      
+      outlineContainer.appendChild(ul);
+    }
+
     // Function to load and render BPMN
     function loadBPMN(bpmnXML, title) {
       bpmnViewer.importXML(bpmnXML)
@@ -199,7 +651,7 @@
           
           // Apply our custom styles
           if (typeof applyBpmnStyles === 'function') {
-            applyBpmnStyles();
+            applyBpmnStyles(bpmnViewer);
           }
           
           // Adjust the view to fit the diagram
@@ -208,6 +660,9 @@
           
           // Update the diagram title
           document.getElementById('diagram-title').textContent = title;
+          
+          // Load and render the corresponding JSON file for textual view
+          loadJsonTextualView(title);
           
           // Store the loaded diagram
           loadedDiagrams[title] = bpmnXML;
@@ -218,7 +673,258 @@
           alert('Error loading the BPMN diagram. Check console for details.');
         });
     }
+
+    // Function to load and render the JSON textual view
+    function loadJsonTextualView(bpmnFileName) {
+      const jsonFileName = bpmnFileName.replace('.bpmn', '.json');
+      const jsonFilePath = `json/${jsonFileName}`;
+      
+      fetch(jsonFilePath)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`JSON file not found: ${jsonFilePath}`);
+          }
+          return response.json();
+        })
+        .then(processData => {
+          renderJsonOutline(processData);
+        })
+        .catch(err => {
+          console.warn(`Could not load JSON textual view: ${err.message}`);
+          // Fallback to the XML-based hierarchy
+          renderOutline();
+        });
+    }
+
+    // Function to render the JSON-based hierarchical view
+    function renderJsonOutline(processData) {
+      const outlineContainer = document.getElementById('outline');
+      outlineContainer.innerHTML = '';
+      
+      if (!processData) {
+        outlineContainer.innerHTML = '<div class="empty-message">No structured data available for this diagram</div>';
+        return;
+      }
+      
+      // Create the main container
+      const mainContainer = document.createElement('div');
+      mainContainer.className = 'json-outline';
+      
+      // Add the process title
+      const processTitle = document.createElement('h2');
+      processTitle.textContent = processData.name;
+      processTitle.className = 'process-title';
+      mainContainer.appendChild(processTitle);
+      
+      // Add process description if available
+      if (processData.description) {
+        const processDesc = document.createElement('div');
+        processDesc.className = 'process-description';
+        processDesc.textContent = processData.description;
+        mainContainer.appendChild(processDesc);
+      }
+      
+      // Add view selector (Lanes/Phases)
+      if (processData.phases && processData.phases.length > 0) {
+        const viewSelector = document.createElement('div');
+        viewSelector.className = 'view-selector';
+        
+        const lanesBtn = document.createElement('button');
+        lanesBtn.className = 'view-btn active';
+        lanesBtn.textContent = 'Swim Lanes View';
+        lanesBtn.addEventListener('click', function() {
+          document.getElementById('lanes-view').style.display = 'block';
+          document.getElementById('phases-view').style.display = 'none';
+          lanesBtn.classList.add('active');
+          phasesBtn.classList.remove('active');
+        });
+        
+        const phasesBtn = document.createElement('button');
+        phasesBtn.className = 'view-btn';
+        phasesBtn.textContent = 'Phases View';
+        phasesBtn.addEventListener('click', function() {
+          document.getElementById('lanes-view').style.display = 'none';
+          document.getElementById('phases-view').style.display = 'block';
+          phasesBtn.classList.add('active');
+          lanesBtn.classList.remove('active');
+        });
+        
+        viewSelector.appendChild(lanesBtn);
+        viewSelector.appendChild(phasesBtn);
+        mainContainer.appendChild(viewSelector);
+        
+        // Create container for both views
+        const lanesView = document.createElement('div');
+        lanesView.id = 'lanes-view';
+        lanesView.style.display = 'block';
+        
+        const phasesView = document.createElement('div');
+        phasesView.id = 'phases-view';
+        phasesView.style.display = 'none';
+        
+        // Add lanes to lanes view
+        renderLanesView(processData, lanesView);
+        
+        // Add phases to phases view
+        renderPhasesView(processData, phasesView);
+        
+        mainContainer.appendChild(lanesView);
+        mainContainer.appendChild(phasesView);
+      } else {
+        // No phases, just render lanes
+        renderLanesView(processData, mainContainer);
+      }
+      
+      outlineContainer.appendChild(mainContainer);
+    }
+
+    // Function to render the lanes view
+    function renderLanesView(processData, container) {
+      if (!processData.lanes || processData.lanes.length === 0) {
+        container.innerHTML = '<div class="empty-message">No lanes defined in this process</div>';
+        return;
+      }
+      
+      // Create lane sections
+      processData.lanes.forEach(lane => {
+        // Skip empty lanes
+        if (!lane.elements || lane.elements.length === 0) return;
+        
+        const laneSection = document.createElement('div');
+        laneSection.className = 'lane-section';
+        
+        // Lane header
+        const laneHeader = document.createElement('h3');
+        laneHeader.className = 'lane-header';
+        laneHeader.textContent = lane.name;
+        laneSection.appendChild(laneHeader);
+        
+        // Lane elements container
+        const elementsContainer = document.createElement('ul');
+        elementsContainer.className = 'lane-elements';
+        
+        // Add elements to the lane
+        lane.elements.forEach(element => {
+          renderJsonElement(element, elementsContainer);
+        });
+        
+        laneSection.appendChild(elementsContainer);
+        container.appendChild(laneSection);
+      });
+    }
     
+    // Function to render the phases view
+    function renderPhasesView(processData, container) {
+      if (!processData.phases || processData.phases.length === 0) {
+        container.innerHTML = '<div class="empty-message">No phases defined in this process</div>';
+        return;
+      }
+      
+      // Create phase sections
+      processData.phases.forEach(phase => {
+        const phaseSection = document.createElement('div');
+        phaseSection.className = 'phase-section';
+        
+        // Phase header
+        const phaseHeader = document.createElement('h3');
+        phaseHeader.className = 'phase-header';
+        phaseHeader.textContent = phase.name;
+        phaseSection.appendChild(phaseHeader);
+        
+        // Phase description if available
+        if (phase.description) {
+          const phaseDesc = document.createElement('div');
+          phaseDesc.className = 'phase-description';
+          phaseDesc.textContent = phase.description;
+          phaseSection.appendChild(phaseDesc);
+        }
+        
+        // Phase elements container
+        const elementsContainer = document.createElement('ul');
+        elementsContainer.className = 'phase-elements';
+        
+        // Add elements to the phase
+        if (phase.elements && phase.elements.length > 0) {
+          phase.elements.forEach(element => {
+            renderJsonElement(element, elementsContainer);
+          });
+        }
+        
+        phaseSection.appendChild(elementsContainer);
+        container.appendChild(phaseSection);
+      });
+    }
+
+    // Function to render an individual element from the JSON hierarchy
+    function renderJsonElement(element, container) {
+      const li = document.createElement('li');
+      li.className = `element ${element.type}-element`;
+      
+      // Mark reference elements
+      if (element.reference) {
+        li.setAttribute('data-reference', 'true');
+      }
+      
+      // Create header with expandable behavior for subprocesses
+      const header = document.createElement('div');
+      header.className = element.type === 'subProcess' ? 'subprocess-header' : 'element-header';
+      header.textContent = element.name;
+      
+      // Add element type label
+      const typeLabel = document.createElement('span');
+      typeLabel.className = 'element-type';
+      typeLabel.textContent = `(${element.type})`;
+      header.appendChild(typeLabel);
+      
+      // Add reference indicator if applicable
+      if (element.reference) {
+        const refLabel = document.createElement('span');
+        refLabel.className = 'reference-label';
+        refLabel.textContent = ' [reference]';
+        refLabel.style.color = '#999';
+        refLabel.style.fontSize = '11px';
+        refLabel.style.fontStyle = 'italic';
+        header.appendChild(refLabel);
+      }
+      
+      li.appendChild(header);
+      
+      // Add description if available
+      if (element.description) {
+        const description = document.createElement('div');
+        description.className = 'element-documentation';
+        description.textContent = element.description;
+        li.appendChild(description);
+      }
+      
+      // For subprocesses, add child elements
+      if (element.type === 'subProcess' && element.elements && element.elements.length > 0) {
+        // Make header expandable
+        header.classList.add('expandable');
+        header.addEventListener('click', function() {
+          this.classList.toggle('expanded');
+          const childContainer = li.querySelector('.subprocess-children');
+          if (childContainer) {
+            childContainer.classList.toggle('visible');
+          }
+        });
+        
+        // Create container for subprocess elements
+        const childContainer = document.createElement('ul');
+        childContainer.className = 'subprocess-children visible'; // Start expanded
+        
+        // Add child elements
+        element.elements.forEach(childElement => {
+          renderJsonElement(childElement, childContainer);
+        });
+        
+        li.appendChild(childContainer);
+        header.classList.add('expanded'); // Start expanded
+      }
+      
+      container.appendChild(li);
+    }
+
     // Function to scan the BPMN directory
     function scanBpmnDirectory() {
       const filesContainer = document.getElementById('files-container');
@@ -268,11 +974,26 @@
     function fallbackFileSearch() {
       const filesContainer = document.getElementById('files-container');
       
-      // Try the file we already know about
-      checkFileExists(bpmnDirPath + '0_new_joiner_onboarding.bpmn')
-        .then(exists => {
-          if (exists) {
-            displayBpmnFiles(['0_new_joiner_onboarding.bpmn']);
+      // List all BPMN files we know about
+      const knownFiles = [
+        'product_sprint.bpmn',
+        'sprint_guide.bpmn',
+        '0_new_joiner_onboarding.bpmn',
+        '0_marketing_effectiveness.bpmn',
+        '1_apollo.bpmn',
+        '4_channel_selection.bpmn',
+        'example.bpmn',
+        'template.bpmn'
+      ];
+      
+      // Check if each file exists
+      Promise.all(knownFiles.map(file => 
+        checkFileExists(bpmnDirPath + file).then(exists => exists ? file : null)
+      ))
+        .then(results => {
+          const existingFiles = results.filter(file => file !== null);
+          if (existingFiles.length > 0) {
+            displayBpmnFiles(existingFiles);
           } else {
             filesContainer.innerHTML = '<div class="empty-message">No BPMN files found. Add files to the /bpmn directory.</div>';
           }
@@ -326,13 +1047,16 @@
           .then(() => {
             // Apply our custom styles to the re-loaded diagram
             if (typeof applyBpmnStyles === 'function') {
-              applyBpmnStyles();
+              applyBpmnStyles(bpmnViewer);
             }
             
             const canvas = bpmnViewer.get('canvas');
             canvas.zoom('fit-viewport');
             document.getElementById('diagram-title').textContent = title;
             currentDiagram = title;
+            
+            // Load and render the corresponding JSON file for textual view
+            loadJsonTextualView(title);
           })
           .catch(err => {
             console.error('Error displaying cached diagram', err);

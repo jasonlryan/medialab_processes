@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+                  id="Definitions_AiSprintGuide"
+                  targetNamespace="https://medialab.com/processes">
+  
+  <bpmn:collaboration id="Collaboration_SprintGuide">
+    <bpmn:participant id="Participant_SprintGuide" name="AI Innovation Day - Startup Sprint" processRef="Process_SprintGuide" />
+  </bpmn:collaboration>
+  
+  <bpmn:process id="Process_SprintGuide" name="AI Innovation Day - Startup Sprint" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_1">
+      <bpmn:lane id="Lane_TeamMembers" name="Team Members">
+        <bpmn:flowNodeRef>StartEvent</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Create_OnePager</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Create_FunctionalSpec</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Write_UserStories</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Perform_CompetitorResearch</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Calculate_TAM</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Create_PRD</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Write_UIPrompt</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Build_Prototype</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Create_KeyMessages</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Design_LandingPage</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Prepare_Demo</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Deliver_Demo</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Document_Feedback</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Facilitator" name="Facilitator">
+        <bpmn:flowNodeRef>Kick_Off_Session1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Provide_Templates</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Review_Session1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Kick_Off_Session2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Provide_AIPrompts</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Review_Session2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Kick_Off_Session3</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Support_UIBuild</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Review_Session3</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Kick_Off_Session4</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Manage_QA</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Collect_Deliverables</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <!-- Change groups to subProcesses -->
+    <bpmn:subProcess id="SubProcess_Session1" name="1. Idea Exploration • Functionality • User Stories">
+      <!-- Nodes will be visually contained within this subprocess -->
+    </bpmn:subProcess>
+    <bpmn:subProcess id="SubProcess_Session2" name="2. Deep Research • PRD • UI Prompt">
+      <!-- Nodes will be visually contained within this subprocess -->
+    </bpmn:subProcess>
+    <bpmn:subProcess id="SubProcess_Session3" name="3. Build the UI (Hands-On)">
+      <!-- Nodes will be visually contained within this subprocess -->
+    </bpmn:subProcess>
+    <bpmn:subProcess id="SubProcess_Session4" name="4. Demo">
+      <!-- Nodes will be visually contained within this subprocess -->
+    </bpmn:subProcess>
+
+    <!-- Start Event -->
+    <bpmn:startEvent id="StartEvent" name="Start Sprint">
+      <bpmn:outgoing>Flow_Start_to_KickOff</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <!-- Session 1: Idea Exploration -->
+    <bpmn:task id="Kick_Off_Session1" name="Kick Off Session 1: Idea Exploration">
+      <bpmn:incoming>Flow_Start_to_KickOff</bpmn:incoming>
+      <bpmn:outgoing>Flow_KickOff_to_Templates</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Provide_Templates" name="Provide One-Pager Templates">
+      <bpmn:incoming>Flow_KickOff_to_Templates</bpmn:incoming>
+      <bpmn:outgoing>Flow_Templates_to_Share</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Share_Ideas" name="Share Lightning Pitches (60s each)">
+      <bpmn:incoming>Flow_Templates_to_Share</bpmn:incoming>
+      <bpmn:outgoing>Flow_Share_to_OnePager</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Create_OnePager" name="Create One-Pager for Selected Idea">
+      <bpmn:incoming>Flow_Share_to_OnePager</bpmn:incoming>
+      <bpmn:outgoing>Flow_OnePager_to_FunctionalSpec</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Create_FunctionalSpec" name="Create Functional Spec v0">
+      <bpmn:incoming>Flow_OnePager_to_FunctionalSpec</bpmn:incoming>
+      <bpmn:outgoing>Flow_FunctionalSpec_to_UserStories</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Write_UserStories" name="Write Core User Stories">
+      <bpmn:incoming>Flow_FunctionalSpec_to_UserStories</bpmn:incoming>
+      <bpmn:outgoing>Flow_UserStories_to_Review1</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Review_Session1" name="Review Session 1 Outputs">
+      <bpmn:incoming>Flow_UserStories_to_Review1</bpmn:incoming>
+      <bpmn:outgoing>Flow_Review1_to_KickOff2</bpmn:outgoing>
+    </bpmn:task>
+
+    <!-- Session 2: Deep Research &amp; PRD -->
+    <bpmn:task id="Kick_Off_Session2" name="Kick Off Session 2: Research &amp; PRD">
+      <bpmn:incoming>Flow_Review1_to_KickOff2</bpmn:incoming>
+      <bpmn:outgoing>Flow_KickOff2_to_Competitor</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Perform_CompetitorResearch" name="Perform Competitor &amp; Analog Research">
+      <bpmn:incoming>Flow_KickOff2_to_Competitor</bpmn:incoming>
+      <bpmn:outgoing>Flow_Competitor_to_TAM</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Calculate_TAM" name="Calculate TAM with Assumptions">
+      <bpmn:incoming>Flow_Competitor_to_TAM</bpmn:incoming>
+      <bpmn:outgoing>Flow_TAM_to_AIPrompts</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Provide_AIPrompts" name="Provide GPT-4o Prompts for PRD">
+      <bpmn:incoming>Flow_TAM_to_AIPrompts</bpmn:incoming>
+      <bpmn:outgoing>Flow_AIPrompts_to_PRD</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Create_PRD" name="Create PRD with GPT Assistance">
+      <bpmn:incoming>Flow_AIPrompts_to_PRD</bpmn:incoming>
+      <bpmn:outgoing>Flow_PRD_to_UIPrompt</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Write_UIPrompt" name="Write UI Prompt for Design Tool">
+      <bpmn:incoming>Flow_PRD_to_UIPrompt</bpmn:incoming>
+      <bpmn:outgoing>Flow_UIPrompt_to_Review2</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Review_Session2" name="Review Session 2 Outputs">
+      <bpmn:incoming>Flow_UIPrompt_to_Review2</bpmn:incoming>
+      <bpmn:outgoing>Flow_Review2_to_KickOff3</bpmn:outgoing>
+    </bpmn:task>
+
+    <!-- Session 3: Build the UI -->
+    <bpmn:task id="Kick_Off_Session3" name="Kick Off Session 3: Build UI">
+      <bpmn:incoming>Flow_Review2_to_KickOff3</bpmn:incoming>
+      <bpmn:outgoing>Flow_KickOff3_to_Support</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Support_UIBuild" name="Support with Bolt/Figma/AI Tools">
+      <bpmn:incoming>Flow_KickOff3_to_Support</bpmn:incoming>
+      <bpmn:outgoing>Flow_Support_to_Prototype</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Build_Prototype" name="Build Clickable Prototype">
+      <bpmn:incoming>Flow_Support_to_Prototype</bpmn:incoming>
+      <bpmn:outgoing>Flow_Prototype_to_KeyMessages</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Create_KeyMessages" name="Create Key Marketing Messages">
+      <bpmn:incoming>Flow_Prototype_to_KeyMessages</bpmn:incoming>
+      <bpmn:outgoing>Flow_KeyMessages_to_LandingPage</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Design_LandingPage" name="Design Landing Page">
+      <bpmn:incoming>Flow_KeyMessages_to_LandingPage</bpmn:incoming>
+      <bpmn:outgoing>Flow_LandingPage_to_Review3</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Review_Session3" name="Review Session 3 Outputs">
+      <bpmn:incoming>Flow_LandingPage_to_Review3</bpmn:incoming>
+      <bpmn:outgoing>Flow_Review3_to_KickOff4</bpmn:outgoing>
+    </bpmn:task>
+
+    <!-- Session 4: Demo -->
+    <bpmn:task id="Kick_Off_Session4" name="Kick Off Session 4: Demo">
+      <bpmn:incoming>Flow_Review3_to_KickOff4</bpmn:incoming>
+      <bpmn:outgoing>Flow_KickOff4_to_PrepareDemo</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Prepare_Demo" name="Prepare 3-Minute Demo">
+      <bpmn:incoming>Flow_KickOff4_to_PrepareDemo</bpmn:incoming>
+      <bpmn:outgoing>Flow_PrepareDemo_to_DeliverDemo</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Deliver_Demo" name="Deliver Demo to Peers/Judges">
+      <bpmn:incoming>Flow_PrepareDemo_to_DeliverDemo</bpmn:incoming>
+      <bpmn:outgoing>Flow_DeliverDemo_to_ManageQA</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Manage_QA" name="Manage 2-Min Q&amp;A Session">
+      <bpmn:incoming>Flow_DeliverDemo_to_ManageQA</bpmn:incoming>
+      <bpmn:outgoing>Flow_ManageQA_to_DocumentFeedback</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Document_Feedback" name="Document Feedback &amp; Next Steps">
+      <bpmn:incoming>Flow_ManageQA_to_DocumentFeedback</bpmn:incoming>
+      <bpmn:outgoing>Flow_DocumentFeedback_to_Collect</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Collect_Deliverables" name="Collect All Deliverables">
+      <bpmn:incoming>Flow_DocumentFeedback_to_Collect</bpmn:incoming>
+      <bpmn:outgoing>Flow_Collect_to_End</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:endEvent id="EndEvent" name="Sprint Complete">
+      <bpmn:incoming>Flow_Collect_to_End</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <!-- Sequence Flows -->
+    <bpmn:sequenceFlow id="Flow_Start_to_KickOff" sourceRef="StartEvent" targetRef="Kick_Off_Session1"/>
+    <bpmn:sequenceFlow id="Flow_KickOff_to_Templates" sourceRef="Kick_Off_Session1" targetRef="Provide_Templates"/>
+    <bpmn:sequenceFlow id="Flow_Templates_to_Share" sourceRef="Provide_Templates" targetRef="Share_Ideas"/>
+    <bpmn:sequenceFlow id="Flow_Share_to_OnePager" sourceRef="Share_Ideas" targetRef="Create_OnePager"/>
+    <bpmn:sequenceFlow id="Flow_OnePager_to_FunctionalSpec" sourceRef="Create_OnePager" targetRef="Create_FunctionalSpec"/>
+    <bpmn:sequenceFlow id="Flow_FunctionalSpec_to_UserStories" sourceRef="Create_FunctionalSpec" targetRef="Write_UserStories"/>
+    <bpmn:sequenceFlow id="Flow_UserStories_to_Review1" sourceRef="Write_UserStories" targetRef="Review_Session1"/>
+    <bpmn:sequenceFlow id="Flow_Review1_to_KickOff2" sourceRef="Review_Session1" targetRef="Kick_Off_Session2"/>
+    <bpmn:sequenceFlow id="Flow_KickOff2_to_Competitor" sourceRef="Kick_Off_Session2" targetRef="Perform_CompetitorResearch"/>
+    <bpmn:sequenceFlow id="Flow_Competitor_to_TAM" sourceRef="Perform_CompetitorResearch" targetRef="Calculate_TAM"/>
+    <bpmn:sequenceFlow id="Flow_TAM_to_AIPrompts" sourceRef="Calculate_TAM" targetRef="Provide_AIPrompts"/>
+    <bpmn:sequenceFlow id="Flow_AIPrompts_to_PRD" sourceRef="Provide_AIPrompts" targetRef="Create_PRD"/>
+    <bpmn:sequenceFlow id="Flow_PRD_to_UIPrompt" sourceRef="Create_PRD" targetRef="Write_UIPrompt"/>
+    <bpmn:sequenceFlow id="Flow_UIPrompt_to_Review2" sourceRef="Write_UIPrompt" targetRef="Review_Session2"/>
+    <bpmn:sequenceFlow id="Flow_Review2_to_KickOff3" sourceRef="Review_Session2" targetRef="Kick_Off_Session3"/>
+    <bpmn:sequenceFlow id="Flow_KickOff3_to_Support" sourceRef="Kick_Off_Session3" targetRef="Support_UIBuild"/>
+    <bpmn:sequenceFlow id="Flow_Support_to_Prototype" sourceRef="Support_UIBuild" targetRef="Build_Prototype"/>
+    <bpmn:sequenceFlow id="Flow_Prototype_to_KeyMessages" sourceRef="Build_Prototype" targetRef="Create_KeyMessages"/>
+    <bpmn:sequenceFlow id="Flow_KeyMessages_to_LandingPage" sourceRef="Create_KeyMessages" targetRef="Design_LandingPage"/>
+    <bpmn:sequenceFlow id="Flow_LandingPage_to_Review3" sourceRef="Design_LandingPage" targetRef="Review_Session3"/>
+    <bpmn:sequenceFlow id="Flow_Review3_to_KickOff4" sourceRef="Review_Session3" targetRef="Kick_Off_Session4"/>
+    <bpmn:sequenceFlow id="Flow_KickOff4_to_PrepareDemo" sourceRef="Kick_Off_Session4" targetRef="Prepare_Demo"/>
+    <bpmn:sequenceFlow id="Flow_PrepareDemo_to_DeliverDemo" sourceRef="Prepare_Demo" targetRef="Deliver_Demo"/>
+    <bpmn:sequenceFlow id="Flow_DeliverDemo_to_ManageQA" sourceRef="Deliver_Demo" targetRef="Manage_QA"/>
+    <bpmn:sequenceFlow id="Flow_ManageQA_to_DocumentFeedback" sourceRef="Manage_QA" targetRef="Document_Feedback"/>
+    <bpmn:sequenceFlow id="Flow_DocumentFeedback_to_Collect" sourceRef="Document_Feedback" targetRef="Collect_Deliverables"/>
+    <bpmn:sequenceFlow id="Flow_Collect_to_End" sourceRef="Collect_Deliverables" targetRef="EndEvent"/>
+  </bpmn:process>
+
+  <!-- Update the BPMNDiagram section to use subProcesses instead of groups -->
+  <bpmndi:BPMNDiagram id="Diagram_SprintGuide">
+    <bpmndi:BPMNPlane id="Plane_SprintGuide" bpmnElement="Collaboration_SprintGuide">
+      <!-- Participant and Lanes -->
+      <bpmndi:BPMNShape id="Shape_Participant_SprintGuide" bpmnElement="Participant_SprintGuide" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="1600" height="400" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_TeamMembers" bpmnElement="Lane_TeamMembers" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="1570" height="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="215" y="172" width="25" height="120" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Facilitator" bpmnElement="Lane_Facilitator" isHorizontal="true">
+        <dc:Bounds x="190" y="280" width="1570" height="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="215" y="372" width="25" height="120" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <!-- Change groups to subprocesses -->
+      <bpmndi:BPMNShape id="Shape_SubProcess_Session1" bpmnElement="SubProcess_Session1" isExpanded="true">
+        <dc:Bounds x="250" y="90" width="350" height="380" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="275" y="100" width="300" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_SubProcess_Session2" bpmnElement="SubProcess_Session2" isExpanded="true">
+        <dc:Bounds x="610" y="90" width="350" height="380" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="635" y="100" width="300" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_SubProcess_Session3" bpmnElement="SubProcess_Session3" isExpanded="true">
+        <dc:Bounds x="970" y="90" width="350" height="380" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="995" y="100" width="300" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_SubProcess_Session4" bpmnElement="SubProcess_Session4" isExpanded="true">
+        <dc:Bounds x="1330" y="90" width="350" height="380" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1355" y="100" width="300" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <!-- Start and End Events -->
+      <bpmndi:BPMNShape id="Shape_StartEvent" bpmnElement="StartEvent">
+        <dc:Bounds x="212" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="208" y="205" width="55" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_EndEvent" bpmnElement="EndEvent">
+        <dc:Bounds x="1672" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1650" y="205" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Session 1 Tasks - Team Members Lane -->
+      <bpmndi:BPMNShape id="Shape_Create_OnePager" bpmnElement="Create_OnePager">
+        <dc:Bounds x="280" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Create_FunctionalSpec" bpmnElement="Create_FunctionalSpec">
+        <dc:Bounds x="390" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Write_UserStories" bpmnElement="Write_UserStories">
+        <dc:Bounds x="490" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <!-- Session 1 Tasks - Facilitator Lane -->
+      <bpmndi:BPMNShape id="Shape_Kick_Off_Session1" bpmnElement="Kick_Off_Session1">
+        <dc:Bounds x="290" y="350" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Share_Ideas" bpmnElement="Share_Ideas">
+        <dc:Bounds x="400" y="350" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Review_Session1" bpmnElement="Review_Session1">
+        <dc:Bounds x="490" y="350" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <!-- Session 2 Tasks - Team Members Lane -->
+      <bpmndi:BPMNShape id="Shape_Perform_CompetitorResearch" bpmnElement="Perform_CompetitorResearch">
+        <dc:Bounds x="640" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Calculate_TAM" bpmnElement="Calculate_TAM">
+        <dc:Bounds x="750" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Create_PRD" bpmnElement="Create_PRD">
+        <dc:Bounds x="840" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <!-- Session 2 Tasks - Facilitator Lane -->
+      <bpmndi:BPMNShape id="Shape_Kick_Off_Session2" bpmnElement="Kick_Off_Session2">
+        <dc:Bounds x="650" y="350" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Provide_AIPrompts" bpmnElement="Provide_AIPrompts">
+        <dc:Bounds x="760" y="350" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Review_Session2" bpmnElement="Review_Session2">
+        <dc:Bounds x="850" y="350" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <!-- Session 3 Tasks - Team Members Lane -->
+      <bpmndi:BPMNShape id="Shape_Build_Prototype" bpmnElement="Build_Prototype">
+        <dc:Bounds x="1000" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Create_KeyMessages" bpmnElement="Create_KeyMessages">
+        <dc:Bounds x="1110" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Design_LandingPage" bpmnElement="Design_LandingPage">
+        <dc:Bounds x="1200" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <!-- Session 3 Tasks - Facilitator Lane -->
+      <bpmndi:BPMNShape id="Shape_Kick_Off_Session3" bpmnElement="Kick_Off_Session3">
+        <dc:Bounds x="1010" y="350" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Support_UIBuild" bpmnElement="Support_UIBuild">
+        <dc:Bounds x="1120" y="350" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Review_Session3" bpmnElement="Review_Session3">
+        <dc:Bounds x="1210" y="350" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <!-- Session 4 Tasks - Team Members Lane -->
+      <bpmndi:BPMNShape id="Shape_Prepare_Demo" bpmnElement="Prepare_Demo">
+        <dc:Bounds x="1360" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Deliver_Demo" bpmnElement="Deliver_Demo">
+        <dc:Bounds x="1470" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Document_Feedback" bpmnElement="Document_Feedback">
+        <dc:Bounds x="1570" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <!-- Session 4 Tasks - Facilitator Lane -->
+      <bpmndi:BPMNShape id="Shape_Kick_Off_Session4" bpmnElement="Kick_Off_Session4">
+        <dc:Bounds x="1370" y="350" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Manage_QA" bpmnElement="Manage_QA">
+        <dc:Bounds x="1480" y="350" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Collect_Deliverables" bpmnElement="Collect_Deliverables">
+        <dc:Bounds x="1570" y="350" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <!-- Sequence Flow Connections - Simplified -->
+      <bpmndi:BPMNEdge id="Edge_Flow_Start_to_KickOff" bpmnElement="Flow_Start_to_KickOff">
+        <di:waypoint x="248" y="180" />
+        <di:waypoint x="269" y="180" />
+        <di:waypoint x="269" y="390" />
+        <di:waypoint x="290" y="390" />
+      </bpmndi:BPMNEdge>
+      
+      <!-- Session 1 Flows -->
+      <bpmndi:BPMNEdge id="Edge_Flow_KickOff_to_Templates" bpmnElement="Flow_KickOff_to_Templates">
+        <di:waypoint x="340" y="350" />
+        <di:waypoint x="340" y="300" />
+        <di:waypoint x="290" y="300" />
+        <di:waypoint x="290" y="220" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_Templates_to_Share" bpmnElement="Flow_Templates_to_Share">
+        <di:waypoint x="340" y="220" />
+        <di:waypoint x="340" y="320" />
+        <di:waypoint x="450" y="320" />
+        <di:waypoint x="450" y="350" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_Share_to_OnePager" bpmnElement="Flow_Share_to_OnePager">
+        <di:waypoint x="450" y="350" />
+        <di:waypoint x="450" y="300" />
+        <di:waypoint x="330" y="300" />
+        <di:waypoint x="330" y="220" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_OnePager_to_FunctionalSpec" bpmnElement="Flow_OnePager_to_FunctionalSpec">
+        <di:waypoint x="380" y="180" />
+        <di:waypoint x="390" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_FunctionalSpec_to_UserStories" bpmnElement="Flow_FunctionalSpec_to_UserStories">
+        <di:waypoint x="490" y="180" />
+        <di:waypoint x="490" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_UserStories_to_Review1" bpmnElement="Flow_UserStories_to_Review1">
+        <di:waypoint x="540" y="220" />
+        <di:waypoint x="540" y="350" />
+      </bpmndi:BPMNEdge>
+      
+      <!-- Session 1 to Session 2 Transition -->
+      <bpmndi:BPMNEdge id="Edge_Flow_Review1_to_KickOff2" bpmnElement="Flow_Review1_to_KickOff2">
+        <di:waypoint x="590" y="390" />
+        <di:waypoint x="620" y="390" />
+        <di:waypoint x="620" y="390" />
+        <di:waypoint x="650" y="390" />
+      </bpmndi:BPMNEdge>
+      
+      <!-- Session 2 Flows -->
+      <bpmndi:BPMNEdge id="Edge_Flow_KickOff2_to_Competitor" bpmnElement="Flow_KickOff2_to_Competitor">
+        <di:waypoint x="700" y="350" />
+        <di:waypoint x="700" y="220" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_Competitor_to_TAM" bpmnElement="Flow_Competitor_to_TAM">
+        <di:waypoint x="740" y="180" />
+        <di:waypoint x="750" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_TAM_to_AIPrompts" bpmnElement="Flow_TAM_to_AIPrompts">
+        <di:waypoint x="800" y="220" />
+        <di:waypoint x="800" y="350" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_AIPrompts_to_PRD" bpmnElement="Flow_AIPrompts_to_PRD">
+        <di:waypoint x="810" y="350" />
+        <di:waypoint x="810" y="300" />
+        <di:waypoint x="890" y="300" />
+        <di:waypoint x="890" y="220" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_PRD_to_UIPrompt" bpmnElement="Flow_PRD_to_UIPrompt">
+        <di:waypoint x="880" y="140" />
+        <di:waypoint x="880" y="120" />
+        <di:waypoint x="820" y="120" />
+        <di:waypoint x="820" y="140" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_UIPrompt_to_Review2" bpmnElement="Flow_UIPrompt_to_Review2">
+        <di:waypoint x="890" y="220" />
+        <di:waypoint x="890" y="350" />
+      </bpmndi:BPMNEdge>
+      
+      <!-- Session 2 to Session 3 Transition -->
+      <bpmndi:BPMNEdge id="Edge_Flow_Review2_to_KickOff3" bpmnElement="Flow_Review2_to_KickOff3">
+        <di:waypoint x="950" y="390" />
+        <di:waypoint x="980" y="390" />
+        <di:waypoint x="980" y="390" />
+        <di:waypoint x="1010" y="390" />
+      </bpmndi:BPMNEdge>
+      
+      <!-- Session 3 Flows -->
+      <bpmndi:BPMNEdge id="Edge_Flow_KickOff3_to_Support" bpmnElement="Flow_KickOff3_to_Support">
+        <di:waypoint x="1110" y="390" />
+        <di:waypoint x="1120" y="390" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_Support_to_Prototype" bpmnElement="Flow_Support_to_Prototype">
+        <di:waypoint x="1170" y="350" />
+        <di:waypoint x="1170" y="300" />
+        <di:waypoint x="1050" y="300" />
+        <di:waypoint x="1050" y="220" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_Prototype_to_KeyMessages" bpmnElement="Flow_Prototype_to_KeyMessages">
+        <di:waypoint x="1100" y="180" />
+        <di:waypoint x="1110" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_KeyMessages_to_LandingPage" bpmnElement="Flow_KeyMessages_to_LandingPage">
+        <di:waypoint x="1210" y="180" />
+        <di:waypoint x="1200" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_LandingPage_to_Review3" bpmnElement="Flow_LandingPage_to_Review3">
+        <di:waypoint x="1250" y="220" />
+        <di:waypoint x="1250" y="350" />
+      </bpmndi:BPMNEdge>
+      
+      <!-- Session 3 to Session 4 Transition -->
+      <bpmndi:BPMNEdge id="Edge_Flow_Review3_to_KickOff4" bpmnElement="Flow_Review3_to_KickOff4">
+        <di:waypoint x="1310" y="390" />
+        <di:waypoint x="1340" y="390" />
+        <di:waypoint x="1340" y="390" />
+        <di:waypoint x="1370" y="390" />
+      </bpmndi:BPMNEdge>
+      
+      <!-- Session 4 Flows -->
+      <bpmndi:BPMNEdge id="Edge_Flow_KickOff4_to_PrepareDemo" bpmnElement="Flow_KickOff4_to_PrepareDemo">
+        <di:waypoint x="1420" y="350" />
+        <di:waypoint x="1420" y="220" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_PrepareDemo_to_DeliverDemo" bpmnElement="Flow_PrepareDemo_to_DeliverDemo">
+        <di:waypoint x="1460" y="180" />
+        <di:waypoint x="1470" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_DeliverDemo_to_ManageQA" bpmnElement="Flow_DeliverDemo_to_ManageQA">
+        <di:waypoint x="1520" y="220" />
+        <di:waypoint x="1520" y="350" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ManageQA_to_DocumentFeedback" bpmnElement="Flow_ManageQA_to_DocumentFeedback">
+        <di:waypoint x="1530" y="350" />
+        <di:waypoint x="1530" y="300" />
+        <di:waypoint x="1620" y="300" />
+        <di:waypoint x="1620" y="220" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_DocumentFeedback_to_Collect" bpmnElement="Flow_DocumentFeedback_to_Collect">
+        <di:waypoint x="1620" y="220" />
+        <di:waypoint x="1620" y="350" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_Collect_to_End" bpmnElement="Flow_Collect_to_End">
+        <di:waypoint x="1670" y="390" />
+        <di:waypoint x="1690" y="390" />
+        <di:waypoint x="1690" y="198" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions> 

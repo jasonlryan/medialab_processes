@@ -1,0 +1,251 @@
+{
+  "id": "Process_ProductSprint",
+  "name": "AI Innovation Day - Startup Sprint Guide",
+  "description": "A structured guide for product sprint activities during AI Innovation Day",
+  "type": "process",
+  "lanes": [
+    {
+      "id": "Lane_TeamMembers",
+      "name": "Team Members",
+      "elements": [
+        {
+          "id": "StartEvent_SprintDay",
+          "name": "Begin Sprint Day",
+          "type": "startEvent",
+          "description": "Beginning of the sprint day"
+        },
+        {
+          "id": "SubProcess_Phase1",
+          "name": "Phase 1: Idea Exploration • Functionality • User Stories",
+          "type": "subProcess",
+          "description": "Initial ideation phase of the sprint",
+          "elements": [
+            {
+              "id": "StartEvent_Phase1",
+              "name": "Phase 1 Start",
+              "type": "startEvent",
+              "description": "Start of Phase 1"
+            },
+            {
+              "id": "Task_LightningPitches",
+              "name": "Lightning Pitches",
+              "type": "task",
+              "description": "Each participant shares an idea & why it excites them (max 60 s)"
+            },
+            {
+              "id": "Task_SelectIdea",
+              "name": "Select Idea",
+              "type": "task",
+              "description": "Team selects one idea to focus on for the sprint"
+            },
+            {
+              "id": "Task_CreateOnePager",
+              "name": "Create One-Pager",
+              "type": "task",
+              "description": "Capture the selected idea in a one-page document"
+            },
+            {
+              "id": "Task_DraftFunctionalSpec",
+              "name": "Draft Functional Spec v0",
+              "type": "task",
+              "description": "Define how the product works end-to-end; highlight AI/ML components"
+            },
+            {
+              "id": "Task_WriteUserStories",
+              "name": "Write User Stories",
+              "type": "task",
+              "description": "Write core User Stories (As a…, I want…, so that…)"
+            },
+            {
+              "id": "Task_PrioritizeStories",
+              "name": "Prioritize Stories",
+              "type": "task",
+              "description": "Organize user stories by importance"
+            },
+            {
+              "id": "EndEvent_Phase1",
+              "name": "Phase 1 End",
+              "type": "endEvent",
+              "description": "End of Phase 1"
+            }
+          ]
+        },
+        {
+          "id": "SubProcess_Phase2",
+          "name": "Phase 2: Deep Research • PRD • UI Prompt",
+          "type": "subProcess",
+          "description": "Research and planning phase of the sprint",
+          "elements": [
+            {
+              "id": "StartEvent_Phase2",
+              "name": "Phase 2 Start",
+              "type": "startEvent",
+              "description": "Start of Phase 2"
+            },
+            {
+              "id": "Task_CompetitorResearch",
+              "name": "Competitor Research",
+              "type": "task",
+              "description": "Rapid competitor & analog sweep: capture 3-5 relevant products and key differentiators"
+            },
+            {
+              "id": "Task_TAMSizing",
+              "name": "TAM Sizing",
+              "type": "task",
+              "description": "Quick TAM sizing: bottom-up or top-down; document assumptions"
+            },
+            {
+              "id": "Task_DraftPRD",
+              "name": "Draft PRD",
+              "type": "task",
+              "description": "Use findings to fill out the PRD skeleton (GPT-o3 can assist)"
+            },
+            {
+              "id": "Task_CreateUIPrompt",
+              "name": "Create UI Prompt",
+              "type": "task",
+              "description": "Write a UI prompt for Bolt / Lovable v0 describing key screens & interactions"
+            },
+            {
+              "id": "EndEvent_Phase2",
+              "name": "Phase 2 End",
+              "type": "endEvent",
+              "description": "End of Phase 2"
+            }
+          ]
+        },
+        {
+          "id": "SubProcess_Phase3",
+          "name": "Phase 3: Build the UI (Hands-On)",
+          "type": "subProcess",
+          "description": "UI design and construction phase of the sprint",
+          "elements": [
+            {
+              "id": "StartEvent_Phase3",
+              "name": "Phase 3 Start",
+              "type": "startEvent",
+              "description": "Start of Phase 3"
+            },
+            {
+              "id": "Task_BuildPrototype",
+              "name": "Build Clickable Prototype",
+              "type": "task",
+              "description": "Use Bolt, Figma, Lovable v0, or preferred tool to create a clickable prototype"
+            },
+            {
+              "id": "Task_CraftKeyMessages",
+              "name": "Craft Key Messages",
+              "type": "task",
+              "description": "Apply Key Messages: short, punchy copy that communicates the value proposition"
+            },
+            {
+              "id": "Task_DesignLandingPage",
+              "name": "Design Landing Page",
+              "type": "task",
+              "description": "Lay out a simple Landing Page (headline, hero, 3 bullets, social proof, CTA)"
+            },
+            {
+              "id": "EndEvent_Phase3",
+              "name": "Phase 3 End",
+              "type": "endEvent",
+              "description": "End of Phase 3"
+            }
+          ]
+        },
+        {
+          "id": "SubProcess_Phase4",
+          "name": "Phase 4: Demo",
+          "type": "subProcess",
+          "description": "Demonstration and feedback phase of the sprint",
+          "elements": [
+            {
+              "id": "StartEvent_Phase4",
+              "name": "Phase 4 Start",
+              "type": "startEvent",
+              "description": "Start of Phase 4"
+            },
+            {
+              "id": "Task_PrepareDemo",
+              "name": "Prepare Demo",
+              "type": "task",
+              "description": "Prepare 3-minute live demo or recorded walkthrough"
+            },
+            {
+              "id": "Task_DeliverDemo",
+              "name": "Deliver 3-min Demo",
+              "type": "task",
+              "description": "Present the 3-minute demo to judges/peers"
+            },
+            {
+              "id": "Task_CaptureFeedback",
+              "name": "Capture Feedback",
+              "type": "task",
+              "description": "Capture feedback & note next steps"
+            },
+            {
+              "id": "EndEvent_Phase4",
+              "name": "Phase 4 End",
+              "type": "endEvent",
+              "description": "End of Phase 4"
+            }
+          ]
+        },
+        {
+          "id": "EndEvent_SprintComplete",
+          "name": "Sprint Complete",
+          "type": "endEvent",
+          "description": "End of the sprint day"
+        }
+      ]
+    },
+    {
+      "id": "Lane_Facilitator",
+      "name": "Facilitator",
+      "elements": []
+    },
+    {
+      "id": "Lane_JudgesPeers",
+      "name": "Judges/Peers",
+      "elements": [
+        {
+          "id": "Task_ConductQA",
+          "name": "Conduct Q&A",
+          "type": "task",
+          "description": "2-minute Q&A with judges/peers"
+        }
+      ]
+    }
+  ],
+  "flows": [
+    { "id": "Flow_To_Phase1", "sourceRef": "StartEvent_SprintDay", "targetRef": "SubProcess_Phase1" },
+    { "id": "Flow_Phase1_To_Phase2", "sourceRef": "SubProcess_Phase1", "targetRef": "SubProcess_Phase2" },
+    { "id": "Flow_Phase2_To_Phase3", "sourceRef": "SubProcess_Phase2", "targetRef": "SubProcess_Phase3" },
+    { "id": "Flow_Phase3_To_Phase4", "sourceRef": "SubProcess_Phase3", "targetRef": "SubProcess_Phase4" },
+    { "id": "Flow_Phase4_To_End", "sourceRef": "SubProcess_Phase4", "targetRef": "EndEvent_SprintComplete" },
+    
+    { "id": "Flow_Internal_Start_P1", "sourceRef": "StartEvent_Phase1", "targetRef": "Task_LightningPitches" },
+    { "id": "Flow_To_SelectIdea", "sourceRef": "Task_LightningPitches", "targetRef": "Task_SelectIdea" },
+    { "id": "Flow_To_CreateOnePager", "sourceRef": "Task_SelectIdea", "targetRef": "Task_CreateOnePager" },
+    { "id": "Flow_To_DraftFunctionalSpec", "sourceRef": "Task_CreateOnePager", "targetRef": "Task_DraftFunctionalSpec" },
+    { "id": "Flow_To_WriteUserStories", "sourceRef": "Task_DraftFunctionalSpec", "targetRef": "Task_WriteUserStories" },
+    { "id": "Flow_To_PrioritizeStories", "sourceRef": "Task_WriteUserStories", "targetRef": "Task_PrioritizeStories" },
+    { "id": "Flow_Internal_End_P1", "sourceRef": "Task_PrioritizeStories", "targetRef": "EndEvent_Phase1" },
+    
+    { "id": "Flow_Internal_Start_P2", "sourceRef": "StartEvent_Phase2", "targetRef": "Task_CompetitorResearch" },
+    { "id": "Flow_To_TAMSizing", "sourceRef": "Task_CompetitorResearch", "targetRef": "Task_TAMSizing" },
+    { "id": "Flow_To_DraftPRD", "sourceRef": "Task_TAMSizing", "targetRef": "Task_DraftPRD" },
+    { "id": "Flow_To_CreateUIPrompt", "sourceRef": "Task_DraftPRD", "targetRef": "Task_CreateUIPrompt" },
+    { "id": "Flow_Internal_End_P2", "sourceRef": "Task_CreateUIPrompt", "targetRef": "EndEvent_Phase2" },
+    
+    { "id": "Flow_Internal_Start_P3", "sourceRef": "StartEvent_Phase3", "targetRef": "Task_BuildPrototype" },
+    { "id": "Flow_To_CraftKeyMessages", "sourceRef": "Task_BuildPrototype", "targetRef": "Task_CraftKeyMessages" },
+    { "id": "Flow_To_DesignLandingPage", "sourceRef": "Task_CraftKeyMessages", "targetRef": "Task_DesignLandingPage" },
+    { "id": "Flow_Internal_End_P3", "sourceRef": "Task_DesignLandingPage", "targetRef": "EndEvent_Phase3" },
+    
+    { "id": "Flow_Internal_Start_P4", "sourceRef": "StartEvent_Phase4", "targetRef": "Task_PrepareDemo" },
+    { "id": "Flow_To_DeliverDemo", "sourceRef": "Task_PrepareDemo", "targetRef": "Task_DeliverDemo" },
+    { "id": "Flow_To_ConductQA", "sourceRef": "Task_DeliverDemo", "targetRef": "Task_ConductQA" },
+    { "id": "Flow_To_CaptureFeedback", "sourceRef": "Task_ConductQA", "targetRef": "Task_CaptureFeedback" },
+    { "id": "Flow_Internal_End_P4", "sourceRef": "Task_CaptureFeedback", "targetRef": "EndEvent_Phase4" }
+  ]
+} 

@@ -1,0 +1,170 @@
+{
+  "id": "Process_Template",
+  "name": "Process Template",
+  "description": "A template process to demonstrate BPMN structure",
+  "type": "process",
+  "lanes": [
+    {
+      "id": "Lane_Stakeholder1",
+      "name": "Stakeholder 1",
+      "elements": [
+        {
+          "id": "StartEvent_Request",
+          "name": "Process Request",
+          "type": "startEvent",
+          "description": "Starting point of the process"
+        },
+        {
+          "id": "Task_S1_1",
+          "name": "Initial Task",
+          "type": "task",
+          "description": "Description of the initial task"
+        },
+        {
+          "id": "Task_S1_2",
+          "name": "Second Task",
+          "type": "task",
+          "description": "Description of the second task"
+        }
+      ]
+    },
+    {
+      "id": "Lane_Stakeholder2",
+      "name": "Stakeholder 2",
+      "elements": [
+        {
+          "id": "Task_S2_1",
+          "name": "Review Task",
+          "type": "task",
+          "description": "Description of the review task"
+        },
+        {
+          "id": "Task_S2_2",
+          "name": "Processing Task",
+          "type": "task",
+          "description": "Description of the processing task"
+        },
+        {
+          "id": "Task_S2_3",
+          "name": "Validation Task",
+          "type": "task",
+          "description": "Description of the validation task"
+        }
+      ]
+    },
+    {
+      "id": "Lane_Stakeholder3",
+      "name": "Stakeholder 3",
+      "elements": [
+        {
+          "id": "Task_S3_1",
+          "name": "Analysis Task",
+          "type": "task",
+          "description": "Description of the analysis task"
+        },
+        {
+          "id": "Task_S3_2",
+          "name": "Final Task",
+          "type": "task",
+          "description": "Description of the final task"
+        },
+        {
+          "id": "EndEvent_Complete",
+          "name": "Process Complete",
+          "type": "endEvent",
+          "description": "End of the process"
+        }
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "id": "SubProcess_Phase1",
+      "name": "Phase 1: Initial Stage",
+      "type": "subProcess",
+      "description": "The first phase of the process",
+      "elements": [
+        {
+          "id": "StartEvent_Request",
+          "name": "Process Request",
+          "type": "startEvent",
+          "reference": true
+        },
+        {
+          "id": "Task_S1_1",
+          "name": "Initial Task",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_S1_2",
+          "name": "Second Task",
+          "type": "task",
+          "reference": true
+        }
+      ]
+    },
+    {
+      "id": "SubProcess_Phase2",
+      "name": "Phase 2: Middle Stage",
+      "type": "subProcess",
+      "description": "The middle phase of the process",
+      "elements": [
+        {
+          "id": "Task_S2_1",
+          "name": "Review Task",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_S2_2",
+          "name": "Processing Task",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_S2_3",
+          "name": "Validation Task",
+          "type": "task",
+          "reference": true
+        }
+      ]
+    },
+    {
+      "id": "SubProcess_Phase3",
+      "name": "Phase 3: Final Stage",
+      "type": "subProcess",
+      "description": "The final phase of the process",
+      "elements": [
+        {
+          "id": "Task_S3_1",
+          "name": "Analysis Task",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_S3_2",
+          "name": "Final Task",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "EndEvent_Complete",
+          "name": "Process Complete",
+          "type": "endEvent",
+          "reference": true
+        }
+      ]
+    }
+  ],
+  "flows": [
+    { "id": "Flow_To_Task_S1_1", "sourceRef": "StartEvent_Request", "targetRef": "Task_S1_1" },
+    { "id": "Flow_To_Task_S1_2", "sourceRef": "Task_S1_1", "targetRef": "Task_S1_2" },
+    { "id": "Flow_To_Task_S2_1", "sourceRef": "Task_S1_2", "targetRef": "Task_S2_1" },
+    { "id": "Flow_To_Task_S2_2", "sourceRef": "Task_S2_1", "targetRef": "Task_S2_2" },
+    { "id": "Flow_To_Task_S2_3", "sourceRef": "Task_S2_2", "targetRef": "Task_S2_3" },
+    { "id": "Flow_To_Task_S3_1", "sourceRef": "Task_S2_3", "targetRef": "Task_S3_1" },
+    { "id": "Flow_To_Task_S3_2", "sourceRef": "Task_S3_1", "targetRef": "Task_S3_2" },
+    { "id": "Flow_To_Complete", "sourceRef": "Task_S3_2", "targetRef": "EndEvent_Complete" }
+  ]
+} 

@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+                  id="Definitions_Template"
+                  targetNamespace="https://medialab.com/processes">
+  
+  <bpmn:collaboration id="Collaboration_Template">
+    <bpmn:participant id="Participant_Process" name="Process Template" processRef="Process_Template" />
+  </bpmn:collaboration>
+  
+  <bpmn:process id="Process_Template" name="Process Template" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Main">
+      <bpmn:lane id="Lane_Stakeholder1" name="Stakeholder 1">
+        <bpmn:flowNodeRef>StartEvent_Request</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_S1_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_S1_2</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Stakeholder2" name="Stakeholder 2">
+        <bpmn:flowNodeRef>Task_S2_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_S2_2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_S2_3</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Stakeholder3" name="Stakeholder 3">
+        <bpmn:flowNodeRef>Task_S3_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_S3_2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_Complete</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <!-- Phase 1 Container -->
+    <bpmn:subProcess id="SubProcess_Phase1" name="Phase 1: Initial Stage">
+      <!-- Nodes will be visually contained within this subprocess -->
+    </bpmn:subProcess>
+
+    <!-- Phase 2 Container -->
+    <bpmn:subProcess id="SubProcess_Phase2" name="Phase 2: Middle Stage">
+      <!-- Nodes will be visually contained within this subprocess -->
+    </bpmn:subProcess>
+
+    <!-- Phase 3 Container -->
+    <bpmn:subProcess id="SubProcess_Phase3" name="Phase 3: Final Stage">
+      <!-- Nodes will be visually contained within this subprocess -->
+    </bpmn:subProcess>
+
+    <!-- Process Start -->
+    <bpmn:startEvent id="StartEvent_Request" name="Process Request">
+      <bpmn:outgoing>Flow_To_Task_S1_1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <!-- Stakeholder 1 Tasks -->
+    <bpmn:task id="Task_S1_1" name="Initial Task">
+      <bpmn:documentation>Description of the initial task</bpmn:documentation>
+      <bpmn:incoming>Flow_To_Task_S1_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_To_Task_S1_2</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_S1_2" name="Second Task">
+      <bpmn:documentation>Description of the second task</bpmn:documentation>
+      <bpmn:incoming>Flow_To_Task_S1_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_To_Task_S2_1</bpmn:outgoing>
+    </bpmn:task>
+
+    <!-- Stakeholder 2 Tasks -->
+    <bpmn:task id="Task_S2_1" name="Review Task">
+      <bpmn:documentation>Description of the review task</bpmn:documentation>
+      <bpmn:incoming>Flow_To_Task_S2_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_To_Task_S2_2</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_S2_2" name="Processing Task">
+      <bpmn:documentation>Description of the processing task</bpmn:documentation>
+      <bpmn:incoming>Flow_To_Task_S2_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_To_Task_S2_3</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_S2_3" name="Validation Task">
+      <bpmn:documentation>Description of the validation task</bpmn:documentation>
+      <bpmn:incoming>Flow_To_Task_S2_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_To_Task_S3_1</bpmn:outgoing>
+    </bpmn:task>
+
+    <!-- Stakeholder 3 Tasks -->
+    <bpmn:task id="Task_S3_1" name="Analysis Task">
+      <bpmn:documentation>Description of the analysis task</bpmn:documentation>
+      <bpmn:incoming>Flow_To_Task_S3_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_To_Task_S3_2</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_S3_2" name="Final Task">
+      <bpmn:documentation>Description of the final task</bpmn:documentation>
+      <bpmn:incoming>Flow_To_Task_S3_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_To_Complete</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:endEvent id="EndEvent_Complete" name="Process Complete">
+      <bpmn:incoming>Flow_To_Complete</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <!-- Sequence Flows -->
+    <bpmn:sequenceFlow id="Flow_To_Task_S1_1" sourceRef="StartEvent_Request" targetRef="Task_S1_1" />
+    <bpmn:sequenceFlow id="Flow_To_Task_S1_2" sourceRef="Task_S1_1" targetRef="Task_S1_2" />
+    <bpmn:sequenceFlow id="Flow_To_Task_S2_1" sourceRef="Task_S1_2" targetRef="Task_S2_1" />
+    <bpmn:sequenceFlow id="Flow_To_Task_S2_2" sourceRef="Task_S2_1" targetRef="Task_S2_2" />
+    <bpmn:sequenceFlow id="Flow_To_Task_S2_3" sourceRef="Task_S2_2" targetRef="Task_S2_3" />
+    <bpmn:sequenceFlow id="Flow_To_Task_S3_1" sourceRef="Task_S2_3" targetRef="Task_S3_1" />
+    <bpmn:sequenceFlow id="Flow_To_Task_S3_2" sourceRef="Task_S3_1" targetRef="Task_S3_2" />
+    <bpmn:sequenceFlow id="Flow_To_Complete" sourceRef="Task_S3_2" targetRef="EndEvent_Complete" />
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="Diagram_Template">
+    <bpmndi:BPMNPlane id="Plane_Template" bpmnElement="Collaboration_Template">
+      <!-- Participant -->
+      <bpmndi:BPMNShape id="Shape_Participant_Process" bpmnElement="Participant_Process" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="1200" height="600" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Lanes -->
+      <bpmndi:BPMNShape id="Shape_Lane_Stakeholder1" bpmnElement="Lane_Stakeholder1" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="1170" height="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="215" y="172" width="25" height="120" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Lane_Stakeholder2" bpmnElement="Lane_Stakeholder2" isHorizontal="true">
+        <dc:Bounds x="190" y="280" width="1170" height="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="215" y="372" width="25" height="120" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Lane_Stakeholder3" bpmnElement="Lane_Stakeholder3" isHorizontal="true">
+        <dc:Bounds x="190" y="480" width="1170" height="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="215" y="572" width="25" height="120" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <!-- Phase Containers (subprocesses) -->
+      <bpmndi:BPMNShape id="Shape_SubProcess_Phase1" bpmnElement="SubProcess_Phase1" isExpanded="true">
+        <dc:Bounds x="250" y="90" width="350" height="580" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="275" y="100" width="300" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_SubProcess_Phase2" bpmnElement="SubProcess_Phase2" isExpanded="true">
+        <dc:Bounds x="610" y="90" width="350" height="580" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="635" y="100" width="300" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_SubProcess_Phase3" bpmnElement="SubProcess_Phase3" isExpanded="true">
+        <dc:Bounds x="970" y="90" width="350" height="580" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="995" y="100" width="300" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <!-- Start Event -->
+      <bpmndi:BPMNShape id="Shape_StartEvent_Request" bpmnElement="StartEvent_Request">
+        <dc:Bounds x="272" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="250" y="205" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Stakeholder 1 Tasks -->
+      <bpmndi:BPMNShape id="Shape_Task_S1_1" bpmnElement="Task_S1_1">
+        <dc:Bounds x="360" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_S1_2" bpmnElement="Task_S1_2">
+        <dc:Bounds x="490" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <!-- Stakeholder 2 Tasks -->
+      <bpmndi:BPMNShape id="Shape_Task_S2_1" bpmnElement="Task_S2_1">
+        <dc:Bounds x="640" y="340" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_S2_2" bpmnElement="Task_S2_2">
+        <dc:Bounds x="770" y="340" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_S2_3" bpmnElement="Task_S2_3">
+        <dc:Bounds x="900" y="340" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <!-- Stakeholder 3 Tasks -->
+      <bpmndi:BPMNShape id="Shape_Task_S3_1" bpmnElement="Task_S3_1">
+        <dc:Bounds x="1000" y="540" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_S3_2" bpmnElement="Task_S3_2">
+        <dc:Bounds x="1130" y="540" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_EndEvent_Complete" bpmnElement="EndEvent_Complete">
+        <dc:Bounds x="1262" y="562" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1240" y="605" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Sequence Flow Edges -->
+      <bpmndi:BPMNEdge id="Edge_Flow_To_Task_S1_1" bpmnElement="Flow_To_Task_S1_1">
+        <di:waypoint x="308" y="180" />
+        <di:waypoint x="360" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_Task_S1_2" bpmnElement="Flow_To_Task_S1_2">
+        <di:waypoint x="460" y="180" />
+        <di:waypoint x="490" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_Task_S2_1" bpmnElement="Flow_To_Task_S2_1">
+        <di:waypoint x="540" y="220" />
+        <di:waypoint x="540" y="280" />
+        <di:waypoint x="690" y="280" />
+        <di:waypoint x="690" y="340" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_Task_S2_2" bpmnElement="Flow_To_Task_S2_2">
+        <di:waypoint x="740" y="380" />
+        <di:waypoint x="770" y="380" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_Task_S2_3" bpmnElement="Flow_To_Task_S2_3">
+        <di:waypoint x="870" y="380" />
+        <di:waypoint x="900" y="380" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_Task_S3_1" bpmnElement="Flow_To_Task_S3_1">
+        <di:waypoint x="950" y="420" />
+        <di:waypoint x="950" y="480" />
+        <di:waypoint x="1050" y="480" />
+        <di:waypoint x="1050" y="540" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_Task_S3_2" bpmnElement="Flow_To_Task_S3_2">
+        <di:waypoint x="1100" y="580" />
+        <di:waypoint x="1130" y="580" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_Complete" bpmnElement="Flow_To_Complete">
+        <di:waypoint x="1230" y="580" />
+        <di:waypoint x="1262" y="580" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions> 

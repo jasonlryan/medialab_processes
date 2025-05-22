@@ -1,0 +1,138 @@
+{
+  "id": "Process_MarketingEffectiveness",
+  "name": "Marketing Effectiveness Process",
+  "description": "Process for measuring and improving marketing effectiveness",
+  "type": "process",
+  "lanes": [
+    {
+      "id": "Lane_Client",
+      "name": "Client",
+      "elements": [
+        {
+          "id": "StartEvent_ClientRequest",
+          "name": "Client Request",
+          "type": "startEvent",
+          "description": "Starting point of the process"
+        },
+        {
+          "id": "Task_ValidateMLCo",
+          "name": "Validate MLCo Requirements",
+          "type": "task",
+          "description": "Ensuring all required information is provided to the team"
+        },
+        {
+          "id": "Task_ReviewData",
+          "name": "Review Collected Data",
+          "type": "task",
+          "description": "Client review of collected data to ensure completeness"
+        }
+      ]
+    },
+    {
+      "id": "Lane_MediaTeam",
+      "name": "Media Team",
+      "elements": [
+        {
+          "id": "Task_DataCollection",
+          "name": "Data Collection",
+          "type": "task",
+          "description": "Process for ensuring the required information/data inputs are provided to the ML team"
+        },
+        {
+          "id": "Task_DataValidation",
+          "name": "Data Validation",
+          "type": "task",
+          "description": "Following data collection, asking client to validate MLCo's representation of all media channel data received"
+        },
+        {
+          "id": "Task_DataPreparation",
+          "name": "Data Preparation",
+          "type": "task",
+          "description": "Preparing and cleaning data for analysis"
+        },
+        {
+          "id": "Task_BuildEconometricModels",
+          "name": "Build Econometric Models",
+          "type": "task",
+          "description": "Creating and refining the statistical models"
+        },
+        {
+          "id": "Task_ProduceInitialOutputs",
+          "name": "Produce Initial Outputs",
+          "type": "task",
+          "description": "Generating the initial model outputs"
+        }
+      ]
+    },
+    {
+      "id": "Lane_Analytics",
+      "name": "Analytics Team",
+      "elements": [
+        {
+          "id": "Task_AnalyzeResults",
+          "name": "Analyze Results",
+          "type": "task",
+          "description": "Analyzing the model outputs"
+        },
+        {
+          "id": "Task_PrepareInsights",
+          "name": "Prepare Insights",
+          "type": "task",
+          "description": "Extracting business insights from the analysis"
+        },
+        {
+          "id": "Task_CreateDashboard",
+          "name": "Create Dashboard",
+          "type": "task",
+          "description": "Building visualization dashboards for reporting"
+        },
+        {
+          "id": "Task_RefineModels",
+          "name": "Refine Models",
+          "type": "task",
+          "description": "Refining models based on client feedback"
+        }
+      ]
+    },
+    {
+      "id": "Lane_Delivery",
+      "name": "Delivery Team",
+      "elements": [
+        {
+          "id": "Task_PresentFindings",
+          "name": "Present Findings",
+          "type": "task",
+          "description": "Presenting insights and recommendations to client"
+        },
+        {
+          "id": "Task_ImplementRecommendations",
+          "name": "Implement Recommendations",
+          "type": "task",
+          "description": "Supporting client with implementation of insights"
+        },
+        {
+          "id": "EndEvent_ProcessComplete",
+          "name": "Process Complete",
+          "type": "endEvent",
+          "description": "End of the marketing effectiveness process"
+        }
+      ]
+    }
+  ],
+  "flows": [
+    { "id": "Flow_ToValidateMLCo", "sourceRef": "StartEvent_ClientRequest", "targetRef": "Task_ValidateMLCo" },
+    { "id": "Flow_ToDataCollection", "sourceRef": "Task_ValidateMLCo", "targetRef": "Task_DataCollection" },
+    { "id": "Flow_ToDataValidation", "sourceRef": "Task_DataCollection", "targetRef": "Task_DataValidation" },
+    { "id": "Flow_FromDataValidation", "sourceRef": "Task_DataValidation", "targetRef": "Task_ReviewData" },
+    { "id": "Flow_ToDataPreparation", "sourceRef": "Task_ReviewData", "targetRef": "Task_DataPreparation" },
+    { "id": "Flow_ToBuildModels", "sourceRef": "Task_DataPreparation", "targetRef": "Task_BuildEconometricModels" },
+    { "id": "Flow_ToProduceOutputs", "sourceRef": "Task_BuildEconometricModels", "targetRef": "Task_ProduceInitialOutputs" },
+    { "id": "Flow_ToAnalyzeResults", "sourceRef": "Task_ProduceInitialOutputs", "targetRef": "Task_AnalyzeResults" },
+    { "id": "Flow_ToPrepareInsights", "sourceRef": "Task_AnalyzeResults", "targetRef": "Task_PrepareInsights" },
+    { "id": "Flow_ToCreateDashboard", "sourceRef": "Task_PrepareInsights", "targetRef": "Task_CreateDashboard" },
+    { "id": "Flow_ToRefineModels", "sourceRef": "Task_CreateDashboard", "targetRef": "Task_RefineModels" },
+    { "id": "Flow_ToPresentFindings", "sourceRef": "Task_RefineModels", "targetRef": "Task_PresentFindings" },
+    { "id": "Flow_ToImplementRecommendations", "sourceRef": "Task_PresentFindings", "targetRef": "Task_ImplementRecommendations" },
+    { "id": "Flow_ToProcessComplete", "sourceRef": "Task_ImplementRecommendations", "targetRef": "EndEvent_ProcessComplete" }
+  ]
+} 

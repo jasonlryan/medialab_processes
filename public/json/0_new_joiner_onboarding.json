@@ -1,0 +1,173 @@
+{
+  "id": "Process_NewJoinerOnboarding",
+  "name": "New Joiner Onboarding (Multi-Stage)",
+  "description": "Process for onboarding new joiners, from acceptance through to completion",
+  "type": "process",
+  "lanes": [
+    {
+      "id": "Lane_HR",
+      "name": "HR Department",
+      "elements": [
+        {
+          "id": "StartEvent_OfferAccepted",
+          "name": "Offer Accepted",
+          "type": "startEvent",
+          "description": "Starting point of the onboarding process when an offer is accepted"
+        },
+        {
+          "id": "SubProcess_PreJoining",
+          "name": "Pre-Joining",
+          "type": "subProcess",
+          "description": "Activities before the employee's first day",
+          "elements": [
+            {
+              "id": "Start_PreJoin",
+              "name": "Pre-Joining Starts",
+              "type": "startEvent",
+              "description": "Start of pre-joining activities"
+            },
+            {
+              "id": "Task_SendContractOffer",
+              "name": "Contract, Offer Letter",
+              "type": "task",
+              "description": "Cover requirements once someone has accepted a role and before their first day."
+            },
+            {
+              "id": "End_PreJoin",
+              "name": "Pre-Joining Ends",
+              "type": "endEvent",
+              "description": "End of pre-joining activities"
+            }
+          ]
+        },
+        {
+          "id": "SubProcess_PostJoining_HR",
+          "name": "Post-Joining (HR)",
+          "type": "subProcess",
+          "description": "HR activities after employee joins",
+          "elements": [
+            {
+              "id": "Start_PostJoin_HR",
+              "name": "Post-Joining HR Starts",
+              "type": "startEvent",
+              "description": "Start of HR post-joining activities"
+            },
+            {
+              "id": "Task_MandatoryTrainingProgramme",
+              "name": "Mandatory Training/Programme",
+              "type": "task",
+              "description": "To ensure each new starter received consistent company onboarding programme and relevant training for the team they are joining."
+            },
+            {
+              "id": "End_PostJoin_HR",
+              "name": "Post-Joining HR Ends",
+              "type": "endEvent",
+              "description": "End of HR post-joining activities"
+            }
+          ]
+        },
+        {
+          "id": "Task_SystemAccessSetup",
+          "name": "Logins, platform set up",
+          "type": "task",
+          "description": "To ensure all logins and system setups are requested, ahead of a new joiner starting in your team"
+        },
+        {
+          "id": "EndEvent_OnboardingProcessComplete",
+          "name": "Entire Onboarding Process Complete",
+          "type": "endEvent",
+          "description": "End of the entire onboarding process"
+        }
+      ]
+    },
+    {
+      "id": "Lane_Employee",
+      "name": "New Joiner",
+      "elements": [
+        {
+          "id": "Task_ReturnSignedContract_Emp",
+          "name": "Return Signed Contract (Employee Action)",
+          "type": "task",
+          "description": "Employee returns the signed contract"
+        }
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "id": "SubProcess_PreJoining",
+      "name": "Pre-Joining",
+      "type": "subProcess",
+      "description": "Activities before the employee's first day",
+      "elements": [
+        {
+          "id": "Start_PreJoin",
+          "name": "Pre-Joining Starts",
+          "type": "startEvent",
+          "reference": true
+        },
+        {
+          "id": "Task_SendContractOffer",
+          "name": "Contract, Offer Letter",
+          "type": "task",
+          "description": "Cover requirements once someone has accepted a role and before their first day.",
+          "reference": true
+        },
+        {
+          "id": "Task_ReturnSignedContract_Emp",
+          "name": "Return Signed Contract (Employee Action)",
+          "type": "task",
+          "description": "Employee returns the signed contract",
+          "reference": true
+        },
+        {
+          "id": "End_PreJoin",
+          "name": "Pre-Joining Ends",
+          "type": "endEvent",
+          "reference": true
+        }
+      ]
+    },
+    {
+      "id": "SubProcess_PostJoining",
+      "name": "Post-Joining",
+      "type": "subProcess",
+      "description": "Activities after the employee's first day",
+      "elements": [
+        {
+          "id": "SubProcess_PostJoining_HR",
+          "name": "Post-Joining (HR)",
+          "type": "subProcess",
+          "reference": true
+        },
+        {
+          "id": "Task_MandatoryTrainingProgramme",
+          "name": "Mandatory Training/Programme",
+          "type": "task",
+          "description": "To ensure each new starter received consistent company onboarding programme and relevant training for the team they are joining.",
+          "reference": true
+        },
+        {
+          "id": "Task_SystemAccessSetup",
+          "name": "Logins, platform set up",
+          "type": "task",
+          "description": "To ensure all logins and system setups are requested, ahead of a new joiner starting in your team",
+          "reference": true
+        }
+      ]
+    }
+  ],
+  "flows": [
+    { "id": "Flow_To_PreJoining", "sourceRef": "StartEvent_OfferAccepted", "targetRef": "SubProcess_PreJoining" },
+    { "id": "Flow_From_PreJoining", "sourceRef": "SubProcess_PreJoining", "targetRef": "SubProcess_PostJoining_HR" },
+    { "id": "Flow_To_SystemSetup", "sourceRef": "SubProcess_PostJoining_HR", "targetRef": "Task_SystemAccessSetup" },
+    { "id": "Flow_To_Benefits", "sourceRef": "Task_SystemAccessSetup", "targetRef": "EndEvent_OnboardingProcessComplete" },
+    
+    { "id": "Flow_Pre1", "sourceRef": "Start_PreJoin", "targetRef": "Task_SendContractOffer" },
+    { "id": "Flow_Pre2", "sourceRef": "Task_SendContractOffer", "targetRef": "Task_ReturnSignedContract_Emp" },
+    { "id": "Flow_Pre3", "sourceRef": "Task_ReturnSignedContract_Emp", "targetRef": "End_PreJoin" },
+    
+    { "id": "Flow_PostHR1", "sourceRef": "Start_PostJoin_HR", "targetRef": "Task_MandatoryTrainingProgramme" },
+    { "id": "Flow_PostHR2", "sourceRef": "Task_MandatoryTrainingProgramme", "targetRef": "End_PostJoin_HR" }
+  ]
+} 

@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+                  id="Definitions_ProductSprint"
+                  targetNamespace="https://medialab.com/processes">
+  
+  <bpmn:collaboration id="Collaboration_ProductSprint">
+    <bpmn:participant id="Participant_Process" name="AI Innovation Day - Startup Sprint Guide" processRef="Process_ProductSprint" />
+  </bpmn:collaboration>
+  
+  <bpmn:process id="Process_ProductSprint" name="AI Innovation Day - Startup Sprint Guide" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Main">
+      <bpmn:lane id="Lane_TeamMembers" name="Team Members">
+        <bpmn:flowNodeRef>StartEvent_SprintDay</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SubProcess_Phase1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SubProcess_Phase2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SubProcess_Phase3</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SubProcess_Phase4</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_SprintComplete</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Facilitator" name="Facilitator">
+        <!-- Facilitator provides guidance throughout but doesn't have specific tasks -->
+      </bpmn:lane>
+      <bpmn:lane id="Lane_JudgesPeers" name="Judges/Peers">
+        <bpmn:flowNodeRef>SubProcess_Phase4</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <!-- Process Start -->
+    <bpmn:startEvent id="StartEvent_SprintDay" name="Begin Sprint Day">
+      <bpmn:outgoing>Flow_To_Phase1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <!-- Phase 1 Container -->
+    <bpmn:subProcess id="SubProcess_Phase1" name="Phase 1: Idea Exploration • Functionality • User Stories">
+      <bpmn:incoming>Flow_To_Phase1</bpmn:incoming>
+      <bpmn:outgoing>Flow_Phase1_To_Phase2</bpmn:outgoing>
+      
+      <bpmn:startEvent id="StartEvent_Phase1">
+        <bpmn:outgoing>Flow_Internal_Start_P1</bpmn:outgoing>
+      </bpmn:startEvent>
+      
+      <bpmn:task id="Task_LightningPitches" name="Lightning Pitches">
+        <bpmn:documentation>Each participant shares an idea &amp; why it excites them (max 60 s)</bpmn:documentation>
+        <bpmn:incoming>Flow_Internal_Start_P1</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_SelectIdea</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_SelectIdea" name="Select Idea">
+        <bpmn:documentation>Team selects one idea to focus on for the sprint</bpmn:documentation>
+        <bpmn:incoming>Flow_To_SelectIdea</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_CreateOnePager</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_CreateOnePager" name="Create One-Pager">
+        <bpmn:documentation>Capture the selected idea in a one-page document</bpmn:documentation>
+        <bpmn:incoming>Flow_To_CreateOnePager</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_DraftFunctionalSpec</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_DraftFunctionalSpec" name="Draft Functional Spec v0">
+        <bpmn:documentation>Define how the product works end-to-end; highlight AI/ML components</bpmn:documentation>
+        <bpmn:incoming>Flow_To_DraftFunctionalSpec</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_WriteUserStories</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_WriteUserStories" name="Write User Stories">
+        <bpmn:documentation>Write core User Stories (As a…, I want…, so that…)</bpmn:documentation>
+        <bpmn:incoming>Flow_To_WriteUserStories</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_PrioritizeStories</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_PrioritizeStories" name="Prioritize Stories">
+        <bpmn:documentation>Organize user stories by importance</bpmn:documentation>
+        <bpmn:incoming>Flow_To_PrioritizeStories</bpmn:incoming>
+        <bpmn:outgoing>Flow_Internal_End_P1</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:endEvent id="EndEvent_Phase1">
+        <bpmn:incoming>Flow_Internal_End_P1</bpmn:incoming>
+      </bpmn:endEvent>
+      
+      <bpmn:sequenceFlow id="Flow_Internal_Start_P1" sourceRef="StartEvent_Phase1" targetRef="Task_LightningPitches" />
+      <bpmn:sequenceFlow id="Flow_To_SelectIdea" sourceRef="Task_LightningPitches" targetRef="Task_SelectIdea" />
+      <bpmn:sequenceFlow id="Flow_To_CreateOnePager" sourceRef="Task_SelectIdea" targetRef="Task_CreateOnePager" />
+      <bpmn:sequenceFlow id="Flow_To_DraftFunctionalSpec" sourceRef="Task_CreateOnePager" targetRef="Task_DraftFunctionalSpec" />
+      <bpmn:sequenceFlow id="Flow_To_WriteUserStories" sourceRef="Task_DraftFunctionalSpec" targetRef="Task_WriteUserStories" />
+      <bpmn:sequenceFlow id="Flow_To_PrioritizeStories" sourceRef="Task_WriteUserStories" targetRef="Task_PrioritizeStories" />
+      <bpmn:sequenceFlow id="Flow_Internal_End_P1" sourceRef="Task_PrioritizeStories" targetRef="EndEvent_Phase1" />
+    </bpmn:subProcess>
+
+    <!-- Phase 2 Container -->
+    <bpmn:subProcess id="SubProcess_Phase2" name="Phase 2: Deep Research • PRD • UI Prompt">
+      <bpmn:incoming>Flow_Phase1_To_Phase2</bpmn:incoming>
+      <bpmn:outgoing>Flow_Phase2_To_Phase3</bpmn:outgoing>
+      
+      <bpmn:startEvent id="StartEvent_Phase2">
+        <bpmn:outgoing>Flow_Internal_Start_P2</bpmn:outgoing>
+      </bpmn:startEvent>
+
+      <!-- Phase 2 Tasks -->
+      <bpmn:task id="Task_CompetitorResearch" name="Competitor Research">
+        <bpmn:documentation>Rapid competitor &amp; analog sweep: capture 3-5 relevant products and key differentiators</bpmn:documentation>
+        <bpmn:incoming>Flow_Internal_Start_P2</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_TAMSizing</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_TAMSizing" name="TAM Sizing">
+        <bpmn:documentation>Quick TAM sizing: bottom-up or top-down; document assumptions</bpmn:documentation>
+        <bpmn:incoming>Flow_To_TAMSizing</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_DraftPRD</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_DraftPRD" name="Draft PRD">
+        <bpmn:documentation>Use findings to fill out the PRD skeleton (GPT-o3 can assist)</bpmn:documentation>
+        <bpmn:incoming>Flow_To_DraftPRD</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_CreateUIPrompt</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_CreateUIPrompt" name="Create UI Prompt">
+        <bpmn:documentation>Write a UI prompt for Bolt / Lovable v0 describing key screens &amp; interactions</bpmn:documentation>
+        <bpmn:incoming>Flow_To_CreateUIPrompt</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_BuildPrototype</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:endEvent id="EndEvent_Phase2">
+        <bpmn:incoming>Flow_Internal_End_P2</bpmn:incoming>
+      </bpmn:endEvent>
+      
+      <bpmn:sequenceFlow id="Flow_Internal_Start_P2" sourceRef="StartEvent_Phase2" targetRef="Task_CompetitorResearch" />
+      <bpmn:sequenceFlow id="Flow_To_TAMSizing" sourceRef="Task_CompetitorResearch" targetRef="Task_TAMSizing" />
+      <bpmn:sequenceFlow id="Flow_To_DraftPRD" sourceRef="Task_TAMSizing" targetRef="Task_DraftPRD" />
+      <bpmn:sequenceFlow id="Flow_To_CreateUIPrompt" sourceRef="Task_DraftPRD" targetRef="Task_CreateUIPrompt" />
+      <bpmn:sequenceFlow id="Flow_Internal_End_P2" sourceRef="Task_CreateUIPrompt" targetRef="EndEvent_Phase2" />
+    </bpmn:subProcess>
+
+    <!-- Phase 3 Container -->
+    <bpmn:subProcess id="SubProcess_Phase3" name="Phase 3: Build the UI (Hands-On)">
+      <bpmn:incoming>Flow_Phase2_To_Phase3</bpmn:incoming>
+      <bpmn:outgoing>Flow_Phase3_To_Phase4</bpmn:outgoing>
+      
+      <bpmn:startEvent id="StartEvent_Phase3">
+        <bpmn:outgoing>Flow_Internal_Start_P3</bpmn:outgoing>
+      </bpmn:startEvent>
+
+      <!-- Phase 3 Tasks -->
+      <bpmn:task id="Task_BuildPrototype" name="Build Clickable Prototype">
+        <bpmn:documentation>Use Bolt, Figma, Lovable v0, or preferred tool to create a clickable prototype</bpmn:documentation>
+        <bpmn:incoming>Flow_Internal_Start_P3</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_CraftKeyMessages</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_CraftKeyMessages" name="Craft Key Messages">
+        <bpmn:documentation>Apply Key Messages: short, punchy copy that communicates the value proposition</bpmn:documentation>
+        <bpmn:incoming>Flow_To_CraftKeyMessages</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_DesignLandingPage</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_DesignLandingPage" name="Design Landing Page">
+        <bpmn:documentation>Lay out a simple Landing Page (headline, hero, 3 bullets, social proof, CTA)</bpmn:documentation>
+        <bpmn:incoming>Flow_To_DesignLandingPage</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_PrepareDemo</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:endEvent id="EndEvent_Phase3">
+        <bpmn:incoming>Flow_Internal_End_P3</bpmn:incoming>
+      </bpmn:endEvent>
+      
+      <bpmn:sequenceFlow id="Flow_Internal_Start_P3" sourceRef="StartEvent_Phase3" targetRef="Task_BuildPrototype" />
+      <bpmn:sequenceFlow id="Flow_To_CraftKeyMessages" sourceRef="Task_BuildPrototype" targetRef="Task_CraftKeyMessages" />
+      <bpmn:sequenceFlow id="Flow_To_DesignLandingPage" sourceRef="Task_CraftKeyMessages" targetRef="Task_DesignLandingPage" />
+      <bpmn:sequenceFlow id="Flow_Internal_End_P3" sourceRef="Task_DesignLandingPage" targetRef="EndEvent_Phase3" />
+    </bpmn:subProcess>
+    
+    <!-- Phase 4 Container -->
+    <bpmn:subProcess id="SubProcess_Phase4" name="Phase 4: Demo">
+      <bpmn:incoming>Flow_Phase3_To_Phase4</bpmn:incoming>
+      <bpmn:outgoing>Flow_Phase4_To_End</bpmn:outgoing>
+      
+      <bpmn:startEvent id="StartEvent_Phase4">
+        <bpmn:outgoing>Flow_Internal_Start_P4</bpmn:outgoing>
+      </bpmn:startEvent>
+
+      <!-- Phase 4 Tasks -->
+      <bpmn:task id="Task_PrepareDemo" name="Prepare Demo">
+        <bpmn:documentation>Prepare 3-minute live demo or recorded walkthrough</bpmn:documentation>
+        <bpmn:incoming>Flow_Internal_Start_P4</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_DeliverDemo</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_DeliverDemo" name="Deliver 3-min Demo">
+        <bpmn:documentation>Present the 3-minute demo to judges/peers</bpmn:documentation>
+        <bpmn:incoming>Flow_To_DeliverDemo</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_ConductQA</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_ConductQA" name="Conduct Q&amp;A">
+        <bpmn:documentation>2-minute Q&amp;A with judges/peers</bpmn:documentation>
+        <bpmn:incoming>Flow_To_ConductQA</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_CaptureFeedback</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_CaptureFeedback" name="Capture Feedback">
+        <bpmn:documentation>Capture feedback &amp; note next steps</bpmn:documentation>
+        <bpmn:incoming>Flow_To_CaptureFeedback</bpmn:incoming>
+        <bpmn:outgoing>Flow_Internal_End_P4</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:endEvent id="EndEvent_Phase4">
+        <bpmn:incoming>Flow_Internal_End_P4</bpmn:incoming>
+      </bpmn:endEvent>
+      
+      <bpmn:sequenceFlow id="Flow_Internal_Start_P4" sourceRef="StartEvent_Phase4" targetRef="Task_PrepareDemo" />
+      <bpmn:sequenceFlow id="Flow_To_DeliverDemo" sourceRef="Task_PrepareDemo" targetRef="Task_DeliverDemo" />
+      <bpmn:sequenceFlow id="Flow_To_ConductQA" sourceRef="Task_DeliverDemo" targetRef="Task_ConductQA" />
+      <bpmn:sequenceFlow id="Flow_To_CaptureFeedback" sourceRef="Task_ConductQA" targetRef="Task_CaptureFeedback" />
+      <bpmn:sequenceFlow id="Flow_Internal_End_P4" sourceRef="Task_CaptureFeedback" targetRef="EndEvent_Phase4" />
+    </bpmn:subProcess>
+    
+    <bpmn:endEvent id="EndEvent_SprintComplete" name="Sprint Complete">
+      <bpmn:incoming>Flow_Phase4_To_End</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <!-- Sequence Flows for Main Process -->
+    <bpmn:sequenceFlow id="Flow_To_Phase1" sourceRef="StartEvent_SprintDay" targetRef="SubProcess_Phase1" />
+    <bpmn:sequenceFlow id="Flow_Phase1_To_Phase2" sourceRef="SubProcess_Phase1" targetRef="SubProcess_Phase2" />
+    <bpmn:sequenceFlow id="Flow_Phase2_To_Phase3" sourceRef="SubProcess_Phase2" targetRef="SubProcess_Phase3" />
+    <bpmn:sequenceFlow id="Flow_Phase3_To_Phase4" sourceRef="SubProcess_Phase3" targetRef="SubProcess_Phase4" />
+    <bpmn:sequenceFlow id="Flow_Phase4_To_End" sourceRef="SubProcess_Phase4" targetRef="EndEvent_SprintComplete" />
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="Diagram_ProductSprint">
+    <bpmndi:BPMNPlane id="Plane_ProductSprint" bpmnElement="Collaboration_ProductSprint">
+      <!-- Participant -->
+      <bpmndi:BPMNShape id="Shape_Participant_Process" bpmnElement="Participant_Process" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="1400" height="600" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Lanes -->
+      <bpmndi:BPMNShape id="Shape_Lane_TeamMembers" bpmnElement="Lane_TeamMembers" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="1370" height="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="215" y="172" width="25" height="120" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Lane_Facilitator" bpmnElement="Lane_Facilitator" isHorizontal="true">
+        <dc:Bounds x="190" y="380" width="1370" height="100" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="215" y="410" width="25" height="70" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Lane_JudgesPeers" bpmnElement="Lane_JudgesPeers" isHorizontal="true">
+        <dc:Bounds x="190" y="480" width="1370" height="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="215" y="550" width="25" height="90" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <!-- Phase Containers (subprocesses) -->
+      <bpmndi:BPMNShape id="Shape_SubProcess_Phase1" bpmnElement="SubProcess_Phase1" isExpanded="true">
+        <dc:Bounds x="250" y="90" width="350" height="580" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="275" y="100" width="300" height="20" />
+        </bpmndi:BPMNLabel>
+        <bpmndi:BPMNStyle>
+          <bpmndi:BPMNStyle.fillColor>#FFFFFF</bpmndi:BPMNStyle.fillColor>
+          <bpmndi:BPMNStyle.fillOpacity>0.4</bpmndi:BPMNStyle.fillOpacity>
+        </bpmndi:BPMNStyle>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_SubProcess_Phase2" bpmnElement="SubProcess_Phase2" isExpanded="true">
+        <dc:Bounds x="610" y="90" width="350" height="580" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="635" y="100" width="300" height="20" />
+        </bpmndi:BPMNLabel>
+        <bpmndi:BPMNStyle>
+          <bpmndi:BPMNStyle.fillColor>#FFFFFF</bpmndi:BPMNStyle.fillColor>
+          <bpmndi:BPMNStyle.fillOpacity>0.4</bpmndi:BPMNStyle.fillOpacity>
+        </bpmndi:BPMNStyle>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_SubProcess_Phase3" bpmnElement="SubProcess_Phase3" isExpanded="true">
+        <dc:Bounds x="970" y="90" width="280" height="580" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="995" y="100" width="230" height="20" />
+        </bpmndi:BPMNLabel>
+        <bpmndi:BPMNStyle>
+          <bpmndi:BPMNStyle.fillColor>#FFFFFF</bpmndi:BPMNStyle.fillColor>
+          <bpmndi:BPMNStyle.fillOpacity>0.4</bpmndi:BPMNStyle.fillOpacity>
+        </bpmndi:BPMNStyle>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_SubProcess_Phase4" bpmnElement="SubProcess_Phase4" isExpanded="true">
+        <dc:Bounds x="1260" y="90" width="280" height="580" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1285" y="100" width="230" height="20" />
+        </bpmndi:BPMNLabel>
+        <bpmndi:BPMNStyle>
+          <bpmndi:BPMNStyle.fillColor>#FFFFFF</bpmndi:BPMNStyle.fillColor>
+          <bpmndi:BPMNStyle.fillOpacity>0.4</bpmndi:BPMNStyle.fillOpacity>
+        </bpmndi:BPMNStyle>
+      </bpmndi:BPMNShape>
+
+      <!-- Start Event -->
+      <bpmndi:BPMNShape id="Shape_StartEvent_SprintDay" bpmnElement="StartEvent_SprintDay">
+        <dc:Bounds x="272" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="250" y="205" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Phase 1 Tasks -->
+      <bpmndi:BPMNShape id="Shape_Task_LightningPitches" bpmnElement="Task_LightningPitches">
+        <dc:Bounds x="340" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_SelectIdea" bpmnElement="Task_SelectIdea">
+        <dc:Bounds x="340" y="240" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_CreateOnePager" bpmnElement="Task_CreateOnePager">
+        <dc:Bounds x="460" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_DraftFunctionalSpec" bpmnElement="Task_DraftFunctionalSpec">
+        <dc:Bounds x="460" y="240" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_WriteUserStories" bpmnElement="Task_WriteUserStories">
+        <dc:Bounds x="460" y="340" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_PrioritizeStories" bpmnElement="Task_PrioritizeStories">
+        <dc:Bounds x="460" y="450" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <!-- Phase 2 Tasks -->
+      <bpmndi:BPMNShape id="Shape_Task_CompetitorResearch" bpmnElement="Task_CompetitorResearch">
+        <dc:Bounds x="640" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_TAMSizing" bpmnElement="Task_TAMSizing">
+        <dc:Bounds x="640" y="240" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_DraftPRD" bpmnElement="Task_DraftPRD">
+        <dc:Bounds x="760" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_CreateUIPrompt" bpmnElement="Task_CreateUIPrompt">
+        <dc:Bounds x="760" y="240" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <!-- Phase 3 Tasks -->
+      <bpmndi:BPMNShape id="Shape_Task_BuildPrototype" bpmnElement="Task_BuildPrototype">
+        <dc:Bounds x="1000" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_CraftKeyMessages" bpmnElement="Task_CraftKeyMessages">
+        <dc:Bounds x="1000" y="240" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_DesignLandingPage" bpmnElement="Task_DesignLandingPage">
+        <dc:Bounds x="1120" y="190" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <!-- Phase 4 Tasks -->
+      <bpmndi:BPMNShape id="Shape_Task_PrepareDemo" bpmnElement="Task_PrepareDemo">
+        <dc:Bounds x="1290" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_DeliverDemo" bpmnElement="Task_DeliverDemo">
+        <dc:Bounds x="1290" y="240" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_ConductQA" bpmnElement="Task_ConductQA">
+        <dc:Bounds x="1290" y="540" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_CaptureFeedback" bpmnElement="Task_CaptureFeedback">
+        <dc:Bounds x="1410" y="240" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_EndEvent_SprintComplete" bpmnElement="EndEvent_SprintComplete">
+        <dc:Bounds x="1442" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1420" y="205" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Sequence Flow Edges -->
+      <bpmndi:BPMNEdge id="Edge_Flow_To_LightningPitches" bpmnElement="Flow_To_LightningPitches">
+        <di:waypoint x="308" y="180" />
+        <di:waypoint x="340" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_SelectIdea" bpmnElement="Flow_To_SelectIdea">
+        <di:waypoint x="390" y="220" />
+        <di:waypoint x="390" y="240" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_CreateOnePager" bpmnElement="Flow_To_CreateOnePager">
+        <di:waypoint x="440" y="280" />
+        <di:waypoint x="450" y="280" />
+        <di:waypoint x="450" y="180" />
+        <di:waypoint x="460" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_DraftFunctionalSpec" bpmnElement="Flow_To_DraftFunctionalSpec">
+        <di:waypoint x="510" y="220" />
+        <di:waypoint x="510" y="240" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_WriteUserStories" bpmnElement="Flow_To_WriteUserStories">
+        <di:waypoint x="510" y="320" />
+        <di:waypoint x="510" y="340" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_PrioritizeStories" bpmnElement="Flow_To_PrioritizeStories">
+        <di:waypoint x="510" y="420" />
+        <di:waypoint x="510" y="450" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_CompetitorResearch" bpmnElement="Flow_To_CompetitorResearch">
+        <di:waypoint x="560" y="490" />
+        <di:waypoint x="600" y="490" />
+        <di:waypoint x="600" y="180" />
+        <di:waypoint x="640" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_TAMSizing" bpmnElement="Flow_To_TAMSizing">
+        <di:waypoint x="690" y="220" />
+        <di:waypoint x="690" y="240" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_DraftPRD" bpmnElement="Flow_To_DraftPRD">
+        <di:waypoint x="740" y="280" />
+        <di:waypoint x="750" y="280" />
+        <di:waypoint x="750" y="180" />
+        <di:waypoint x="760" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_CreateUIPrompt" bpmnElement="Flow_To_CreateUIPrompt">
+        <di:waypoint x="810" y="220" />
+        <di:waypoint x="810" y="240" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_BuildPrototype" bpmnElement="Flow_To_BuildPrototype">
+        <di:waypoint x="860" y="280" />
+        <di:waypoint x="930" y="280" />
+        <di:waypoint x="930" y="180" />
+        <di:waypoint x="1000" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_CraftKeyMessages" bpmnElement="Flow_To_CraftKeyMessages">
+        <di:waypoint x="1050" y="220" />
+        <di:waypoint x="1050" y="240" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_DesignLandingPage" bpmnElement="Flow_To_DesignLandingPage">
+        <di:waypoint x="1100" y="280" />
+        <di:waypoint x="1110" y="280" />
+        <di:waypoint x="1110" y="230" />
+        <di:waypoint x="1120" y="230" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_PrepareDemo" bpmnElement="Flow_To_PrepareDemo">
+        <di:waypoint x="1220" y="230" />
+        <di:waypoint x="1255" y="230" />
+        <di:waypoint x="1255" y="180" />
+        <di:waypoint x="1290" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_DeliverDemo" bpmnElement="Flow_To_DeliverDemo">
+        <di:waypoint x="1340" y="220" />
+        <di:waypoint x="1340" y="240" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_ConductQA" bpmnElement="Flow_To_ConductQA">
+        <di:waypoint x="1340" y="320" />
+        <di:waypoint x="1340" y="540" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_CaptureFeedback" bpmnElement="Flow_To_CaptureFeedback">
+        <di:waypoint x="1390" y="580" />
+        <di:waypoint x="1460" y="580" />
+        <di:waypoint x="1460" y="320" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_To_Complete" bpmnElement="Flow_To_Complete">
+        <di:waypoint x="1460" y="240" />
+        <di:waypoint x="1460" y="198" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions> 

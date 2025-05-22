@@ -11,12 +11,51 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Tabs,
+  Tab,
+  Button,
+  Collapse,
 } from "@mui/material";
 import TaskIcon from "@mui/icons-material/Task";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import InfoIcon from "@mui/icons-material/Info";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+
+interface ProcessElement {
+  id: string;
+  name: string;
+  type: string;
+  description?: string;
+  elements?: ProcessElement[];
+  reference?: boolean;
+}
+
+interface Lane {
+  id: string;
+  name: string;
+  elements: ProcessElement[];
+}
+
+interface Phase {
+  id: string;
+  name: string;
+  type: string;
+  description?: string;
+  elements: ProcessElement[];
+}
+
+interface ProcessData {
+  id: string;
+  name: string;
+  description?: string;
+  type: string;
+  lanes: Lane[];
+  phases?: Phase[];
+  flows?: any[];
+}
 
 interface ProcessStep {
   id: string;
@@ -27,18 +66,19 @@ interface ProcessStep {
 
 interface TextualProcessViewProps {
   xml: string;
+  bpmnFileName?: string;
 }
 
 // Helper to get the right icon for each type
 const getStepIcon = (type: string) => {
-  switch (type) {
-    case "Start Event":
+  switch (type.toLowerCase()) {
+    case "startevent":
       return <PlayCircleOutlineIcon fontSize="small" color="success" />;
-    case "End Event":
+    case "endevent":
       return <StopCircleIcon fontSize="small" color="error" />;
-    case "Sub-Process":
+    case "subprocess":
       return <AccountTreeIcon fontSize="small" color="primary" />;
-    case "Task":
+    case "task":
     default:
       return <TaskIcon fontSize="small" color="action" />;
   }
@@ -55,27 +95,98 @@ const getTypeChipColor = (
   | "info"
   | "success"
   | "warning" => {
-  switch (type) {
-    case "Start Event":
+  const lowerType = type.toLowerCase();
+  switch (true) {
+    case lowerType.includes("start"):
       return "success";
-    case "End Event":
+    case lowerType.includes("end"):
       return "error";
-    case "Sub-Process":
+    case lowerType.includes("subprocess"):
       return "primary";
-    case "Task":
-    default:
+    case lowerType.includes("task"):
       return "default";
+    default:
+      return "info";
   }
 };
 
-const TextualProcessView: React.FC<TextualProcessViewProps> = ({ xml }) => {
-  const [processSteps, setProcessSteps] = useState<ProcessStep[]>([]);
-  const [error, setError] = useState<string | null>(null);
+// Helper function to convert type to display format
+const formatType = (type: string): string => {
+  // Convert camelCase to Title Case with spaces
+  return type
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, (str) => str.toUpperCase())
+    .trim();
+};
 
+const TextualProcessView: React.FC<TextualProcessViewProps> = ({
+  xml,
+  bpmnFileName,
+}) => {
+  const [processSteps, setProcessSteps] = useState<ProcessStep[]>([]);
+  const [jsonData, setJsonData] = useState<ProcessData | null>(null);
+  const [viewType, setViewType] = useState<string>("json"); // "xml" or "json"
+  const [viewMode, setViewMode] = useState<string>("lanes"); // "lanes" or "phases"
+  const [error, setError] = useState<string | null>(null);
+  const [expandedElements, setExpandedElements] = useState<{
+    [key: string]: boolean;
+  }>({});
+
+  const toggleExpand = (id: string) => {
+    setExpandedElements((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  // Load JSON data based on the BPMN filename
   useEffect(() => {
-    if (!xml) {
-      setProcessSteps([]);
-      setError(null);
+    if (!bpmnFileName) return;
+
+    const jsonFileName = bpmnFileName.replace(".bpmn", ".json");
+
+    fetch(`/json/${jsonFileName}`)
+      .then((response) => {
+        if (!response.ok) {
+          // If JSON doesn't exist, fall back to XML view
+          console.warn(`JSON file not found: ${jsonFileName}`);
+          setViewType("xml");
+          return null;
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data) {
+          setJsonData(data);
+          setViewType("json");
+          setError(null);
+
+          // Initialize expanded state for subprocesses
+          const expanded: { [key: string]: boolean } = {};
+          if (data.lanes) {
+            data.lanes.forEach((lane: Lane) => {
+              lane.elements.forEach((element: ProcessElement) => {
+                if (
+                  element.type === "subProcess" ||
+                  element.type === "subprocess"
+                ) {
+                  expanded[element.id] = true; // Default expanded
+                }
+              });
+            });
+          }
+          setExpandedElements(expanded);
+        }
+      })
+      .catch((err) => {
+        console.error("Error loading JSON:", err);
+        setViewType("xml");
+      });
+  }, [bpmnFileName]);
+
+  // Parse XML if JSON view is not available
+  useEffect(() => {
+    if (!xml || viewType === "json") {
       return;
     }
 
@@ -162,40 +273,246 @@ const TextualProcessView: React.FC<TextualProcessViewProps> = ({ xml }) => {
       setError("An unexpected error occurred while processing the BPMN data.");
       setProcessSteps([]);
     }
-  }, [xml]);
+  }, [xml, viewType]);
 
-  if (error) {
+  // Render element recursively for JSON view
+  const renderElement = (element: ProcessElement, indent: number = 0) => {
+    const isSubProcess = element.type.toLowerCase() === "subprocess";
+    const isExpanded = expandedElements[element.id] !== false; // Default to true if not set
+
     return (
-      <Box sx={{ p: 2, height: "100%", overflow: "auto" }}>
-        <Alert severity="error">{error}</Alert>
-      </Box>
-    );
-  }
+      <React.Fragment key={element.id}>
+        <ListItem
+          alignItems="flex-start"
+          sx={{
+            flexDirection: "column",
+            py: 1,
+            pl: indent > 0 ? indent * 3 : 2, // Indent based on hierarchy level
+            borderLeft: indent > 0 ? "1px dashed #ccc" : "none",
+            ml: indent > 0 ? 2 : 0,
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              mb: element.description ? 1 : 0,
+            }}
+          >
+            {isSubProcess && element.elements && element.elements.length > 0 ? (
+              <Button
+                size="small"
+                onClick={() => toggleExpand(element.id)}
+                sx={{ minWidth: 30, p: 0.5 }}
+              >
+                {isExpanded ? (
+                  <ExpandLessIcon fontSize="small" />
+                ) : (
+                  <ExpandMoreIcon fontSize="small" />
+                )}
+              </Button>
+            ) : (
+              <Box sx={{ width: 30 }}>{getStepIcon(element.type)}</Box>
+            )}
 
-  if (processSteps.length === 0 && !xml) {
+            <Typography
+              variant={isSubProcess ? "subtitle1" : "body1"}
+              sx={{
+                ml: 1,
+                flex: 1,
+                fontWeight: isSubProcess ? "bold" : "normal",
+                color: element.reference ? "text.secondary" : "text.primary",
+              }}
+            >
+              {element.name}
+            </Typography>
+
+            <Chip
+              label={formatType(element.type)}
+              size="small"
+              color={getTypeChipColor(element.type)}
+              variant={element.reference ? "outlined" : "filled"}
+              sx={{ opacity: element.reference ? 0.7 : 1 }}
+            />
+
+            {element.reference && (
+              <Chip
+                label="Reference"
+                size="small"
+                color="default"
+                variant="outlined"
+                sx={{ ml: 1, opacity: 0.7 }}
+              />
+            )}
+          </Box>
+
+          {element.description && (
+            <Paper
+              variant="outlined"
+              sx={{
+                width: "calc(100% - 30px)",
+                p: 1.5,
+                ml: 3.5,
+                bgcolor: "background.paper",
+                mb: 1,
+              }}
+            >
+              <Typography variant="body2">{element.description}</Typography>
+            </Paper>
+          )}
+
+          {isSubProcess &&
+            element.elements &&
+            element.elements.length > 0 &&
+            isExpanded && (
+              <Box sx={{ width: "100%", mt: 1 }}>
+                {element.elements.map((childElement) =>
+                  renderElement(childElement, indent + 1)
+                )}
+              </Box>
+            )}
+        </ListItem>
+      </React.Fragment>
+    );
+  };
+
+  // Render JSON view
+  const renderJsonView = () => {
+    if (!jsonData) return null;
+
     return (
-      <Box sx={{ p: 2, height: "100%", overflow: "auto" }}>
-        <Alert severity="info">No BPMN data loaded.</Alert>
-      </Box>
-    );
-  }
+      <>
+        {jsonData.description && (
+          <Paper sx={{ p: 2, mb: 2, bgcolor: "background.paper" }}>
+            <Typography variant="body1">{jsonData.description}</Typography>
+          </Paper>
+        )}
 
-  if (processSteps.length === 0 && xml) {
+        {jsonData.phases && jsonData.phases.length > 0 && (
+          <Box sx={{ mb: 2 }}>
+            <Tabs
+              value={viewMode}
+              onChange={(_, newValue) => setViewMode(newValue)}
+              textColor="primary"
+              indicatorColor="primary"
+            >
+              <Tab value="lanes" label="Swim Lanes View" />
+              <Tab value="phases" label="Phases View" />
+            </Tabs>
+          </Box>
+        )}
+
+        {viewMode === "lanes"
+          ? // Lanes View
+            jsonData.lanes.map((lane) => (
+              <Box key={lane.id} sx={{ mb: 3 }}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    bgcolor: "primary.main",
+                    color: "primary.contrastText",
+                    p: 1,
+                    borderRadius: "4px 4px 0 0",
+                  }}
+                >
+                  {lane.name}
+                </Typography>
+
+                <List
+                  sx={{
+                    width: "100%",
+                    bgcolor: "background.paper",
+                    border: "1px solid",
+                    borderColor: "divider",
+                    borderTopWidth: 0,
+                    borderRadius: "0 0 4px 4px",
+                    overflow: "hidden",
+                  }}
+                >
+                  {lane.elements.map((element, index) => (
+                    <React.Fragment key={element.id}>
+                      {index > 0 && <Divider component="li" />}
+                      {renderElement(element)}
+                    </React.Fragment>
+                  ))}
+
+                  {lane.elements.length === 0 && (
+                    <ListItem>
+                      <Typography variant="body2" color="text.secondary">
+                        No elements in this lane
+                      </Typography>
+                    </ListItem>
+                  )}
+                </List>
+              </Box>
+            ))
+          : // Phases View
+            jsonData.phases?.map((phase) => (
+              <Box key={phase.id} sx={{ mb: 3 }}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    bgcolor: "secondary.main",
+                    color: "secondary.contrastText",
+                    p: 1,
+                    borderRadius: "4px 4px 0 0",
+                  }}
+                >
+                  {phase.name}
+                </Typography>
+
+                {phase.description && (
+                  <Paper
+                    sx={{
+                      p: 1.5,
+                      borderRadius: 0,
+                      borderLeft: "1px solid",
+                      borderRight: "1px solid",
+                      borderColor: "divider",
+                    }}
+                  >
+                    <Typography variant="body2">{phase.description}</Typography>
+                  </Paper>
+                )}
+
+                <List
+                  sx={{
+                    width: "100%",
+                    bgcolor: "background.paper",
+                    border: "1px solid",
+                    borderColor: "divider",
+                    borderTopWidth: phase.description ? 0 : 1,
+                    borderRadius: phase.description
+                      ? "0 0 4px 4px"
+                      : "0 0 4px 4px",
+                    overflow: "hidden",
+                  }}
+                >
+                  {phase.elements.map((element, index) => (
+                    <React.Fragment key={element.id}>
+                      {index > 0 && <Divider component="li" />}
+                      {renderElement(element)}
+                    </React.Fragment>
+                  ))}
+
+                  {phase.elements.length === 0 && (
+                    <ListItem>
+                      <Typography variant="body2" color="text.secondary">
+                        No elements in this phase
+                      </Typography>
+                    </ListItem>
+                  )}
+                </List>
+              </Box>
+            ))}
+      </>
+    );
+  };
+
+  // Render XML view (legacy)
+  const renderXmlView = () => {
     return (
-      <Box sx={{ p: 2, height: "100%", overflow: "auto" }}>
-        <Alert severity="info">
-          Loading process steps or no standard elements found...
-        </Alert>
-      </Box>
-    );
-  }
-
-  return (
-    <Box sx={{ p: 2, height: "100%", overflow: "auto" }}>
-      <Typography variant="h5" gutterBottom>
-        Process Steps & Details
-      </Typography>
-
       <List sx={{ width: "100%" }}>
         {processSteps.map((step, index) => (
           <React.Fragment key={step.id}>
@@ -248,7 +565,7 @@ const TextualProcessView: React.FC<TextualProcessViewProps> = ({ xml }) => {
                     mt: 1,
                   }}
                 >
-                  <InfoIcon fontSize="small" sx={{ mr: 1 }} />
+                  <InfoIcon fontSize="small" sx={{ mr: 0.5 }} />
                   <Typography variant="body2">
                     No detailed description provided in the BPMN.
                   </Typography>
@@ -258,6 +575,57 @@ const TextualProcessView: React.FC<TextualProcessViewProps> = ({ xml }) => {
           </React.Fragment>
         ))}
       </List>
+    );
+  };
+
+  if (error) {
+    return (
+      <Box sx={{ p: 2, height: "100%", overflow: "auto" }}>
+        <Alert severity="error">{error}</Alert>
+      </Box>
+    );
+  }
+
+  if (
+    (processSteps.length === 0 && !xml) ||
+    (!jsonData && viewType === "json" && !xml)
+  ) {
+    return (
+      <Box sx={{ p: 2, height: "100%", overflow: "auto" }}>
+        <Alert severity="info">No process data loaded.</Alert>
+      </Box>
+    );
+  }
+
+  if (processSteps.length === 0 && viewType === "xml" && xml) {
+    return (
+      <Box sx={{ p: 2, height: "100%", overflow: "auto" }}>
+        <Alert severity="info">
+          Loading process steps or no standard elements found...
+        </Alert>
+      </Box>
+    );
+  }
+
+  return (
+    <Box sx={{ p: 2, height: "100%", overflow: "auto" }}>
+      <Typography variant="h5" gutterBottom>
+        Process Steps & Details
+      </Typography>
+
+      {viewType === "json" && jsonData ? renderJsonView() : renderXmlView()}
+
+      {viewType === "xml" && jsonData && (
+        <Box sx={{ mt: 3, textAlign: "center" }}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => setViewType("json")}
+          >
+            Switch to Enhanced Hierarchical View
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };

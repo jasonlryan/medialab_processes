@@ -86,6 +86,7 @@ const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<"diagram" | "text">("diagram");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [processTitle, setProcessTitle] = useState<string>("");
 
   const fetchFileList = async () => {
     try {
@@ -133,12 +134,50 @@ const Home: React.FC = () => {
         throw new Error(`Fetched BPMN file ${filename} is empty.`);
       }
       setBpmnXml(xml);
+
+      // Try to fetch the corresponding JSON file to get the process title
+      fetchProcessTitle(filename);
     } catch (err: any) {
       console.error("Error fetching BPMN XML:", err);
       setError(`Error loading BPMN file '${filename}': ${err.message}`);
       setBpmnXml(null);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchProcessTitle = async (filename: string) => {
+    try {
+      const jsonFileName = filename.replace(".bpmn", ".json");
+      const response = await fetch(`/json/${jsonFileName}`);
+
+      if (response.ok) {
+        const jsonData = await response.json();
+        if (jsonData && jsonData.name) {
+          // Use the actual process name from the JSON data
+          setProcessTitle(jsonData.name);
+          return;
+        }
+      }
+
+      // If JSON not available or doesn't have a name, use the filename
+      const baseName = filename.split(".")[0];
+      const nameFromFile = baseName
+        .split("_")
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
+
+      setProcessTitle(nameFromFile);
+    } catch (err) {
+      console.warn("Could not fetch process title from JSON:", err);
+      // Fallback to filename-based title
+      const baseName = filename.split(".")[0];
+      const nameFromFile = baseName
+        .split("_")
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
+
+      setProcessTitle(nameFromFile);
     }
   };
 
@@ -309,7 +348,28 @@ const Home: React.FC = () => {
 
           {/* View Mode Toggle */}
           {selectedFile && !error && (
-            <Paper sx={{ mb: 2, p: 1, boxShadow: 2 }}>
+            <Paper
+              sx={{
+                mb: 2,
+                p: 1,
+                boxShadow: 2,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{
+                  ml: 2,
+                  fontWeight: 500,
+                  color: "text.primary",
+                  flexGrow: 1,
+                }}
+              >
+                {processTitle}
+              </Typography>
               <ToggleButtonGroup
                 value={viewMode}
                 exclusive
@@ -384,7 +444,10 @@ const Home: React.FC = () => {
                 {viewMode === "diagram" ? (
                   <BpmnViewer xml={bpmnXml} />
                 ) : (
-                  <TextualProcessView xml={bpmnXml} />
+                  <TextualProcessView
+                    xml={bpmnXml}
+                    bpmnFileName={selectedFile}
+                  />
                 )}
               </Box>
             )}

@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+                  id="Definitions_Apollo"
+                  targetNamespace="https://medialab.com/processes">
+  
+  <bpmn:collaboration id="Collaboration_Apollo">
+    <bpmn:participant id="Participant_ApolloProcess" name="Apollo Onboarding Process" processRef="Process_Apollo" />
+  </bpmn:collaboration>
+  
+  <bpmn:process id="Process_Apollo" name="Apollo Onboarding Process" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Main">
+      <bpmn:lane id="Lane_ClientTeam" name="Client Team">
+        <bpmn:flowNodeRef>StartEvent_Process</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_AgreeScopeServices</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SubmitTicket</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_GrantAccessDataSources</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_GrantAccessPlatform</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ConfirmChannelAccuracy</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_AcceptTraining</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_ApolloTeam" name="Apollo Team">
+        <bpmn:flowNodeRef>Task_CompleteENGAGE</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SetupProject</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_UpdateProjectPlan</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_CreateSite</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_RemindResponsibilities</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_RequestAccess</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_DeliverTraining</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_GainSignOff</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SubProcess_SetupDashboard</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_ProcessComplete</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <!-- Sub-Processes -->
+    <bpmn:subProcess id="SubProcess_SetupDashboard" name="Dashboard Setup and Reporting">
+      <bpmn:incoming>Flow_ToSetupDashboard</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToProcessComplete</bpmn:outgoing>
+      
+      <bpmn:startEvent id="StartEvent_Dashboard" name="Dashboard Setup Starts">
+        <bpmn:outgoing>Flow_ToDashboardTasks</bpmn:outgoing>
+      </bpmn:startEvent>
+      
+      <bpmn:task id="Task_RequestConfirmation" name="Request confirmation from client team">
+        <bpmn:incoming>Flow_ToDashboardTasks</bpmn:incoming>
+        <bpmn:outgoing>Flow_ToPerformSetup</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_PerformSetup" name="Perform setup for initial reporting">
+        <bpmn:incoming>Flow_ToPerformSetup</bpmn:incoming>
+        <bpmn:outgoing>Flow_ToIncrementalOnboarding</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_IncrementalOnboarding" name="Incrementally onboard data into the dashboard">
+        <bpmn:incoming>Flow_ToIncrementalOnboarding</bpmn:incoming>
+        <bpmn:outgoing>Flow_ToDashboardEnd</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:endEvent id="EndEvent_Dashboard" name="Dashboard Setup Complete">
+        <bpmn:incoming>Flow_ToDashboardEnd</bpmn:incoming>
+      </bpmn:endEvent>
+      
+      <bpmn:sequenceFlow id="Flow_ToDashboardTasks" sourceRef="StartEvent_Dashboard" targetRef="Task_RequestConfirmation" />
+      <bpmn:sequenceFlow id="Flow_ToPerformSetup" sourceRef="Task_RequestConfirmation" targetRef="Task_PerformSetup" />
+      <bpmn:sequenceFlow id="Flow_ToIncrementalOnboarding" sourceRef="Task_PerformSetup" targetRef="Task_IncrementalOnboarding" />
+      <bpmn:sequenceFlow id="Flow_ToDashboardEnd" sourceRef="Task_IncrementalOnboarding" targetRef="EndEvent_Dashboard" />
+    </bpmn:subProcess>
+
+    <!-- Process Start -->
+    <bpmn:startEvent id="StartEvent_Process" name="Process Started">
+      <bpmn:outgoing>Flow_ToAgreeScopeServices</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <!-- Client Team Tasks -->
+    <bpmn:task id="Task_AgreeScopeServices" name="Agree with Client/Apollo team Scope of Services and Apollo package">
+      <bpmn:incoming>Flow_ToAgreeScopeServices</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToSubmitTicket</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_SubmitTicket" name="Client team submit ticket for 'New Client Onboarding'">
+      <bpmn:incoming>Flow_ToSubmitTicket</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToCompleteENGAGE</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:task id="Task_GrantAccessDataSources" name="Grant read access to data sources and APIs">
+      <bpmn:incoming>Flow_ToGrantAccessDataSources</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToSetupProject</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_GrantAccessPlatform" name="Grant read access to Apollo Platform">
+      <bpmn:incoming>Flow_ToGrantAccessPlatform</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToConfirmChannelAccuracy</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_ConfirmChannelAccuracy" name="Confirm channel structure and costs">
+      <bpmn:incoming>Flow_ToConfirmChannelAccuracy</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToDeliverTraining</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_AcceptTraining" name="Receive training on Apollo">
+      <bpmn:incoming>Flow_ToAcceptTraining</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToGainSignOff</bpmn:outgoing>
+    </bpmn:task>
+
+    <!-- Apollo Team Tasks -->
+    <bpmn:task id="Task_CompleteENGAGE" name="Complete ENGAGE GATHER to identify reporting requirements">
+      <bpmn:incoming>Flow_ToCompleteENGAGE</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToUpdateProjectPlan</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_UpdateProjectPlan" name="Update onboarding project plan with client details">
+      <bpmn:incoming>Flow_ToUpdateProjectPlan</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToCreateSite</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_CreateSite" name="Create site to manage client onboard">
+      <bpmn:incoming>Flow_ToCreateSite</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToRemindResponsibilities</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_RemindResponsibilities" name="Remind client team of responsibilities">
+      <bpmn:incoming>Flow_ToRemindResponsibilities</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToRequestAccess</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_RequestAccess" name="Request access to data sources and Apollo Platform">
+      <bpmn:incoming>Flow_ToRequestAccess</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToGrantAccessDataSources</bpmn:outgoing>
+      <bpmn:outgoing>Flow_ToGrantAccessPlatform</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_DeliverTraining" name="Deliver training to client">
+      <bpmn:incoming>Flow_ToDeliverTraining</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToAcceptTraining</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_GainSignOff" name="Gain sign-off from client team on first reporting deliverable">
+      <bpmn:incoming>Flow_ToGainSignOff</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToSetupDashboard</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:endEvent id="EndEvent_ProcessComplete" name="Onboarding Process Complete">
+      <bpmn:incoming>Flow_ToProcessComplete</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <!-- Sequence Flows -->
+    <bpmn:sequenceFlow id="Flow_ToAgreeScopeServices" sourceRef="StartEvent_Process" targetRef="Task_AgreeScopeServices" />
+    <bpmn:sequenceFlow id="Flow_ToSubmitTicket" sourceRef="Task_AgreeScopeServices" targetRef="Task_SubmitTicket" />
+    <bpmn:sequenceFlow id="Flow_ToCompleteENGAGE" sourceRef="Task_SubmitTicket" targetRef="Task_CompleteENGAGE" />
+    <bpmn:sequenceFlow id="Flow_ToUpdateProjectPlan" sourceRef="Task_CompleteENGAGE" targetRef="Task_UpdateProjectPlan" />
+    <bpmn:sequenceFlow id="Flow_ToCreateSite" sourceRef="Task_UpdateProjectPlan" targetRef="Task_CreateSite" />
+    <bpmn:sequenceFlow id="Flow_ToRemindResponsibilities" sourceRef="Task_CreateSite" targetRef="Task_RemindResponsibilities" />
+    <bpmn:sequenceFlow id="Flow_ToRequestAccess" sourceRef="Task_RemindResponsibilities" targetRef="Task_RequestAccess" />
+    <bpmn:sequenceFlow id="Flow_ToGrantAccessDataSources" sourceRef="Task_RequestAccess" targetRef="Task_GrantAccessDataSources" />
+    <bpmn:sequenceFlow id="Flow_ToGrantAccessPlatform" sourceRef="Task_RequestAccess" targetRef="Task_GrantAccessPlatform" />
+    <bpmn:sequenceFlow id="Flow_ToSetupProject" sourceRef="Task_GrantAccessDataSources" targetRef="Task_SetupProject" />
+    <bpmn:sequenceFlow id="Flow_ToConfirmChannelAccuracy" sourceRef="Task_GrantAccessPlatform" targetRef="Task_ConfirmChannelAccuracy" />
+    <bpmn:sequenceFlow id="Flow_ToDeliverTraining" sourceRef="Task_ConfirmChannelAccuracy" targetRef="Task_DeliverTraining" />
+    <bpmn:sequenceFlow id="Flow_ToAcceptTraining" sourceRef="Task_DeliverTraining" targetRef="Task_AcceptTraining" />
+    <bpmn:sequenceFlow id="Flow_ToGainSignOff" sourceRef="Task_AcceptTraining" targetRef="Task_GainSignOff" />
+    <bpmn:sequenceFlow id="Flow_ToSetupDashboard" sourceRef="Task_GainSignOff" targetRef="SubProcess_SetupDashboard" />
+    <bpmn:sequenceFlow id="Flow_ToProcessComplete" sourceRef="SubProcess_SetupDashboard" targetRef="EndEvent_ProcessComplete" />
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="Diagram_Apollo">
+    <bpmndi:BPMNPlane id="Plane_Apollo" bpmnElement="Collaboration_Apollo">
+      <!-- Participant -->
+      <bpmndi:BPMNShape id="Shape_Participant_ApolloProcess" bpmnElement="Participant_ApolloProcess" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="2000" height="600" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Lanes -->
+      <bpmndi:BPMNShape id="Shape_Lane_ClientTeam" bpmnElement="Lane_ClientTeam" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="1970" height="300" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Lane_ApolloTeam" bpmnElement="Lane_ApolloTeam" isHorizontal="true">
+        <dc:Bounds x="190" y="380" width="1970" height="300" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Start Event -->
+      <bpmndi:BPMNShape id="Shape_StartEvent_Process" bpmnElement="StartEvent_Process">
+        <dc:Bounds x="242" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="224" y="205" width="73" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Client Team Tasks -->
+      <bpmndi:BPMNShape id="Shape_Task_AgreeScopeServices" bpmnElement="Task_AgreeScopeServices">
+        <dc:Bounds x="330" y="140" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_SubmitTicket" bpmnElement="Task_SubmitTicket">
+        <dc:Bounds x="470" y="140" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_GrantAccessDataSources" bpmnElement="Task_GrantAccessDataSources">
+        <dc:Bounds x="820" y="140" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_GrantAccessPlatform" bpmnElement="Task_GrantAccessPlatform">
+        <dc:Bounds x="950" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_ConfirmChannelAccuracy" bpmnElement="Task_ConfirmChannelAccuracy">
+        <dc:Bounds x="1080" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_AcceptTraining" bpmnElement="Task_AcceptTraining">
+        <dc:Bounds x="1230" y="140" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Apollo Team Tasks -->
+      <bpmndi:BPMNShape id="Shape_Task_CompleteENGAGE" bpmnElement="Task_CompleteENGAGE">
+        <dc:Bounds x="470" y="440" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_UpdateProjectPlan" bpmnElement="Task_UpdateProjectPlan">
+        <dc:Bounds x="600" y="440" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_CreateSite" bpmnElement="Task_CreateSite">
+        <dc:Bounds x="730" y="440" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_RemindResponsibilities" bpmnElement="Task_RemindResponsibilities">
+        <dc:Bounds x="860" y="440" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_RequestAccess" bpmnElement="Task_RequestAccess">
+        <dc:Bounds x="990" y="440" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_SetupProject" bpmnElement="Task_SetupProject">
+        <dc:Bounds x="1120" y="440" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_DeliverTraining" bpmnElement="Task_DeliverTraining">
+        <dc:Bounds x="1250" y="440" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_GainSignOff" bpmnElement="Task_GainSignOff">
+        <dc:Bounds x="1380" y="440" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Subprocess -->
+      <bpmndi:BPMNShape id="Shape_SubProcess_SetupDashboard" bpmnElement="SubProcess_SetupDashboard" isExpanded="true">
+        <dc:Bounds x="1510" y="400" width="450" height="220" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_StartEvent_Dashboard" bpmnElement="StartEvent_Dashboard">
+        <dc:Bounds x="1530" y="492" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1505" y="535" width="86" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_RequestConfirmation" bpmnElement="Task_RequestConfirmation">
+        <dc:Bounds x="1600" y="470" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_PerformSetup" bpmnElement="Task_PerformSetup">
+        <dc:Bounds x="1730" y="470" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_IncrementalOnboarding" bpmnElement="Task_IncrementalOnboarding">
+        <dc:Bounds x="1860" y="470" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_EndEvent_Dashboard" bpmnElement="EndEvent_Dashboard">
+        <dc:Bounds x="1990" y="492" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1965" y="535" width="86" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- End Event -->
+      <bpmndi:BPMNShape id="Shape_EndEvent_ProcessComplete" bpmnElement="EndEvent_ProcessComplete">
+        <dc:Bounds x="2000" y="552" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1975" y="595" width="86" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Sequence Flow Edges -->
+      <bpmndi:BPMNEdge id="Edge_Flow_ToAgreeScopeServices" bpmnElement="Flow_ToAgreeScopeServices">
+        <di:waypoint x="278" y="180" />
+        <di:waypoint x="330" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToSubmitTicket" bpmnElement="Flow_ToSubmitTicket">
+        <di:waypoint x="430" y="180" />
+        <di:waypoint x="470" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToCompleteENGAGE" bpmnElement="Flow_ToCompleteENGAGE">
+        <di:waypoint x="520" y="220" />
+        <di:waypoint x="520" y="440" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToUpdateProjectPlan" bpmnElement="Flow_ToUpdateProjectPlan">
+        <di:waypoint x="570" y="480" />
+        <di:waypoint x="600" y="480" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToCreateSite" bpmnElement="Flow_ToCreateSite">
+        <di:waypoint x="700" y="480" />
+        <di:waypoint x="730" y="480" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToRemindResponsibilities" bpmnElement="Flow_ToRemindResponsibilities">
+        <di:waypoint x="830" y="480" />
+        <di:waypoint x="860" y="480" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToRequestAccess" bpmnElement="Flow_ToRequestAccess">
+        <di:waypoint x="960" y="480" />
+        <di:waypoint x="990" y="480" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToGrantAccessDataSources" bpmnElement="Flow_ToGrantAccessDataSources">
+        <di:waypoint x="1040" y="440" />
+        <di:waypoint x="1040" y="180" />
+        <di:waypoint x="920" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToGrantAccessPlatform" bpmnElement="Flow_ToGrantAccessPlatform">
+        <di:waypoint x="1040" y="440" />
+        <di:waypoint x="1040" y="280" />
+        <di:waypoint x="1050" y="280" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToSetupProject" bpmnElement="Flow_ToSetupProject">
+        <di:waypoint x="870" y="220" />
+        <di:waypoint x="870" y="330" />
+        <di:waypoint x="1170" y="330" />
+        <di:waypoint x="1170" y="440" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToConfirmChannelAccuracy" bpmnElement="Flow_ToConfirmChannelAccuracy">
+        <di:waypoint x="1050" y="280" />
+        <di:waypoint x="1080" y="280" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToDeliverTraining" bpmnElement="Flow_ToDeliverTraining">
+        <di:waypoint x="1180" y="280" />
+        <di:waypoint x="1300" y="280" />
+        <di:waypoint x="1300" y="440" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToAcceptTraining" bpmnElement="Flow_ToAcceptTraining">
+        <di:waypoint x="1300" y="440" />
+        <di:waypoint x="1300" y="180" />
+        <di:waypoint x="1230" y="180" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToGainSignOff" bpmnElement="Flow_ToGainSignOff">
+        <di:waypoint x="1330" y="180" />
+        <di:waypoint x="1430" y="180" />
+        <di:waypoint x="1430" y="440" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToSetupDashboard" bpmnElement="Flow_ToSetupDashboard">
+        <di:waypoint x="1480" y="480" />
+        <di:waypoint x="1510" y="480" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToProcessComplete" bpmnElement="Flow_ToProcessComplete">
+        <di:waypoint x="1960" y="500" />
+        <di:waypoint x="2000" y="500" />
+        <di:waypoint x="2018" y="552" />
+      </bpmndi:BPMNEdge>
+      
+      <!-- Subprocess Internal Flows -->
+      <bpmndi:BPMNEdge id="Edge_Flow_ToDashboardTasks" bpmnElement="Flow_ToDashboardTasks">
+        <di:waypoint x="1566" y="510" />
+        <di:waypoint x="1600" y="510" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToPerformSetup" bpmnElement="Flow_ToPerformSetup">
+        <di:waypoint x="1700" y="510" />
+        <di:waypoint x="1730" y="510" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToIncrementalOnboarding" bpmnElement="Flow_ToIncrementalOnboarding">
+        <di:waypoint x="1830" y="510" />
+        <di:waypoint x="1860" y="510" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToDashboardEnd" bpmnElement="Flow_ToDashboardEnd">
+        <di:waypoint x="1960" y="510" />
+        <di:waypoint x="1990" y="510" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

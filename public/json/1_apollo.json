@@ -1,0 +1,316 @@
+{
+  "id": "Process_Apollo",
+  "name": "Apollo Onboarding Process",
+  "description": "Process for onboarding new clients to the Apollo platform",
+  "type": "process",
+  "lanes": [
+    {
+      "id": "Lane_ClientTeam",
+      "name": "Client Team",
+      "elements": [
+        {
+          "id": "StartEvent_Process",
+          "name": "Process Started",
+          "type": "startEvent",
+          "description": "Start of the Apollo onboarding process"
+        },
+        {
+          "id": "Task_AgreeScopeServices",
+          "name": "Agree with Client/Apollo team Scope of Services and Apollo package",
+          "type": "task",
+          "description": "Initial agreement between client and Apollo team on scope of services and package"
+        },
+        {
+          "id": "Task_SubmitTicket",
+          "name": "Client team submit ticket for 'New Client Onboarding'",
+          "type": "task",
+          "description": "Client team submits formal ticket to initiate the onboarding process"
+        },
+        {
+          "id": "Task_GrantAccessDataSources",
+          "name": "Grant read access to data sources and APIs",
+          "type": "task",
+          "description": "Client grants the necessary access to their 1st party data and APIs outbound data feeds"
+        },
+        {
+          "id": "Task_GrantAccessPlatform",
+          "name": "Grant read access to Apollo Platform",
+          "type": "task",
+          "description": "Client grants access to Apollo Platform with necessary usernames across all platforms"
+        },
+        {
+          "id": "Task_ConfirmChannelAccuracy",
+          "name": "Confirm channel structure and costs",
+          "type": "task",
+          "description": "Client confirms channel structure is accurate for initial reporting of costs"
+        },
+        {
+          "id": "Task_AcceptTraining",
+          "name": "Receive training on Apollo",
+          "type": "task",
+          "description": "Client team receives training on how to use the Apollo platform"
+        }
+      ]
+    },
+    {
+      "id": "Lane_ApolloTeam",
+      "name": "Apollo Team",
+      "elements": [
+        {
+          "id": "Task_CompleteENGAGE",
+          "name": "Complete ENGAGE GATHER to identify reporting requirements",
+          "type": "task",
+          "description": "Identify reporting requirements, fit existing solution to problem, identify 1st party data sources and/or outbound data feeds"
+        },
+        {
+          "id": "Task_UpdateProjectPlan",
+          "name": "Update onboarding project plan with client details",
+          "type": "task",
+          "description": "Update onboarding project plan with new client details, brief internal team and clarify/decide ways of working inc. status updates"
+        },
+        {
+          "id": "Task_CreateSite",
+          "name": "Create site to manage client onboard",
+          "type": "task",
+          "description": "Create site to manage client onboard and add all known tasks based on ENGAGE GATHER outputs"
+        },
+        {
+          "id": "Task_RemindResponsibilities",
+          "name": "Remind client team of responsibilities",
+          "type": "task",
+          "description": "Remind client team of their responsibilities concerning metadata, use of Apollo dashboard and provide any required training"
+        },
+        {
+          "id": "Task_RequestAccess",
+          "name": "Request access to data sources and Apollo Platform",
+          "type": "task",
+          "description": "Request access to necessary data sources, APIs and Apollo Platform"
+        },
+        {
+          "id": "Task_SetupProject",
+          "name": "Setup project for client",
+          "type": "task",
+          "description": "Set up project for client in Apollo environment"
+        },
+        {
+          "id": "Task_DeliverTraining",
+          "name": "Deliver training to client",
+          "type": "task",
+          "description": "Deliver training on Apollo platform to client team"
+        },
+        {
+          "id": "Task_GainSignOff",
+          "name": "Gain sign-off from client team",
+          "type": "task",
+          "description": "Gain sign-off from client team on first reporting deliverable"
+        },
+        {
+          "id": "SubProcess_SetupDashboard",
+          "name": "Dashboard Setup and Reporting",
+          "type": "subProcess",
+          "description": "Set up dashboard and reporting for client",
+          "elements": [
+            {
+              "id": "StartEvent_Dashboard",
+              "name": "Dashboard Setup Starts",
+              "type": "startEvent",
+              "description": "Start of dashboard setup process"
+            },
+            {
+              "id": "Task_RequestConfirmation",
+              "name": "Request confirmation from client team",
+              "type": "task",
+              "description": "Request confirmation from client team on setup details"
+            },
+            {
+              "id": "Task_PerformSetup",
+              "name": "Perform setup for initial reporting",
+              "type": "task",
+              "description": "Perform setup for initial reporting, focusing on the first deliverable"
+            },
+            {
+              "id": "Task_IncrementalOnboarding",
+              "name": "Incrementally onboard data into the dashboard",
+              "type": "task",
+              "description": "Incrementally onboard data into the dashboard, making required integrations and training on dashboard"
+            },
+            {
+              "id": "EndEvent_Dashboard",
+              "name": "Dashboard Setup Complete",
+              "type": "endEvent",
+              "description": "End of dashboard setup process"
+            }
+          ]
+        },
+        {
+          "id": "EndEvent_ProcessComplete",
+          "name": "Onboarding Process Complete",
+          "type": "endEvent",
+          "description": "Apollo Dashboard set up and briefed to internal team"
+        }
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "id": "Phase_Initiation",
+      "name": "Initiation",
+      "type": "phase",
+      "description": "Initial setup and agreement phase",
+      "elements": [
+        {
+          "id": "StartEvent_Process",
+          "name": "Process Started",
+          "type": "startEvent",
+          "reference": true
+        },
+        {
+          "id": "Task_AgreeScopeServices",
+          "name": "Agree with Client/Apollo team Scope of Services and Apollo package",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_SubmitTicket",
+          "name": "Client team submit ticket for 'New Client Onboarding'",
+          "type": "task",
+          "reference": true
+        }
+      ]
+    },
+    {
+      "id": "Phase_Requirements",
+      "name": "Requirements Gathering",
+      "type": "phase",
+      "description": "Gathering requirements and planning the implementation",
+      "elements": [
+        {
+          "id": "Task_CompleteENGAGE",
+          "name": "Complete ENGAGE GATHER to identify reporting requirements",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_UpdateProjectPlan",
+          "name": "Update onboarding project plan with client details",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_CreateSite",
+          "name": "Create site to manage client onboard",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_RemindResponsibilities",
+          "name": "Remind client team of responsibilities",
+          "type": "task",
+          "reference": true
+        }
+      ]
+    },
+    {
+      "id": "Phase_Access",
+      "name": "Access and Setup",
+      "type": "phase",
+      "description": "Setting up access to necessary systems and data sources",
+      "elements": [
+        {
+          "id": "Task_RequestAccess",
+          "name": "Request access to data sources and Apollo Platform",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_GrantAccessDataSources",
+          "name": "Grant read access to data sources and APIs",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_GrantAccessPlatform",
+          "name": "Grant read access to Apollo Platform",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_ConfirmChannelAccuracy",
+          "name": "Confirm channel structure and costs",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_SetupProject",
+          "name": "Setup project for client",
+          "type": "task",
+          "reference": true
+        }
+      ]
+    },
+    {
+      "id": "Phase_Training",
+      "name": "Training and Sign-off",
+      "type": "phase",
+      "description": "Training the client team and getting sign-off on deliverables",
+      "elements": [
+        {
+          "id": "Task_DeliverTraining",
+          "name": "Deliver training to client",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_AcceptTraining",
+          "name": "Receive training on Apollo",
+          "type": "task",
+          "reference": true
+        },
+        {
+          "id": "Task_GainSignOff",
+          "name": "Gain sign-off from client team",
+          "type": "task",
+          "reference": true
+        }
+      ]
+    },
+    {
+      "id": "Phase_Dashboard",
+      "name": "Dashboard Setup",
+      "type": "phase",
+      "description": "Setting up the dashboard and reporting",
+      "elements": [
+        {
+          "id": "SubProcess_SetupDashboard",
+          "name": "Dashboard Setup and Reporting",
+          "type": "subProcess",
+          "reference": true
+        },
+        {
+          "id": "EndEvent_ProcessComplete",
+          "name": "Onboarding Process Complete",
+          "type": "endEvent",
+          "reference": true
+        }
+      ]
+    }
+  ],
+  "flows": [
+    { "id": "Flow_ToAgreeScopeServices", "sourceRef": "StartEvent_Process", "targetRef": "Task_AgreeScopeServices" },
+    { "id": "Flow_ToSubmitTicket", "sourceRef": "Task_AgreeScopeServices", "targetRef": "Task_SubmitTicket" },
+    { "id": "Flow_ToCompleteENGAGE", "sourceRef": "Task_SubmitTicket", "targetRef": "Task_CompleteENGAGE" },
+    { "id": "Flow_ToUpdateProjectPlan", "sourceRef": "Task_CompleteENGAGE", "targetRef": "Task_UpdateProjectPlan" },
+    { "id": "Flow_ToCreateSite", "sourceRef": "Task_UpdateProjectPlan", "targetRef": "Task_CreateSite" },
+    { "id": "Flow_ToRemindResponsibilities", "sourceRef": "Task_CreateSite", "targetRef": "Task_RemindResponsibilities" },
+    { "id": "Flow_ToRequestAccess", "sourceRef": "Task_RemindResponsibilities", "targetRef": "Task_RequestAccess" },
+    { "id": "Flow_ToGrantAccessDataSources", "sourceRef": "Task_RequestAccess", "targetRef": "Task_GrantAccessDataSources" },
+    { "id": "Flow_ToGrantAccessPlatform", "sourceRef": "Task_RequestAccess", "targetRef": "Task_GrantAccessPlatform" },
+    { "id": "Flow_ToSetupProject", "sourceRef": "Task_GrantAccessDataSources", "targetRef": "Task_SetupProject" },
+    { "id": "Flow_ToConfirmChannelAccuracy", "sourceRef": "Task_GrantAccessPlatform", "targetRef": "Task_ConfirmChannelAccuracy" },
+    { "id": "Flow_ToDeliverTraining", "sourceRef": "Task_ConfirmChannelAccuracy", "targetRef": "Task_DeliverTraining" },
+    { "id": "Flow_ToAcceptTraining", "sourceRef": "Task_DeliverTraining", "targetRef": "Task_AcceptTraining" },
+    { "id": "Flow_ToGainSignOff", "sourceRef": "Task_AcceptTraining", "targetRef": "Task_GainSignOff" },
+    { "id": "Flow_ToSetupDashboard", "sourceRef": "Task_GainSignOff", "targetRef": "SubProcess_SetupDashboard" },
+    { "id": "Flow_ToProcessComplete", "sourceRef": "SubProcess_SetupDashboard", "targetRef": "EndEvent_ProcessComplete" }
+  ]
+} 
