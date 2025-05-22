@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+                  id="Definitions_ExampleProcess"
+                  targetNamespace="https://medialab.com/processes">
+
+  <!-- Collaboration defines the overall container for participants (pools) -->
+  <bpmn:collaboration id="Collab_ExampleProcess">
+    <bpmn:participant id="Participant_MainProcess" name="Example Multi-Stage Process" processRef="Process_Main" />
+  </bpmn:collaboration>
+
+  <!-- Main process with lanes -->
+  <bpmn:process id="Process_Main" name="Example Process" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Main">
+      <bpmn:lane id="Lane_Management" name="Management">
+        <bpmn:flowNodeRef>StartEvent_ProcessStart</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_InitiateProject</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SubProcess_Planning</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Development" name="Development Team">
+        <bpmn:flowNodeRef>SubProcess_Implementation</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_TestResult</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_QA" name="Quality Assurance">
+        <bpmn:flowNodeRef>SubProcess_Testing</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_FinalReview</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_ProcessEnd</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <!-- Process Start -->
+    <bpmn:startEvent id="StartEvent_ProcessStart" name="Process Initiated">
+      <bpmn:outgoing>Flow_ToInitiateProject</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <!-- Management Tasks -->
+    <bpmn:task id="Task_InitiateProject" name="Initiate Project">
+      <bpmn:incoming>Flow_ToInitiateProject</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToPlanning</bpmn:outgoing>
+    </bpmn:task>
+
+    <!-- Planning Phase (Sub-Process) -->
+    <bpmn:subProcess id="SubProcess_Planning" name="Planning Phase">
+      <bpmn:incoming>Flow_ToPlanning</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToImplementation</bpmn:outgoing>
+      
+      <bpmn:startEvent id="StartEvent_Planning" name="Planning Starts">
+        <bpmn:outgoing>Flow_ToPlanningTasks</bpmn:outgoing>
+      </bpmn:startEvent>
+      
+      <bpmn:task id="Task_RequirementsGathering" name="Gather Requirements">
+        <bpmn:incoming>Flow_ToPlanningTasks</bpmn:incoming>
+        <bpmn:outgoing>Flow_ToResourceAllocation</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_ResourceAllocation" name="Allocate Resources">
+        <bpmn:incoming>Flow_ToResourceAllocation</bpmn:incoming>
+        <bpmn:outgoing>Flow_ToScheduling</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_Scheduling" name="Create Schedule">
+        <bpmn:incoming>Flow_ToScheduling</bpmn:incoming>
+        <bpmn:outgoing>Flow_ToPlanningEnd</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:endEvent id="EndEvent_Planning" name="Planning Complete">
+        <bpmn:incoming>Flow_ToPlanningEnd</bpmn:incoming>
+      </bpmn:endEvent>
+      
+      <bpmn:sequenceFlow id="Flow_ToPlanningTasks" sourceRef="StartEvent_Planning" targetRef="Task_RequirementsGathering" />
+      <bpmn:sequenceFlow id="Flow_ToResourceAllocation" sourceRef="Task_RequirementsGathering" targetRef="Task_ResourceAllocation" />
+      <bpmn:sequenceFlow id="Flow_ToScheduling" sourceRef="Task_ResourceAllocation" targetRef="Task_Scheduling" />
+      <bpmn:sequenceFlow id="Flow_ToPlanningEnd" sourceRef="Task_Scheduling" targetRef="EndEvent_Planning" />
+    </bpmn:subProcess>
+
+    <!-- Implementation Phase (Sub-Process) -->
+    <bpmn:subProcess id="SubProcess_Implementation" name="Implementation Phase">
+      <bpmn:incoming>Flow_ToImplementation</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToTesting</bpmn:outgoing>
+      <bpmn:incoming>Flow_ToImplementationRetry</bpmn:incoming>
+      
+      <bpmn:startEvent id="StartEvent_Implementation" name="Implementation Starts">
+        <bpmn:outgoing>Flow_ToDesign</bpmn:outgoing>
+      </bpmn:startEvent>
+      
+      <bpmn:task id="Task_Design" name="Design Solution">
+        <bpmn:incoming>Flow_ToDesign</bpmn:incoming>
+        <bpmn:outgoing>Flow_ToDevelopment</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_Development" name="Develop Solution">
+        <bpmn:incoming>Flow_ToDevelopment</bpmn:incoming>
+        <bpmn:outgoing>Flow_ToUnitTest</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_UnitTest" name="Unit Testing">
+        <bpmn:incoming>Flow_ToUnitTest</bpmn:incoming>
+        <bpmn:outgoing>Flow_ToImplementationEnd</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:endEvent id="EndEvent_Implementation" name="Implementation Complete">
+        <bpmn:incoming>Flow_ToImplementationEnd</bpmn:incoming>
+      </bpmn:endEvent>
+      
+      <bpmn:sequenceFlow id="Flow_ToDesign" sourceRef="StartEvent_Implementation" targetRef="Task_Design" />
+      <bpmn:sequenceFlow id="Flow_ToDevelopment" sourceRef="Task_Design" targetRef="Task_Development" />
+      <bpmn:sequenceFlow id="Flow_ToUnitTest" sourceRef="Task_Development" targetRef="Task_UnitTest" />
+      <bpmn:sequenceFlow id="Flow_ToImplementationEnd" sourceRef="Task_UnitTest" targetRef="EndEvent_Implementation" />
+    </bpmn:subProcess>
+
+    <!-- Testing Phase (Sub-Process) -->
+    <bpmn:subProcess id="SubProcess_Testing" name="Testing Phase">
+      <bpmn:incoming>Flow_ToTesting</bpmn:incoming>
+      <bpmn:outgoing>Flow_FromTesting</bpmn:outgoing>
+      
+      <bpmn:startEvent id="StartEvent_Testing" name="Testing Starts">
+        <bpmn:outgoing>Flow_ToIntegrationTest</bpmn:outgoing>
+      </bpmn:startEvent>
+      
+      <bpmn:task id="Task_IntegrationTest" name="Integration Testing">
+        <bpmn:incoming>Flow_ToIntegrationTest</bpmn:incoming>
+        <bpmn:outgoing>Flow_ToSystemTest</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_SystemTest" name="System Testing">
+        <bpmn:incoming>Flow_ToSystemTest</bpmn:incoming>
+        <bpmn:outgoing>Flow_ToAcceptanceTest</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:task id="Task_AcceptanceTest" name="Acceptance Testing">
+        <bpmn:incoming>Flow_ToAcceptanceTest</bpmn:incoming>
+        <bpmn:outgoing>Flow_ToTestingEnd</bpmn:outgoing>
+      </bpmn:task>
+      
+      <bpmn:endEvent id="EndEvent_Testing" name="Testing Complete">
+        <bpmn:incoming>Flow_ToTestingEnd</bpmn:incoming>
+      </bpmn:endEvent>
+      
+      <bpmn:sequenceFlow id="Flow_ToIntegrationTest" sourceRef="StartEvent_Testing" targetRef="Task_IntegrationTest" />
+      <bpmn:sequenceFlow id="Flow_ToSystemTest" sourceRef="Task_IntegrationTest" targetRef="Task_SystemTest" />
+      <bpmn:sequenceFlow id="Flow_ToAcceptanceTest" sourceRef="Task_SystemTest" targetRef="Task_AcceptanceTest" />
+      <bpmn:sequenceFlow id="Flow_ToTestingEnd" sourceRef="Task_AcceptanceTest" targetRef="EndEvent_Testing" />
+    </bpmn:subProcess>
+
+    <!-- Gateway and Finishing Tasks -->
+    <bpmn:exclusiveGateway id="Gateway_TestResult" name="Testing Successful?">
+      <bpmn:incoming>Flow_FromTesting</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToImplementationRetry</bpmn:outgoing>
+      <bpmn:outgoing>Flow_ToFinalReview</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:task id="Task_FinalReview" name="Final Review and Sign-off">
+      <bpmn:incoming>Flow_ToFinalReview</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToProcessEnd</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:endEvent id="EndEvent_ProcessEnd" name="Process Complete">
+      <bpmn:incoming>Flow_ToProcessEnd</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <!-- Sequence Flows -->
+    <bpmn:sequenceFlow id="Flow_ToInitiateProject" sourceRef="StartEvent_ProcessStart" targetRef="Task_InitiateProject" />
+    <bpmn:sequenceFlow id="Flow_ToPlanning" sourceRef="Task_InitiateProject" targetRef="SubProcess_Planning" />
+    <bpmn:sequenceFlow id="Flow_ToImplementation" sourceRef="SubProcess_Planning" targetRef="SubProcess_Implementation" />
+    <bpmn:sequenceFlow id="Flow_ToTesting" sourceRef="SubProcess_Implementation" targetRef="SubProcess_Testing" />
+    <bpmn:sequenceFlow id="Flow_FromTesting" sourceRef="SubProcess_Testing" targetRef="Gateway_TestResult" />
+    <bpmn:sequenceFlow id="Flow_ToImplementationRetry" name="No" sourceRef="Gateway_TestResult" targetRef="SubProcess_Implementation" />
+    <bpmn:sequenceFlow id="Flow_ToFinalReview" name="Yes" sourceRef="Gateway_TestResult" targetRef="Task_FinalReview" />
+    <bpmn:sequenceFlow id="Flow_ToProcessEnd" sourceRef="Task_FinalReview" targetRef="EndEvent_ProcessEnd" />
+  </bpmn:process>
+
+  <!-- Diagram Interchange (DI) Information - Essential for visual rendering -->
+  <bpmndi:BPMNDiagram id="Diagram_ExampleProcess">
+    <bpmndi:BPMNPlane id="Plane_ExampleProcess" bpmnElement="Collab_ExampleProcess">
+      <!-- Participant Shape -->
+      <bpmndi:BPMNShape id="Shape_Participant_MainProcess" bpmnElement="Participant_MainProcess" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="1400" height="800" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Lane Shapes -->
+      <bpmndi:BPMNShape id="Shape_Lane_Management" bpmnElement="Lane_Management" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="1370" height="250" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Development" bpmnElement="Lane_Development" isHorizontal="true">
+        <dc:Bounds x="190" y="330" width="1370" height="250" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_QA" bpmnElement="Lane_QA" isHorizontal="true">
+        <dc:Bounds x="190" y="580" width="1370" height="300" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Management Lane Elements -->
+      <bpmndi:BPMNShape id="Shape_StartEvent_ProcessStart" bpmnElement="StartEvent_ProcessStart">
+        <dc:Bounds x="242" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="222" y="225" width="76" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_InitiateProject" bpmnElement="Task_InitiateProject">
+        <dc:Bounds x="330" y="160" width="110" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_SubProcess_Planning" bpmnElement="SubProcess_Planning" isExpanded="true">
+        <dc:Bounds x="490" y="120" width="480" height="180" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_StartEvent_Planning" bpmnElement="StartEvent_Planning">
+        <dc:Bounds x="510" y="192" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="490" y="235" width="76" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_RequirementsGathering" bpmnElement="Task_RequirementsGathering">
+        <dc:Bounds x="580" y="170" width="110" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_ResourceAllocation" bpmnElement="Task_ResourceAllocation">
+        <dc:Bounds x="720" y="170" width="110" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Scheduling" bpmnElement="Task_Scheduling">
+        <dc:Bounds x="860" y="170" width="110" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndEvent_Planning" bpmnElement="EndEvent_Planning">
+        <dc:Bounds x="1000" y="192" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="978" y="235" width="90" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Development Lane Elements -->
+      <bpmndi:BPMNShape id="Shape_SubProcess_Implementation" bpmnElement="SubProcess_Implementation" isExpanded="true">
+        <dc:Bounds x="490" y="370" width="480" height="180" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_StartEvent_Implementation" bpmnElement="StartEvent_Implementation">
+        <dc:Bounds x="510" y="442" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="487" y="485" width="86" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Design" bpmnElement="Task_Design">
+        <dc:Bounds x="580" y="420" width="110" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_Development" bpmnElement="Task_Development">
+        <dc:Bounds x="720" y="420" width="110" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_UnitTest" bpmnElement="Task_UnitTest">
+        <dc:Bounds x="860" y="420" width="110" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndEvent_Implementation" bpmnElement="EndEvent_Implementation">
+        <dc:Bounds x="1000" y="442" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="976" y="485" width="86" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- QA Lane Elements -->
+      <bpmndi:BPMNShape id="Shape_SubProcess_Testing" bpmnElement="SubProcess_Testing" isExpanded="true">
+        <dc:Bounds x="490" y="620" width="480" height="180" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_StartEvent_Testing" bpmnElement="StartEvent_Testing">
+        <dc:Bounds x="510" y="692" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="495" y="735" width="68" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_IntegrationTest" bpmnElement="Task_IntegrationTest">
+        <dc:Bounds x="580" y="670" width="110" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_SystemTest" bpmnElement="Task_SystemTest">
+        <dc:Bounds x="720" y="670" width="110" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_AcceptanceTest" bpmnElement="Task_AcceptanceTest">
+        <dc:Bounds x="860" y="670" width="110" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndEvent_Testing" bpmnElement="EndEvent_Testing">
+        <dc:Bounds x="1000" y="692" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="978" y="735" width="83" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Gateway and Final Elements -->
+      <bpmndi:BPMNShape id="Shape_Gateway_TestResult" bpmnElement="Gateway_TestResult" isMarkerVisible="true">
+        <dc:Bounds x="1070" y="685" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1051" y="742" width="89" height="18" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_FinalReview" bpmnElement="Task_FinalReview">
+        <dc:Bounds x="1170" y="670" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndEvent_ProcessEnd" bpmnElement="EndEvent_ProcessEnd">
+        <dc:Bounds x="1342" y="692" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1316" y="735" width="88" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Sequence Flow Edges - Main Process -->
+      <bpmndi:BPMNEdge id="Edge_Flow_ToInitiateProject" bpmnElement="Flow_ToInitiateProject">
+        <di:waypoint x="278" y="200" />
+        <di:waypoint x="330" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToPlanning" bpmnElement="Flow_ToPlanning">
+        <di:waypoint x="440" y="200" />
+        <di:waypoint x="490" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToImplementation" bpmnElement="Flow_ToImplementation">
+        <di:waypoint x="730" y="300" />
+        <di:waypoint x="730" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToTesting" bpmnElement="Flow_ToTesting">
+        <di:waypoint x="730" y="550" />
+        <di:waypoint x="730" y="620" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_FromTesting" bpmnElement="Flow_FromTesting">
+        <di:waypoint x="1036" y="710" />
+        <di:waypoint x="1070" y="710" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToImplementationRetry" bpmnElement="Flow_ToImplementationRetry">
+        <di:waypoint x="1095" y="685" />
+        <di:waypoint x="1095" y="460" />
+        <di:waypoint x="970" y="460" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1077" y="570" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToFinalReview" bpmnElement="Flow_ToFinalReview">
+        <di:waypoint x="1120" y="710" />
+        <di:waypoint x="1170" y="710" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1136" y="692" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToProcessEnd" bpmnElement="Flow_ToProcessEnd">
+        <di:waypoint x="1290" y="710" />
+        <di:waypoint x="1342" y="710" />
+      </bpmndi:BPMNEdge>
+      
+      <!-- Sequence Flow Edges - Planning Sub-Process -->
+      <bpmndi:BPMNEdge id="Edge_Flow_ToPlanningTasks" bpmnElement="Flow_ToPlanningTasks">
+        <di:waypoint x="546" y="210" />
+        <di:waypoint x="580" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToResourceAllocation" bpmnElement="Flow_ToResourceAllocation">
+        <di:waypoint x="690" y="210" />
+        <di:waypoint x="720" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToScheduling" bpmnElement="Flow_ToScheduling">
+        <di:waypoint x="830" y="210" />
+        <di:waypoint x="860" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToPlanningEnd" bpmnElement="Flow_ToPlanningEnd">
+        <di:waypoint x="970" y="210" />
+        <di:waypoint x="1000" y="210" />
+      </bpmndi:BPMNEdge>
+      
+      <!-- Sequence Flow Edges - Implementation Sub-Process -->
+      <bpmndi:BPMNEdge id="Edge_Flow_ToDesign" bpmnElement="Flow_ToDesign">
+        <di:waypoint x="546" y="460" />
+        <di:waypoint x="580" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToDevelopment" bpmnElement="Flow_ToDevelopment">
+        <di:waypoint x="690" y="460" />
+        <di:waypoint x="720" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToUnitTest" bpmnElement="Flow_ToUnitTest">
+        <di:waypoint x="830" y="460" />
+        <di:waypoint x="860" y="460" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToImplementationEnd" bpmnElement="Flow_ToImplementationEnd">
+        <di:waypoint x="970" y="460" />
+        <di:waypoint x="1000" y="460" />
+      </bpmndi:BPMNEdge>
+      
+      <!-- Sequence Flow Edges - Testing Sub-Process -->
+      <bpmndi:BPMNEdge id="Edge_Flow_ToIntegrationTest" bpmnElement="Flow_ToIntegrationTest">
+        <di:waypoint x="546" y="710" />
+        <di:waypoint x="580" y="710" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToSystemTest" bpmnElement="Flow_ToSystemTest">
+        <di:waypoint x="690" y="710" />
+        <di:waypoint x="720" y="710" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToAcceptanceTest" bpmnElement="Flow_ToAcceptanceTest">
+        <di:waypoint x="830" y="710" />
+        <di:waypoint x="860" y="710" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToTestingEnd" bpmnElement="Flow_ToTestingEnd">
+        <di:waypoint x="970" y="710" />
+        <di:waypoint x="1000" y="710" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

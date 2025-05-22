@@ -1,0 +1,301 @@
+/* BPMN Diagram Style Guide Implementation
+   Based on the "Business Process Diagram with Lanes" example */
+
+/* Color Palette - Based on example diagram */
+:root {
+  /* Brand colors */
+  --header-color: #0A1721;
+  --primary-color: #13A6EA;
+  
+  /* Diagram element colors */
+  --pool-border: #808080;
+  --pool-header-bg: #F0F0F0;
+  --lane-bg: #EBF5FF; /* Very light blue (slightly darker for better visibility) */
+  --lane-border: #D0D0D0;
+  
+  /* Activity (Task) colors */
+  --activity-bg: #FAFAD2; /* Light yellow/cream */
+  --activity-border: #808080; /* Dark gray */
+  
+  /* Event colors */
+  --event-bg: #FFB6C1; /* Light pink */
+  --event-border: #8B0000; /* Dark red */
+  
+  /* Gateway colors */
+  --gateway-bg: #90EE90; /* Light green */
+  --gateway-border: #006400; /* Dark green */
+  
+  /* Connection colors */
+  --sequence-flow: #404040; /* Dark gray */
+  
+  /* Text colors and fonts */
+  --text-color: #000000;
+  --font-family: Arial, Helvetica, sans-serif;
+  --font-size-normal: 12px;
+  --font-size-lane: 13px;
+}
+
+/* EXTREMELY AGGRESSIVE TEXT STYLING - Override all font weights */
+.bjs-container *,
+.djs-container *,
+svg *,
+[data-element-id*="StartEvent_OfferAccepted"] *,
+[data-element-id*="Offer"] *,
+[id*="Offer"] *,
+.djs-label text,
+text.djs-label,
+[id*="Shape_StartEvent_OfferAccepted"] *,
+.bjs-container text,
+.djs-container text,
+.bjs-container tspan,
+.djs-container tspan,
+svg text,
+svg tspan,
+.djs-label,
+[font-weight],
+[font-weight="bold"],
+[style*="font-weight"],
+[style*="font-weight: bold"] {
+  font-weight: normal !important;
+  font-family: var(--font-family) !important;
+}
+
+/* Apply these styles directly to text nodes */
+text, tspan {
+  font-weight: normal !important;
+}
+
+/* ========== General Styling ========== */
+
+/* Text Styling */
+.djs-label, .djs-direct-editing-content {
+  color: var(--text-color) !important;
+  font-family: var(--font-family) !important;
+  font-size: var(--font-size-normal) !important;
+  font-weight: normal !important;
+}
+
+/* SVG Text Elements - Direct targeting */
+.bjs-container svg text,
+.djs-container svg text,
+svg text {
+  font-weight: normal !important;
+  font-family: var(--font-family) !important;
+  fill: var(--text-color) !important;
+}
+
+/* Target specific element IDs for events like "Offer Accepted" */
+[data-element-id="StartEvent_OfferAccepted"] text,
+[data-label-id*="StartEvent_OfferAccepted"] text,
+text[data-label-id*="StartEvent_OfferAccepted"] {
+  font-weight: normal !important;
+}
+
+/* Force normal weight on all SVG elements */
+.bjs-container tspan,
+.djs-container tspan,
+svg tspan {
+  font-weight: normal !important;
+}
+
+/* ========== Activities (Tasks) ========== */
+/* Match the light beige/cream rectangular tasks */
+.djs-shape[data-element-id*="Activity"],
+.djs-shape[data-element-id*="Task"],
+.djs-shape[data-bpmn-type="bpmn:Task"],
+.djs-shape[data-bpmn-type="bpmn:UserTask"],
+.djs-shape[data-bpmn-type="bpmn:ServiceTask"],
+.djs-shape[data-bpmn-type="bpmn:ScriptTask"],
+.djs-shape[data-bpmn-type="bpmn:BusinessRuleTask"],
+.djs-shape[data-bpmn-type="bpmn:ManualTask"],
+.djs-shape[data-bpmn-type="bpmn:SendTask"],
+.djs-shape[data-bpmn-type="bpmn:ReceiveTask"] {
+  fill: var(--activity-bg) !important;
+  stroke: var(--activity-border) !important;
+  stroke-width: 1px !important;
+}
+
+.djs-shape[data-element-id*="Activity"] .djs-visual > rect,
+.djs-shape[data-element-id*="Task"] .djs-visual > rect,
+.djs-shape[data-bpmn-type="bpmn:Task"] .djs-visual > rect,
+.djs-shape[data-bpmn-type="bpmn:UserTask"] .djs-visual > rect,
+.djs-shape[data-bpmn-type="bpmn:ServiceTask"] .djs-visual > rect,
+.djs-shape[data-bpmn-type="bpmn:ScriptTask"] .djs-visual > rect,
+.djs-shape[data-bpmn-type="bpmn:BusinessRuleTask"] .djs-visual > rect,
+.djs-shape[data-bpmn-type="bpmn:ManualTask"] .djs-visual > rect,
+.djs-shape[data-bpmn-type="bpmn:SendTask"] .djs-visual > rect,
+.djs-shape[data-bpmn-type="bpmn:ReceiveTask"] .djs-visual > rect {
+  fill: var(--activity-bg) !important;
+  stroke: var(--activity-border) !important;
+  stroke-width: 1px !important;
+  rx: 5px !important; /* Rounded corners */
+  ry: 5px !important;
+}
+
+/* ========== Events ========== */
+/* Match the light pink circles */
+.djs-shape[data-element-id*="Event"],
+.djs-shape[data-bpmn-type="bpmn:StartEvent"],
+.djs-shape[data-bpmn-type="bpmn:EndEvent"],
+.djs-shape[data-bpmn-type="bpmn:IntermediateThrowEvent"],
+.djs-shape[data-bpmn-type="bpmn:IntermediateCatchEvent"] {
+  fill: var(--event-bg) !important;
+  stroke: var(--event-border) !important;
+  stroke-width: 1.5px !important;
+}
+
+.djs-shape[data-element-id*="StartEvent"] .djs-visual > circle,
+.djs-shape[data-bpmn-type="bpmn:StartEvent"] .djs-visual > circle {
+  fill: var(--event-bg) !important;
+  stroke: var(--event-border) !important;
+  stroke-width: 1.5px !important;
+}
+
+.djs-shape[data-element-id*="EndEvent"] .djs-visual > circle,
+.djs-shape[data-bpmn-type="bpmn:EndEvent"] .djs-visual > circle {
+  fill: var(--event-bg) !important;
+  stroke: var(--event-border) !important;
+  stroke-width: 2px !important; /* Slightly thicker for end events */
+}
+
+/* ========== Gateways ========== */
+/* Match the light green diamonds */
+.djs-shape[data-element-id*="Gateway"],
+.djs-shape[data-bpmn-type="bpmn:ExclusiveGateway"],
+.djs-shape[data-bpmn-type="bpmn:ParallelGateway"],
+.djs-shape[data-bpmn-type="bpmn:InclusiveGateway"] {
+  fill: var(--gateway-bg) !important;
+  stroke: var(--gateway-border) !important;
+  stroke-width: 1.5px !important;
+}
+
+.djs-shape[data-element-id*="Gateway"] .djs-visual > polygon,
+.djs-shape[data-bpmn-type="bpmn:ExclusiveGateway"] .djs-visual > polygon,
+.djs-shape[data-bpmn-type="bpmn:ParallelGateway"] .djs-visual > polygon,
+.djs-shape[data-bpmn-type="bpmn:InclusiveGateway"] .djs-visual > polygon {
+  fill: var(--gateway-bg) !important;
+  stroke: var(--gateway-border) !important;
+  stroke-width: 1.5px !important;
+}
+
+/* Gateway markers (X for exclusive, + for parallel) */
+.djs-shape[data-bpmn-type="bpmn:ExclusiveGateway"] .djs-visual > path,
+.djs-shape[data-element-id*="Gateway"] .djs-visual > path {
+  stroke: var(--gateway-border) !important;
+  stroke-width: 2px !important;
+  fill: none !important;
+}
+
+.djs-shape[data-bpmn-type="bpmn:ParallelGateway"] .djs-visual > path {
+  stroke: var(--gateway-border) !important;
+  stroke-width: 2.5px !important;
+  fill: none !important;
+}
+
+/* ========== Pools and Lanes ========== */
+/* Match the white background with gray borders */
+.djs-shape[data-bpmn-type="bpmn:Participant"],
+.djs-shape[data-element-id*="Participant"],
+.djs-shape[data-element-id*="Pool"] {
+  fill: var(--lane-bg) !important;
+  stroke: var(--pool-border) !important;
+  stroke-width: 1.5px !important;
+}
+
+.djs-shape[data-bpmn-type="bpmn:Participant"] .djs-visual > rect,
+.djs-shape[data-element-id*="Participant"] .djs-visual > rect,
+.djs-shape[data-element-id*="Pool"] .djs-visual > rect,
+[id*="Shape_Participant"] rect {
+  fill: var(--lane-bg) !important;
+  stroke: var(--pool-border) !important;
+  stroke-width: 1.5px !important;
+}
+
+/* Pool header */
+.djs-shape[data-bpmn-type="bpmn:Participant"] .djs-visual > rect:first-child,
+.djs-shape[data-element-id*="Participant"] .djs-visual > rect:first-child,
+.djs-shape[data-element-id*="Pool"] .djs-visual > rect:first-child,
+[id*="Shape_Participant"] rect:first-child {
+  fill: var(--pool-header-bg) !important;
+}
+
+/* Lanes */
+.djs-shape[data-bpmn-type="bpmn:Lane"],
+.djs-shape[data-element-id*="Lane"],
+[id*="Shape_Lane"] {
+  fill: var(--lane-bg) !important;
+  stroke: var(--lane-border) !important;
+  stroke-width: 1px !important;
+}
+
+.djs-shape[data-bpmn-type="bpmn:Lane"] .djs-visual > rect,
+.djs-shape[data-element-id*="Lane"] .djs-visual > rect,
+[id*="Shape_Lane"] rect {
+  fill: var(--lane-bg) !important;
+  stroke: var(--lane-border) !important;
+  stroke-width: 1px !important;
+}
+
+/* Lane labels - Specifically targeting bold text issue */
+.djs-shape[data-bpmn-type="bpmn:Lane"] .djs-label,
+.djs-shape[data-element-id*="Lane"] .djs-label,
+[id*="Shape_Lane"] .djs-label,
+[id*="Shape_Lane_HR"] text,
+[id*="Shape_Lane_Employee"] text,
+text[id*="Shape_Lane"],
+.djs-label[data-label-id*="Lane"] {
+  font-size: var(--font-size-lane) !important;
+  font-weight: normal !important;
+  font-family: var(--font-family) !important;
+  fill: var(--text-color) !important;
+}
+
+/* ========== Connections/Sequence Flows ========== */
+/* Match the dark gray arrows */
+.djs-connection .djs-visual > path,
+.djs-connection[data-element-id*="SequenceFlow"] .djs-visual > path,
+.djs-connection[data-bpmn-type="bpmn:SequenceFlow"] .djs-visual > path {
+  stroke: var(--sequence-flow) !important;
+  stroke-width: 1.5px !important;
+  fill: none !important;
+  marker-end: url(#sequenceflow-end-marker) !important;
+}
+
+/* ========== Reduction of Visual Noise ========== */
+/* Eliminate excessive highlighting and shadows */
+.djs-shape.hover,
+.djs-connection.hover {
+  box-shadow: none !important;
+}
+
+.djs-shape.selected,
+.djs-connection.selected {
+  outline: none !important;
+  box-shadow: 0 0 3px var(--primary-color) !important;
+}
+
+.djs-connection.selected .djs-visual > path {
+  stroke-width: 2px !important;
+  stroke: var(--primary-color) !important;
+}
+
+.djs-shape.selected .djs-outline {
+  stroke: var(--primary-color) !important;
+  stroke-width: 1px !important;
+  fill: none !important;
+}
+
+/* Ensure labels are clear and consistent */
+.djs-label {
+  font-family: var(--font-family) !important;
+  font-size: var(--font-size-normal) !important;
+  fill: var(--text-color) !important;
+  color: var(--text-color) !important;
+  font-weight: normal !important;
+}
+
+/* Hide default overlays when not needed */
+.djs-overlay-context-pad,
+.djs-context-pad {
+  display: none !important;
+} 

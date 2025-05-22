@@ -1,0 +1,41 @@
+/* Essential local styles for BPMN viewer */
+.fullScreen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 1300 !important; /* Higher than MUI's drawer (1200) */
+  background-color: #ffffff !important;
+}
+
+.canvasContainer {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  /* Simple clean background */
+  background-color: #ffffff;
+}
+
+/* Next.js CSS Modules require a local class wrapper for global styles */
+.canvasContainer :global(.djs-container) {
+  background-color: #f8f8f8 !important;
+}
+
+.canvasContainer :global(.djs-container.with-diagram) {
+  border: 1px solid #e0e0e0;
+}
+
+.canvasContainer :global(.djs-element.hover) {
+  stroke: #1976d2 !important;
+  stroke-width: 2px !important;
+}
+
+.canvasContainer :global(.djs-element.selected) {
+  stroke: #1976d2 !important;
+  stroke-width: 2.5px !important;
+}
+
+.canvasContainer :global(.bjs-powered-by) {
+  display: none; /* Hide the bpmn.io branding */
+} 

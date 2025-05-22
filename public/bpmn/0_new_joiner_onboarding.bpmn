@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+                  id="Definitions_NewJoinerOnboardingMultiStage"
+                  targetNamespace="https://medialab.com/processes">
+
+  <bpmn:collaboration id="Collab_Onboarding">
+    <bpmn:participant id="Participant_OnboardingProcess" name="New Joiner Onboarding Process" processRef="Process_NewJoinerOnboarding" />
+  </bpmn:collaboration>
+
+  <bpmn:process id="Process_NewJoinerOnboarding" name="New Joiner Onboarding (Multi-Stage)" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Main">
+      <bpmn:lane id="Lane_HR" name="HR Department">
+        <bpmn:flowNodeRef>StartEvent_OfferAccepted</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SubProcess_PreJoining</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SubProcess_PostJoining_HR</bpmn:flowNodeRef>
+        <!-- More HR tasks/sub-processes can be referenced here -->
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Employee" name="New Joiner">
+        <!-- Tasks for the new joiner would go here or in their own sub-processes within this lane -->
+        <bpmn:flowNodeRef>Task_ReturnSignedContract_Emp</bpmn:flowNodeRef> 
+      </bpmn:lane>
+      <!-- Add more lanes for IT, Hiring Manager etc. as needed -->
+    </bpmn:laneSet>
+
+    <bpmn:startEvent id="StartEvent_OfferAccepted" name="Offer Accepted">
+      <bpmn:outgoing>Flow_To_PreJoining</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <!-- Pre-Joining Stage -->
+    <bpmn:subProcess id="SubProcess_PreJoining" name="Pre-Joining">
+      <bpmn:incoming>Flow_To_PreJoining</bpmn:incoming>
+      <bpmn:outgoing>Flow_From_PreJoining</bpmn:outgoing>
+      
+      <bpmn:startEvent id="Start_PreJoin" name="Pre-Joining Starts">
+        <bpmn:outgoing>Flow_Pre1</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:task id="Task_SendContractOffer" name="Contract, Offer Letter">
+        <bpmn:documentation>Cover requirements once someone has accepted a role and before their first day.</bpmn:documentation>
+        <bpmn:incoming>Flow_Pre1</bpmn:incoming>
+        <bpmn:outgoing>Flow_Pre2</bpmn:outgoing>
+      </bpmn:task>
+      <!-- This task would typically be in the Employee Lane, but shown here for sub-process flow -->
+      <bpmn:task id="Task_ReturnSignedContract_Emp" name="Return Signed Contract (Employee Action)">
+        <bpmn:incoming>Flow_Pre2</bpmn:incoming>
+        <bpmn:outgoing>Flow_Pre3</bpmn:outgoing>
+      </bpmn:task>
+      <bpmn:endEvent id="End_PreJoin" name="Pre-Joining Ends">
+        <bpmn:incoming>Flow_Pre3</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_Pre1" sourceRef="Start_PreJoin" targetRef="Task_SendContractOffer" />
+      <bpmn:sequenceFlow id="Flow_Pre2" sourceRef="Task_SendContractOffer" targetRef="Task_ReturnSignedContract_Emp" />
+      <bpmn:sequenceFlow id="Flow_Pre3" sourceRef="Task_ReturnSignedContract_Emp" targetRef="End_PreJoin" />
+    </bpmn:subProcess>
+
+    <!-- Post-Joining Stage (Example for HR portions) -->
+    <bpmn:subProcess id="SubProcess_PostJoining_HR" name="Post-Joining (HR)">
+      <bpmn:incoming>Flow_From_PreJoining</bpmn:incoming>
+      <bpmn:outgoing>Flow_To_SystemSetup</bpmn:outgoing> <!-- Assuming next is system setup -->
+      
+      <bpmn:startEvent id="Start_PostJoin_HR" name="Post-Joining HR Starts">
+        <bpmn:outgoing>Flow_PostHR1</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:task id="Task_MandatoryTrainingProgramme" name="Mandatory Training/Programme">
+        <bpmn:documentation>To ensure each new starter received consistent company onboarding programme and relevant training for the team they are joining.</bpmn:documentation>
+        <bpmn:incoming>Flow_PostHR1</bpmn:incoming>
+        <bpmn:outgoing>Flow_PostHR2</bpmn:outgoing>
+      </bpmn:task>
+      <bpmn:endEvent id="End_PostJoin_HR" name="Post-Joining HR Ends">
+        <bpmn:incoming>Flow_PostHR2</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_PostHR1" sourceRef="Start_PostJoin_HR" targetRef="Task_MandatoryTrainingProgramme" />
+      <bpmn:sequenceFlow id="Flow_PostHR2" sourceRef="Task_MandatoryTrainingProgramme" targetRef="End_PostJoin_HR" />
+    </bpmn:subProcess>
+    
+    <!-- Placeholder for next major step/stage -->
+    <bpmn:task id="Task_SystemAccessSetup" name="Logins, platform set up">
+        <bpmn:documentation>To ensure all logins and system setups are requested, ahead of a new joiner starting in your team.</bpmn:documentation>
+        <bpmn:incoming>Flow_To_SystemSetup</bpmn:incoming>
+        <bpmn:outgoing>Flow_To_Benefits</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:endEvent id="EndEvent_OnboardingProcessComplete" name="Entire Onboarding Process Complete">
+        <bpmn:incoming>Flow_To_Benefits</bpmn:incoming> <!-- This would be the flow from the last actual stage -->
+    </bpmn:endEvent>
+
+    <!-- Connecting Flows between major stages -->
+    <bpmn:sequenceFlow id="Flow_To_PreJoining" sourceRef="StartEvent_OfferAccepted" targetRef="SubProcess_PreJoining" />
+    <bpmn:sequenceFlow id="Flow_From_PreJoining" sourceRef="SubProcess_PreJoining" targetRef="SubProcess_PostJoining_HR" />
+    <bpmn:sequenceFlow id="Flow_To_SystemSetup" sourceRef="SubProcess_PostJoining_HR" targetRef="Task_SystemAccessSetup" />
+    <bpmn:sequenceFlow id="Flow_To_Benefits" sourceRef="Task_SystemAccessSetup" targetRef="EndEvent_OnboardingProcessComplete" /> <!-- Simplified: connect to end for now -->
+
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="Diagram_NewJoinerMultiStage">
+    <bpmndi:BPMNPlane id="Plane_NewJoinerMultiStage" bpmnElement="Collab_Onboarding">
+      <!-- Pool -->
+      <bpmndi:BPMNShape id="Shape_Participant_OnboardingProcess" bpmnElement="Participant_OnboardingProcess" isHorizontal="true">
+        <dc:Bounds x="100" y="50" width="1400" height="600" />
+      </bpmndi:BPMNShape>
+
+      <!-- Lanes (Coordinates are relative to the Pool's top-left if isHorizontal="true") -->
+      <bpmndi:BPMNShape id="Shape_Lane_HR" bpmnElement="Lane_HR" isHorizontal="true">
+        <dc:Bounds x="130" y="50" width="1370" height="300" /> <!-- Height of HR Lane -->
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Employee" bpmnElement="Lane_Employee" isHorizontal="true">
+        <dc:Bounds x="130" y="350" width="1370" height="300" /> <!-- Height of Employee Lane, positioned below HR -->
+      </bpmndi:BPMNShape>
+
+      <!-- Start Event in HR Lane -->
+      <bpmndi:BPMNShape id="Shape_StartEvent_OfferAccepted" bpmnElement="StartEvent_OfferAccepted">
+        <dc:Bounds x="180" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="158" y="205" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <!-- Pre-Joining Sub-Process (within HR Lane) -->
+      <bpmndi:BPMNShape id="Shape_SubProcess_PreJoining" bpmnElement="SubProcess_PreJoining" isExpanded="true">
+        <dc:Bounds x="280" y="80" width="450" height="250" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="455" y="92" width="60" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Start_PreJoin" bpmnElement="Start_PreJoin">
+        <dc:Bounds x="320" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="296" y="205" width="84" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_SendContractOffer" bpmnElement="Task_SendContractOffer">
+        <dc:Bounds x="410" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="400" y="130" width="120" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+       <!-- Task_ReturnSignedContract_Emp is in Employee Lane but part of PreJoining sub-process logically -->
+       <!-- Its shape would be positioned within the Employee Lane bounds. -->
+      <bpmndi:BPMNShape id="Shape_Task_ReturnSignedContract_Emp" bpmnElement="Task_ReturnSignedContract_Emp">
+        <dc:Bounds x="410" y="420" width="100" height="80" /> <!-- Positioned in Employee Lane area -->
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="415" y="500" width="90" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_End_PreJoin" bpmnElement="End_PreJoin">
+        <dc:Bounds x="560" y="162" width="36" height="36" /> <!-- End event for PreJoining -->
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="536" y="205" width="84" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Flow_Pre1" bpmnElement="Flow_Pre1">
+        <di:waypoint x="356" y="180" />
+        <di:waypoint x="410" y="180" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Pre2" bpmnElement="Flow_Pre2">
+        <di:waypoint x="460" y="220" />
+        <di:waypoint x="460" y="420" /> <!-- Connecting to task in another lane -->
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Pre3" bpmnElement="Flow_Pre3">
+        <di:waypoint x="510" y="460" />
+        <di:waypoint x="578" y="460" />
+        <di:waypoint x="578" y="198" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNEdge>
+      
+      <!-- Post-Joining HR Sub-Process (within HR Lane) -->
+      <bpmndi:BPMNShape id="Shape_SubProcess_PostJoining_HR" bpmnElement="SubProcess_PostJoining_HR" isExpanded="true">
+        <dc:Bounds x="800" y="80" width="450" height="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="965" y="92" width="120" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Start_PostJoin_HR" bpmnElement="Start_PostJoin_HR">
+        <dc:Bounds x="840" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="815" y="205" width="86" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_MandatoryTrainingProgramme" bpmnElement="Task_MandatoryTrainingProgramme">
+        <dc:Bounds x="930" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="915" y="130" width="130" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_End_PostJoin_HR" bpmnElement="End_PostJoin_HR">
+        <dc:Bounds x="1080" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1055" y="205" width="86" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Flow_PostHR1" bpmnElement="Flow_PostHR1">
+        <di:waypoint x="876" y="180" />
+        <di:waypoint x="930" y="180" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_PostHR2" bpmnElement="Flow_PostHR2">
+        <di:waypoint x="1030" y="180" />
+        <di:waypoint x="1080" y="180" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNEdge>
+
+      <!-- Task_SystemAccessSetup (in HR Lane as per current structure, could be IT lane) -->
+      <bpmndi:BPMNShape id="Shape_Task_SystemAccessSetup" bpmnElement="Task_SystemAccessSetup">
+        <dc:Bounds x="1300" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1285" y="130" width="130" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- End Event in HR Lane -->
+      <bpmndi:BPMNShape id="Shape_EndEvent_OnboardingProcessComplete" bpmnElement="EndEvent_OnboardingProcessComplete">
+        <dc:Bounds x="1332" y="250" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1308" y="293" width="84" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <!-- Edges connecting major stages -->
+      <bpmndi:BPMNEdge id="Edge_Flow_To_PreJoining" bpmnElement="Flow_To_PreJoining">
+        <di:waypoint x="216" y="180" />
+        <di:waypoint x="280" y="180" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_From_PreJoining" bpmnElement="Flow_From_PreJoining">
+        <di:waypoint x="730" y="180" />
+        <di:waypoint x="800" y="180" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_To_SystemSetup" bpmnElement="Flow_To_SystemSetup">
+        <di:waypoint x="1250" y="180" />
+        <di:waypoint x="1300" y="180" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_To_Benefits" bpmnElement="Flow_To_Benefits">
+        <di:waypoint x="1350" y="220" />
+        <di:waypoint x="1350" y="250" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNEdge>
+
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

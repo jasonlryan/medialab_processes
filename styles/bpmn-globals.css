@@ -1,0 +1,125 @@
+/* Clean modern BPMN viewer styles - simplified */
+.djs-container {
+  background-color: #ffffff !important;
+}
+
+/* Remove multiple corners and simplify styling */
+.djs-container.with-diagram {
+  /* No box-shadow */
+}
+
+/* Basic styling for shapes without multiple borders/effects */
+.djs-container .djs-visual {
+  fill: white !important;
+  stroke: #666 !important;
+  stroke-width: 1px !important;
+  /* Remove drop-shadow */
+}
+
+/* Tasks (rectangles) - simplified */
+.djs-container rect.djs-shape {
+  fill: #ffffff !important;
+  stroke: #4285f4 !important;
+  /* No rounded corners */
+  stroke-width: 1px !important;
+}
+
+/* Start events (circles) */
+.djs-container circle[data-element-id*="StartEvent"] {
+  fill: #d6f5d6 !important;
+  stroke: #34a853 !important;
+  stroke-width: 1px !important;
+}
+
+/* End events (circles) */
+.djs-container circle[data-element-id*="EndEvent"] {
+  fill: #fad8d8 !important;
+  stroke: #ea4335 !important;
+  stroke-width: 1px !important;
+}
+
+/* Subprocess rectangles - simplified */
+.djs-container rect[data-element-id*="SubProcess"] {
+  fill: #e8f0fe !important;
+  stroke: #4285f4 !important;
+  /* No rounded corners */
+  stroke-width: 1px !important;
+}
+
+/* Sequence flows (connections) */
+.djs-container .djs-connection path {
+  stroke: #5f6368 !important;
+  stroke-width: 1px !important;
+  marker-end: url(#sequenceflow-end-white-black) !important;
+}
+
+/* Lane styling - simplified */
+.djs-container rect[data-element-id*="Lane"] {
+  fill: #f8f9fa !important;
+  stroke: #dadce0 !important;
+  stroke-width: 1px !important;
+  /* No rounded corners */
+}
+
+/* Pool styling - simplified */
+.djs-container rect[data-element-id*="Participant"] {
+  fill: #f8f9fa !important;
+  stroke: #dadce0 !important;
+  stroke-width: 1px !important;
+  /* No rounded corners */
+}
+
+/* Text styling */
+.djs-container text {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+  font-size: 12px !important;
+  fill: #3c4043 !important;
+}
+
+/* Apply a style reset to all BPMN elements to remove hover effects */
+.djs-container * {
+  pointer-events: none !important;
+}
+
+/* COMPLETELY DISABLE ALL HOVER EFFECTS */
+.djs-element:hover,
+.djs-element.hover,
+.djs-connection:hover,
+.djs-connection.hover,
+.djs-shape:hover,
+.djs-shape.hover {
+  stroke: initial !important;
+  stroke-width: initial !important;
+  cursor: default !important;
+  outline: none !important;
+  filter: none !important;
+  fill-opacity: initial !important;
+  fill: initial !important;
+  transition: none !important;
+}
+
+/* Disable hover highlight effect */
+.djs-visual:hover {
+  fill-opacity: initial !important;
+  stroke-opacity: initial !important;
+}
+
+/* Disable any hover outline */
+.djs-outline {
+  display: none !important;
+}
+
+/* Only preserve selection style */
+.djs-element.selected {
+  stroke: #1a73e8 !important;
+  stroke-width: 2px !important;
+}
+
+/* Hide any tooltips or hover context menus */
+.djs-popup, .djs-context-menu, .djs-overlay-context-pad {
+  display: none !important;
+}
+
+.bjs-powered-by {
+  display: none !important; /* Hide the bpmn.io branding */
+} 

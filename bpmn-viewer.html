@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BPMN Viewer</title>
+  
+  <!-- bpmn-js dependencies -->
+  <script src="https://unpkg.com/bpmn-js@11.5.0/dist/bpmn-navigated-viewer.development.js"></script>
+  
+  <!-- Custom BPMN styles -->
+  <link rel="stylesheet" href="/styles/bpmn-styles.css">
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    
+    #canvas {
+      height: calc(100% - 60px); /* Adjusted for header */
+      margin: 0;
+      padding: 0;
+    }
+    
+    .app-header {
+      background-color: #0A1721; /* --header-color */
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 40px;
+    }
+    
+    .app-header img {
+      height: 40px;
+      width: auto;
+    }
+    
+    .controls {
+      position: fixed;
+      top: 70px; /* Adjusted for header */
+      left: 20px;
+      z-index: 10;
+      background: white;
+      padding: 10px;
+      border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+      min-width: 250px;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    button {
+      background: #13A6EA; /* --primary-color */
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+
+    button:hover {
+      background: #1090cc; /* Slightly darker variant of primary color */
+    }
+
+    .diagram-title {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    
+    select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      margin: 10px 0;
+      display: block;
+    }
+    
+    .file-list {
+      margin-top: 10px;
+    }
+    
+    .file-item {
+      display: block;
+      padding: 8px;
+      margin: 5px 0;
+      background: #f1f1f1;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid #ddd;
+    }
+    
+    .file-item:hover {
+      background: #e9e9e9;
+    }
+    
+    .loading {
+      margin-top: 10px;
+      color: #666;
+      font-style: italic;
+    }
+    
+    .files-container {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 10px;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      padding: 5px;
+    }
+    
+    .empty-message {
+      color: #666;
+      font-style: italic;
+      padding: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header with logo -->
+  <header class="app-header">
+    <img src="/images/medialab-logo.png" alt="Medialab Logo">
+    <div style="color: white; font-size: 18px;">BPMN Process Viewer</div>
+  </header>
+
+  <div class="controls">
+    <button id="load-btn">Load Custom BPMN File</button>
+    <button id="scan-btn">Scan BPMN Directory</button>
+    <input type="file" id="file-input" class="file-input" accept=".bpmn, .xml">
+    
+    <div class="file-list">
+      <p>Available BPMN diagrams:</p>
+      <div class="files-container" id="files-container">
+        <div class="empty-message">Scan the directory to see available files</div>
+      </div>
+    </div>
+    
+    <div id="diagram-title" class="diagram-title"></div>
+  </div>
+  
+  <div id="canvas"></div>
+
+  <!-- Load our custom BPMN styling script -->
+  <script src="/scripts/apply-bpmn-styles.js"></script>
+
+  <script>
+    // Initialize the BPMN viewer
+    const bpmnViewer = new BpmnJS({
+      container: '#canvas'
+    });
+    
+    // Track loaded diagrams
+    const loadedDiagrams = {};
+    let currentDiagram = null;
+    
+    // Directory path
+    const bpmnDirPath = 'bpmn/';
+
+    // Handle file loading from disk
+    document.getElementById('load-btn').addEventListener('click', function() {
+      document.getElementById('file-input').click();
+    });
+
+    document.getElementById('file-input').addEventListener('change', function(e) {
+      if (e.target.files.length > 0) {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = function(event) {
+          const bpmnXML = event.target.result;
+          loadBPMN(bpmnXML, file.name);
+        };
+        
+        reader.readAsText(file);
+      }
+    });
+    
+    // Scan for BPMN files
+    document.getElementById('scan-btn').addEventListener('click', function() {
+      scanBpmnDirectory();
+    });
+
+    // Function to load and render BPMN
+    function loadBPMN(bpmnXML, title) {
+      bpmnViewer.importXML(bpmnXML)
+        .then(({ warnings }) => {
+          if (warnings.length) {
+            console.warn('Warnings encountered while loading BPMN:', warnings);
+          }
+          
+          // Apply our custom styles
+          if (typeof applyBpmnStyles === 'function') {
+            applyBpmnStyles();
+          }
+          
+          // Adjust the view to fit the diagram
+          const canvas = bpmnViewer.get('canvas');
+          canvas.zoom('fit-viewport');
+          
+          // Update the diagram title
+          document.getElementById('diagram-title').textContent = title;
+          
+          // Store the loaded diagram
+          loadedDiagrams[title] = bpmnXML;
+          currentDiagram = title;
+        })
+        .catch(err => {
+          console.error('Error loading BPMN diagram', err);
+          alert('Error loading the BPMN diagram. Check console for details.');
+        });
+    }
+    
+    // Function to scan the BPMN directory
+    function scanBpmnDirectory() {
+      const filesContainer = document.getElementById('files-container');
+      filesContainer.innerHTML = '<div class="loading">Scanning for BPMN files...</div>';
+      
+      // Use fetch to check each potential file in the directory
+      checkFileExists(bpmnDirPath)
+        .then(dirExists => {
+          if (!dirExists) {
+            filesContainer.innerHTML = '<div class="empty-message">BPMN directory not found</div>';
+            return;
+          }
+          
+          // First, try to get a directory listing if available (works in some scenarios)
+          fetch(bpmnDirPath)
+            .then(response => response.text())
+            .then(html => {
+              // Try to extract links from directory listing (may not work on all servers)
+              const tempDiv = document.createElement('div');
+              tempDiv.innerHTML = html;
+              
+              const links = Array.from(tempDiv.querySelectorAll('a'))
+                .map(a => a.getAttribute('href'))
+                .filter(href => href && href.toLowerCase().endsWith('.bpmn'));
+              
+              if (links.length > 0) {
+                displayBpmnFiles(links);
+              } else {
+                // Fallback: Try with known files
+                fallbackFileSearch();
+              }
+            })
+            .catch(() => {
+              fallbackFileSearch();
+            });
+        });
+    }
+    
+    // Function to check if a file or directory exists
+    function checkFileExists(url) {
+      return fetch(url, { method: 'HEAD' })
+        .then(response => response.ok)
+        .catch(() => false);
+    }
+    
+    // Fallback file search by checking a common filename pattern
+    function fallbackFileSearch() {
+      const filesContainer = document.getElementById('files-container');
+      
+      // Try the file we already know about
+      checkFileExists(bpmnDirPath + '0_new_joiner_onboarding.bpmn')
+        .then(exists => {
+          if (exists) {
+            displayBpmnFiles(['0_new_joiner_onboarding.bpmn']);
+          } else {
+            filesContainer.innerHTML = '<div class="empty-message">No BPMN files found. Add files to the /bpmn directory.</div>';
+          }
+        });
+    }
+    
+    // Display BPMN files in the container
+    function displayBpmnFiles(files) {
+      const filesContainer = document.getElementById('files-container');
+      
+      if (files.length === 0) {
+        filesContainer.innerHTML = '<div class="empty-message">No BPMN files found</div>';
+        return;
+      }
+      
+      filesContainer.innerHTML = '';
+      
+      files.forEach(file => {
+        // Clean up the filename (remove path if present)
+        const fileName = file.split('/').pop();
+        
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+        fileItem.textContent = fileName;
+        fileItem.addEventListener('click', () => {
+          if (loadedDiagrams[fileName]) {
+            // If already loaded, just display it
+            displayDiagram(fileName);
+          } else {
+            // Otherwise load it
+            fetch(`${bpmnDirPath}${fileName}`)
+              .then(response => response.text())
+              .then(bpmnXML => {
+                loadBPMN(bpmnXML, fileName);
+              })
+              .catch(err => {
+                console.error('Could not load BPMN file', err);
+                alert(`Failed to load ${fileName}. Make sure the file exists.`);
+              });
+          }
+        });
+        
+        filesContainer.appendChild(fileItem);
+      });
+    }
+    
+    // Function to display an already-loaded diagram
+    function displayDiagram(title) {
+      if (loadedDiagrams[title]) {
+        bpmnViewer.importXML(loadedDiagrams[title])
+          .then(() => {
+            // Apply our custom styles to the re-loaded diagram
+            if (typeof applyBpmnStyles === 'function') {
+              applyBpmnStyles();
+            }
+            
+            const canvas = bpmnViewer.get('canvas');
+            canvas.zoom('fit-viewport');
+            document.getElementById('diagram-title').textContent = title;
+            currentDiagram = title;
+          })
+          .catch(err => {
+            console.error('Error displaying cached diagram', err);
+          });
+      }
+    }
+    
+    // Initial scan on page load
+    window.addEventListener('DOMContentLoaded', function() {
+      scanBpmnDirectory();
+    });
+  </script>
+</body>
+</html> 

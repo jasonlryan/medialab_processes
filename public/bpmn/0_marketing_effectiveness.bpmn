@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd"
+                  id="Definitions_MarketingEffectiveness"
+                  targetNamespace="https://medialab.com/processes">
+  <bpmn:collaboration id="Collab_MarketingEffectiveness">
+    <bpmn:participant id="Participant_MarketingProcess" name="Marketing Effectiveness Process" processRef="Process_MarketingEffectiveness" />
+  </bpmn:collaboration>
+  
+  <bpmn:process id="Process_MarketingEffectiveness" name="Marketing Effectiveness" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_Main">
+      <bpmn:lane id="Lane_Client" name="Client">
+        <bpmn:flowNodeRef>StartEvent_ClientRequest</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ValidateMLCo</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ReviewData</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_MediaTeam" name="Media Team">
+        <bpmn:flowNodeRef>Task_DataCollection</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_DataValidation</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_DataPreparation</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_BuildEconometricModels</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ProduceInitialOutputs</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Analytics" name="Analytics Team">
+        <bpmn:flowNodeRef>Task_AnalyzeResults</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_PrepareInsights</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_CreateDashboard</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_RefineModels</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Delivery" name="Delivery Team">
+        <bpmn:flowNodeRef>Task_PresentFindings</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ImplementRecommendations</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>EndEvent_ProcessComplete</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <!-- Process Start -->
+    <bpmn:startEvent id="StartEvent_ClientRequest" name="Client Request">
+      <bpmn:outgoing>Flow_ToValidateMLCo</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <!-- Client Tasks -->
+    <bpmn:task id="Task_ValidateMLCo" name="Validate MLCo Requirements">
+      <bpmn:documentation>Ensuring all required information is provided to the team</bpmn:documentation>
+      <bpmn:incoming>Flow_ToValidateMLCo</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToDataCollection</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_ReviewData" name="Review Collected Data">
+      <bpmn:documentation>Client review of collected data to ensure completeness</bpmn:documentation>
+      <bpmn:incoming>Flow_FromDataValidation</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToDataPreparation</bpmn:outgoing>
+    </bpmn:task>
+
+    <!-- Media Team Tasks -->
+    <bpmn:task id="Task_DataCollection" name="Data Collection">
+      <bpmn:documentation>Process for ensuring the required information/data inputs are provided to the ML team</bpmn:documentation>
+      <bpmn:incoming>Flow_ToDataCollection</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToDataValidation</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_DataValidation" name="Data Validation">
+      <bpmn:documentation>Following data collection, asking client to validate MLCo's representation of all media channel data received</bpmn:documentation>
+      <bpmn:incoming>Flow_ToDataValidation</bpmn:incoming>
+      <bpmn:outgoing>Flow_FromDataValidation</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_DataPreparation" name="Data Preparation">
+      <bpmn:documentation>Preparing and cleaning data for analysis</bpmn:documentation>
+      <bpmn:incoming>Flow_ToDataPreparation</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToBuildModels</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_BuildEconometricModels" name="Build Econometric Models">
+      <bpmn:documentation>Creating and refining the statistical models</bpmn:documentation>
+      <bpmn:incoming>Flow_ToBuildModels</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToProduceOutputs</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_ProduceInitialOutputs" name="Produce Initial Outputs">
+      <bpmn:documentation>Generating the initial model outputs</bpmn:documentation>
+      <bpmn:incoming>Flow_ToProduceOutputs</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToAnalyzeResults</bpmn:outgoing>
+    </bpmn:task>
+
+    <!-- Analytics Team Tasks -->
+    <bpmn:task id="Task_AnalyzeResults" name="Analyze Results">
+      <bpmn:documentation>Analyzing the model outputs</bpmn:documentation>
+      <bpmn:incoming>Flow_ToAnalyzeResults</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToPrepareInsights</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_PrepareInsights" name="Prepare Insights">
+      <bpmn:documentation>Extracting business insights from the analysis</bpmn:documentation>
+      <bpmn:incoming>Flow_ToPrepareInsights</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToCreateDashboard</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_CreateDashboard" name="Create Dashboard">
+      <bpmn:documentation>Building visualization dashboards for reporting</bpmn:documentation>
+      <bpmn:incoming>Flow_ToCreateDashboard</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToRefineModels</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_RefineModels" name="Refine Models">
+      <bpmn:documentation>Refining models based on client feedback</bpmn:documentation>
+      <bpmn:incoming>Flow_ToRefineModels</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToPresentFindings</bpmn:outgoing>
+    </bpmn:task>
+
+    <!-- Delivery Team Tasks -->
+    <bpmn:task id="Task_PresentFindings" name="Present Findings">
+      <bpmn:documentation>Presenting insights and recommendations to client</bpmn:documentation>
+      <bpmn:incoming>Flow_ToPresentFindings</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToImplementRecommendations</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:task id="Task_ImplementRecommendations" name="Implement Recommendations">
+      <bpmn:documentation>Supporting client with implementation of insights</bpmn:documentation>
+      <bpmn:incoming>Flow_ToImplementRecommendations</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToProcessComplete</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:endEvent id="EndEvent_ProcessComplete" name="Process Complete">
+      <bpmn:incoming>Flow_ToProcessComplete</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <!-- Sequence Flows -->
+    <bpmn:sequenceFlow id="Flow_ToValidateMLCo" sourceRef="StartEvent_ClientRequest" targetRef="Task_ValidateMLCo" />
+    <bpmn:sequenceFlow id="Flow_ToDataCollection" sourceRef="Task_ValidateMLCo" targetRef="Task_DataCollection" />
+    <bpmn:sequenceFlow id="Flow_ToDataValidation" sourceRef="Task_DataCollection" targetRef="Task_DataValidation" />
+    <bpmn:sequenceFlow id="Flow_FromDataValidation" sourceRef="Task_DataValidation" targetRef="Task_ReviewData" />
+    <bpmn:sequenceFlow id="Flow_ToDataPreparation" sourceRef="Task_ReviewData" targetRef="Task_DataPreparation" />
+    <bpmn:sequenceFlow id="Flow_ToBuildModels" sourceRef="Task_DataPreparation" targetRef="Task_BuildEconometricModels" />
+    <bpmn:sequenceFlow id="Flow_ToProduceOutputs" sourceRef="Task_BuildEconometricModels" targetRef="Task_ProduceInitialOutputs" />
+    <bpmn:sequenceFlow id="Flow_ToAnalyzeResults" sourceRef="Task_ProduceInitialOutputs" targetRef="Task_AnalyzeResults" />
+    <bpmn:sequenceFlow id="Flow_ToPrepareInsights" sourceRef="Task_AnalyzeResults" targetRef="Task_PrepareInsights" />
+    <bpmn:sequenceFlow id="Flow_ToCreateDashboard" sourceRef="Task_PrepareInsights" targetRef="Task_CreateDashboard" />
+    <bpmn:sequenceFlow id="Flow_ToRefineModels" sourceRef="Task_CreateDashboard" targetRef="Task_RefineModels" />
+    <bpmn:sequenceFlow id="Flow_ToPresentFindings" sourceRef="Task_RefineModels" targetRef="Task_PresentFindings" />
+    <bpmn:sequenceFlow id="Flow_ToImplementRecommendations" sourceRef="Task_PresentFindings" targetRef="Task_ImplementRecommendations" />
+    <bpmn:sequenceFlow id="Flow_ToProcessComplete" sourceRef="Task_ImplementRecommendations" targetRef="EndEvent_ProcessComplete" />
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="Diagram_MarketingEffectiveness">
+    <bpmndi:BPMNPlane id="Plane_MarketingEffectiveness" bpmnElement="Collab_MarketingEffectiveness">
+      <!-- Participant -->
+      <bpmndi:BPMNShape id="Shape_Participant_MarketingProcess" bpmnElement="Participant_MarketingProcess" isHorizontal="true">
+        <dc:Bounds x="160" y="80" width="1400" height="700" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Lanes -->
+      <bpmndi:BPMNShape id="Shape_Lane_Client" bpmnElement="Lane_Client" isHorizontal="true">
+        <dc:Bounds x="190" y="80" width="1370" height="175" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_MediaTeam" bpmnElement="Lane_MediaTeam" isHorizontal="true">
+        <dc:Bounds x="190" y="255" width="1370" height="175" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Analytics" bpmnElement="Lane_Analytics" isHorizontal="true">
+        <dc:Bounds x="190" y="430" width="1370" height="175" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Lane_Delivery" bpmnElement="Lane_Delivery" isHorizontal="true">
+        <dc:Bounds x="190" y="605" width="1370" height="175" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Client Lane Elements -->
+      <bpmndi:BPMNShape id="Shape_StartEvent_ClientRequest" bpmnElement="StartEvent_ClientRequest">
+        <dc:Bounds x="232" y="147" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="215" y="190" width="70" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_ValidateMLCo" bpmnElement="Task_ValidateMLCo">
+        <dc:Bounds x="320" y="125" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_ReviewData" bpmnElement="Task_ReviewData">
+        <dc:Bounds x="570" y="125" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Media Team Lane Elements -->
+      <bpmndi:BPMNShape id="Shape_Task_DataCollection" bpmnElement="Task_DataCollection">
+        <dc:Bounds x="320" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_DataValidation" bpmnElement="Task_DataValidation">
+        <dc:Bounds x="470" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_DataPreparation" bpmnElement="Task_DataPreparation">
+        <dc:Bounds x="670" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_BuildEconometricModels" bpmnElement="Task_BuildEconometricModels">
+        <dc:Bounds x="820" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_ProduceInitialOutputs" bpmnElement="Task_ProduceInitialOutputs">
+        <dc:Bounds x="970" y="300" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Analytics Team Lane Elements -->
+      <bpmndi:BPMNShape id="Shape_Task_AnalyzeResults" bpmnElement="Task_AnalyzeResults">
+        <dc:Bounds x="970" y="475" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_PrepareInsights" bpmnElement="Task_PrepareInsights">
+        <dc:Bounds x="820" y="475" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_CreateDashboard" bpmnElement="Task_CreateDashboard">
+        <dc:Bounds x="670" y="475" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_RefineModels" bpmnElement="Task_RefineModels">
+        <dc:Bounds x="520" y="475" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <!-- Delivery Team Lane Elements -->
+      <bpmndi:BPMNShape id="Shape_Task_PresentFindings" bpmnElement="Task_PresentFindings">
+        <dc:Bounds x="520" y="650" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_ImplementRecommendations" bpmnElement="Task_ImplementRecommendations">
+        <dc:Bounds x="670" y="650" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndEvent_ProcessComplete" bpmnElement="EndEvent_ProcessComplete">
+        <dc:Bounds x="822" y="672" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="799" y="715" width="82" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Sequence Flow Edges -->
+      <bpmndi:BPMNEdge id="Edge_Flow_ToValidateMLCo" bpmnElement="Flow_ToValidateMLCo">
+        <di:waypoint x="268" y="165" />
+        <di:waypoint x="320" y="165" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToDataCollection" bpmnElement="Flow_ToDataCollection">
+        <di:waypoint x="370" y="205" />
+        <di:waypoint x="370" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToDataValidation" bpmnElement="Flow_ToDataValidation">
+        <di:waypoint x="420" y="340" />
+        <di:waypoint x="470" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_FromDataValidation" bpmnElement="Flow_FromDataValidation">
+        <di:waypoint x="520" y="300" />
+        <di:waypoint x="520" y="165" />
+        <di:waypoint x="570" y="165" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToDataPreparation" bpmnElement="Flow_ToDataPreparation">
+        <di:waypoint x="620" y="205" />
+        <di:waypoint x="620" y="252" />
+        <di:waypoint x="720" y="252" />
+        <di:waypoint x="720" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToBuildModels" bpmnElement="Flow_ToBuildModels">
+        <di:waypoint x="770" y="340" />
+        <di:waypoint x="820" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToProduceOutputs" bpmnElement="Flow_ToProduceOutputs">
+        <di:waypoint x="920" y="340" />
+        <di:waypoint x="970" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToAnalyzeResults" bpmnElement="Flow_ToAnalyzeResults">
+        <di:waypoint x="1020" y="380" />
+        <di:waypoint x="1020" y="475" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToPrepareInsights" bpmnElement="Flow_ToPrepareInsights">
+        <di:waypoint x="970" y="515" />
+        <di:waypoint x="920" y="515" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToCreateDashboard" bpmnElement="Flow_ToCreateDashboard">
+        <di:waypoint x="820" y="515" />
+        <di:waypoint x="770" y="515" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToRefineModels" bpmnElement="Flow_ToRefineModels">
+        <di:waypoint x="670" y="515" />
+        <di:waypoint x="620" y="515" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToPresentFindings" bpmnElement="Flow_ToPresentFindings">
+        <di:waypoint x="570" y="555" />
+        <di:waypoint x="570" y="650" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToImplementRecommendations" bpmnElement="Flow_ToImplementRecommendations">
+        <di:waypoint x="620" y="690" />
+        <di:waypoint x="670" y="690" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_ToProcessComplete" bpmnElement="Flow_ToProcessComplete">
+        <di:waypoint x="770" y="690" />
+        <di:waypoint x="822" y="690" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

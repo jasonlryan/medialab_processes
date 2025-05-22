@@ -1,0 +1,172 @@
+/* styles/bpmn-styles.css */
+
+/* Brand Color Variables */
+:root {
+  --header-color: #0A1721;
+  --primary-color: #13A6EA;
+  --activity-bg: #FFFFE0; /* Light Yellow */
+  --activity-border: #A9A9A9; /* Dark Gray */
+  --event-bg: #FFD1DC; /* Light Pink - slightly adjusted from #FFC0CB for better visibility if needed */
+  --event-border: #8B0000; /* Dark Red */
+  --event-start-border: #DC143C; /* Crimson for start event */
+  --event-end-border: #8B0000; /* Dark Red for end event (thicker) */
+  --gateway-bg: #98FB98; /* Pale Green */
+  --gateway-border: #006400; /* Dark Green */
+  --sequence-flow-stroke: #333333; /* Dark Gray */
+  --pool-header-bg: #E6E6E6; /* Light Gray */
+  --pool-lane-bg: #FFFFFF; /* White */
+  --pool-border-color: #A9A9A9; /* Dark Gray */
+  --text-color: #000000; /* Black */
+  --font-family: Arial, Helvetica, sans-serif;
+}
+
+/* General BPMN Container Styling (adjust selector as needed) */
+.bjs-container {
+  font-family: var(--font-family);
+}
+
+/* Text Styling */
+.djs-label, .djs-direct-editing-content {
+  color: var(--text-color) !important;
+  font-family: var(--font-family) !important;
+  font-size: 12px !important;
+}
+
+/* Activities (Tasks) */
+.djs-shape[data-bpmn-type="bpmn:Task"],
+.djs-shape[data-bpmn-type="bpmn:UserTask"],
+.djs-shape[data-bpmn-type="bpmn:ServiceTask"],
+.djs-shape[data-bpmn-type="bpmn:ScriptTask"],
+.djs-shape[data-bpmn-type="bpmn:ManualTask"],
+.djs-shape[data-bpmn-type="bpmn:BusinessRuleTask"],
+.djs-shape[data-bpmn-type="bpmn:SendTask"],
+.djs-shape[data-bpmn-type="bpmn:ReceiveTask"] {
+  fill: var(--activity-bg) !important;
+  stroke: var(--activity-border) !important;
+  stroke-width: 1.5px !important;
+}
+.djs-shape[data-bpmn-type="bpmn:Task"] .djs-visual > rect,
+.djs-shape[data-bpmn-type="bpmn:UserTask"] .djs-visual > rect,
+/* ... add other task types if they use rect */
+.djs-shape[data-bpmn-type="bpmn:Activity"] .djs-visual > rect { /* More generic activity */
+  fill: var(--activity-bg) !important;
+  stroke: var(--activity-border) !important;
+  stroke-width: 1.5px !important;
+  rx: 6px !important; /* Rounded corners */
+  ry: 6px !important;
+}
+
+
+/* Events */
+.djs-shape[data-bpmn-type="bpmn:StartEvent"] .djs-visual > circle {
+  fill: var(--event-bg) !important;
+  stroke: var(--event-start-border) !important;
+  stroke-width: 2px !important;
+}
+
+.djs-shape[data-bpmn-type="bpmn:EndEvent"] .djs-visual > circle {
+  fill: var(--event-bg) !important;
+  stroke: var(--event-end-border) !important;
+  stroke-width: 3px !important; /* Thicker border for end event */
+}
+
+.djs-shape[data-bpmn-type="bpmn:IntermediateThrowEvent"] .djs-visual > circle,
+.djs-shape[data-bpmn-type="bpmn:IntermediateCatchEvent"] .djs-visual > circle {
+  fill: var(--event-bg) !important;
+  stroke: var(--event-border) !important;
+  stroke-width: 2px !important;
+}
+/* Add rules for event definitions (e.g., message, timer) if needed */
+
+
+/* Gateways */
+.djs-shape[data-bpmn-type="bpmn:ExclusiveGateway"] .djs-visual > polygon,
+.djs-shape[data-bpmn-type="bpmn:ParallelGateway"] .djs-visual > polygon,
+.djs-shape[data-bpmn-type="bpmn:InclusiveGateway"] .djs-visual > polygon,
+.djs-shape[data-bpmn-type="bpmn:EventBasedGateway"] .djs-visual > polygon {
+  fill: var(--gateway-bg) !important;
+  stroke: var(--gateway-border) !important;
+  stroke-width: 2px !important;
+}
+
+/* Gateway markers (e.g., X for exclusive, + for parallel) */
+.djs-shape[data-bpmn-type="bpmn:ExclusiveGateway"] .djs-visual > path, /* X marker */
+.djs-shape[data-bpmn-type="bpmn:ParallelGateway"] .djs-visual > path { /* + marker */
+  stroke: var(--gateway-border) !important;
+  stroke-width: 2.5px !important;
+  fill: none !important;
+}
+
+
+/* Sequence Flows */
+.djs-connection .djs-visual > path {
+  stroke: var(--sequence-flow-stroke) !important;
+  stroke-width: 2px !important;
+  marker-end: url(#sequenceflow-arrow-normal) !important; /* Requires marker definition */
+}
+
+/* Pools and Lanes */
+.djs-shape[data-bpmn-type="bpmn:Participant"] .djs-visual > rect { /* Pool */
+  fill: var(--pool-header-bg) !important; /* Pool header part */
+  stroke: var(--pool-border-color) !important;
+  stroke-width: 1.5px !important;
+}
+
+.djs-shape[data-bpmn-type="bpmn:Lane"] .djs-visual > rect { /* Lane */
+  fill: var(--pool-lane-bg) !important;
+  stroke: var(--pool-border-color) !important;
+  stroke-width: 1px !important;
+}
+
+/* Pool/Lane Labels - typically vertical */
+.djs-shape[data-bpmn-type="bpmn:Participant"] .djs-label,
+.djs-shape[data-bpmn-type="bpmn:Lane"] .djs-label {
+  fill: var(--text-color) !important;
+  font-size: 13px !important;
+  font-weight: bold;
+}
+
+/* Data Objects */
+.djs-shape[data-bpmn-type="bpmn:DataObjectReference"] .djs-visual > path {
+  fill: #FFFFFF !important; /* White background for data object page */
+  stroke: var(--activity-border) !important;
+  stroke-width: 1.5px !important;
+}
+.djs-shape[data-bpmn-type="bpmn:DataObjectReference"] .djs-label {
+  font-size: 11px !important;
+}
+
+
+/* Text Annotations */
+.djs-shape[data-bpmn-type="bpmn:TextAnnotation"] .djs-visual > path {
+  fill: none !important; /* No fill for the bracket-like shape */
+  stroke: var(--activity-border) !important;
+  stroke-width: 1.5px !important;
+}
+.djs-shape[data-bpmn-type="bpmn:TextAnnotation"] .djs-label {
+  text-align: left !important;
+  vertical-align: top !important;
+}
+
+/* Association */
+.djs-connection[data-bpmn-type="bpmn:Association"] .djs-visual > path {
+  stroke: var(--sequence-flow-stroke) !important;
+  stroke-width: 1.5px !important;
+  stroke-dasharray: 4, 4 !important; /* Dashed line */
+}
+
+/* Ensure high specificity if bpmn-js default styles are overriding */
+g.djs-shape.bpmn-task > .djs-visual > rect { /* Example of higher specificity */
+    fill: var(--activity-bg) !important;
+}
+
+/* SVG marker for sequence flow arrows - this might need to be added by the JS script */
+/* Add this to an SVG <defs> element in your HTML or have the JS create it */
+/*
+<defs>
+  <marker id="sequenceflow-arrow-normal" viewBox="0 0 20 20" refX="11" refY="10"
+          markerWidth="10" markerHeight="10" orient="auto">
+    <path d="M 1 5 L 11 10 L 1 15 Z" style="fill: var(--sequence-flow-stroke); stroke-width: 1px; stroke-linecap: round; stroke-linejoin: round; stroke: var(--sequence-flow-stroke);"></path>
+  </marker>
+</defs>
+*/ 

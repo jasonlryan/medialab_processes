@@ -1,0 +1,89 @@
+.container {
+  padding: 20px;
+  font-family: sans-serif;
+  background-color: #ffffff; /* Match viewerPanel background */
+  border-radius: 0 0 8px 8px; /* Match viewerPanel if it has rounded bottom corners */
+  margin: 0; /* Remove margin, as it fills its parent */
+  flex: 1; /* CRUCIAL: Make TextualProcessView's root take available space from viewerPanel */
+  display: flex; /* Added to make it a flex container itself if needed for internal layout */
+  flex-direction: column; /* Stack its own children (like h2 and the list of steps) */
+  overflow-y: auto; /* CRUCIAL: Enable vertical scrolling for its content */
+  box-sizing: border-box; /* Ensure padding doesn't add to height */
+}
+
+.error {
+  color: red;
+  padding: 15px;
+  border: 1px solid red;
+  border-radius: 4px;
+  background-color: #ffeeee;
+  margin: 10px;
+}
+
+.step {
+  background-color: #f9f9f9; /* Slightly different background for each step */
+  border: 1px solid #e0e0e0;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.step:last-child {
+  margin-bottom: 0;
+}
+
+.step h2, .container > h2 { /* Style for the main "Process Steps & Details" title */
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #1f1f1f;
+  font-size: 1.4em;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e8e8e8;
+  flex-shrink: 0; /* Prevent header from shrinking if content is too large */
+}
+
+.stepsList { /* Assuming the list of steps is wrapped in a div with this class */
+  flex: 1; /* Allows the list itself to take space if header is present */
+  overflow-y: auto; /* This might be redundant if .container scrolls, but good for nested scroll */
+                  /* Or simply let the main .container scroll */
+}
+
+.step h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: #333;
+  font-size: 1.15em;
+}
+
+.stepType {
+  font-size: 0.85em;
+  color: #666;
+  font-style: italic;
+  margin-left: 5px;
+}
+
+.documentation {
+  margin-top: 10px;
+  padding-left: 15px;
+  border-left: 3px solid #007bff;
+  background-color: #fdfdfd;
+}
+
+.documentation p {
+  margin-bottom: 8px;
+  line-height: 1.6;
+  color: #444;
+  font-size: 0.95em;
+}
+
+.documentation p:last-child {
+  margin-bottom: 0;
+}
+
+.noDocumentation {
+  color: #777;
+  font-style: italic;
+  font-size: 0.9em;
+  margin-top: 8px;
+} 
