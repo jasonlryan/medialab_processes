@@ -1,53 +1,67 @@
-# BPMN Viewer
+# MediaLab Process Viewer
 
-A simple viewer for Business Process Model and Notation (BPMN) diagrams.
-
-## How to Use
-
-1. Place your BPMN files in the `bpmn/` directory in the root of this project.
-2. Open the `bpmn-viewer.html` file in your web browser.
-3. Click "Scan BPMN Directory" to detect BPMN files in the directory.
-4. Click on any of the discovered BPMN files to view them.
-5. Alternatively, click "Load Custom BPMN File" to select and open a BPMN file from anywhere on your computer.
+A modern viewer for Business Process Model and Notation (BPMN) diagrams with AI-powered assistance.
 
 ## Features
 
+- Secure access with password protection
 - View any BPMN 2.0 compliant XML file
-- Automatically discover BPMN files in the `/bpmn` directory
-- Load files from your local system
+- Upload and manage BPMN files
+- Dual view modes: diagram view and textual process view
+- AI-powered chat for process understanding and analysis
 - Pan and zoom navigation
-- Caches loaded diagrams for quick switching
-- Responsive layout that works on any screen size
-- No server required - works directly in the browser
+- Modern responsive UI built with Material UI
+- Next.js-based application
 
-## Setup
+## Getting Started
 
-1. Create a `bpmn` directory in the same location as the HTML file
-2. Place your BPMN files (with `.bpmn` extension) in that directory
-3. Open the HTML file in a browser
+### Running Locally
+
+1. Clone this repository
+2. Install dependencies:
+   ```
+   npm install
+   ```
+3. Start the development server:
+   ```
+   npm run dev
+   ```
+4. Open http://localhost:3000 in your browser
+5. Enter the password: `medialab2024`
+
+### Deployment
+
+To deploy the application:
+
+```
+npm run build
+npm run start
+```
+
+For production deployment, consider using Vercel or Netlify for simplified deployment of Next.js applications.
+
+## Usage
+
+1. After logging in, upload BPMN files through the interface
+2. View diagrams in either graphical BPMN format or as a textual process
+3. Use the AI chat panel to ask questions about the displayed process
+4. Navigate between uploaded files using the file selector
 
 ## Technical Details
 
-This viewer uses the [bpmn-js](https://github.com/bpmn-io/bpmn-js) library, which is a BPMN 2.0 renderer and web modeler.
+This application uses:
 
-## Dependencies
-
-- bpmn-js (loaded via CDN)
+- Next.js for the React framework
+- Material UI for the component library
+- bpmn-js for BPMN rendering
+- AI integration for process analysis
 
 ## Troubleshooting
 
-If the viewer cannot automatically discover files in the /bpmn directory, you may need to:
+- Ensure your BPMN files are valid BPMN 2.0 XML format
+- For file upload issues, check file size and permissions
+- If AI chat is not responding, ensure your network connection is stable
 
-1. Ensure the files have a `.bpmn` extension
-2. Run the page from a local server (not just opening the file directly) for some browsers
-3. Use the "Load Custom BPMN File" button to load files manually
+## Security
 
-## Extending the Viewer
-
-If you need to edit BPMN diagrams (not just view them), consider upgrading to the full bpmn-js modeler by changing the dependency to:
-
-```html
-<script src="https://unpkg.com/bpmn-js@11.5.0/dist/bpmn-modeler.development.js"></script>
-```
-
-And adding the necessary modeler initialization code.
+The application is protected with a password. Default password is `medialab2024`.

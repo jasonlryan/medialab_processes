@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import styles from "../styles/BpmnViewer.module.css";
 import type BpmnJS from "bpmn-js/dist/bpmn-navigated-viewer.production.min.js";
 import jsPDF from "jspdf";
+import AIPanel from "./AIPanel";
 
 // MUI imports
 import {
@@ -26,6 +27,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import InfoIcon from "@mui/icons-material/Info";
 import SchemaIcon from "@mui/icons-material/Schema";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
 
 // Type for svg2pdf function - can be refined if more specific types are known
 type Svg2PdfFunc = (
@@ -73,6 +75,8 @@ const BpmnViewer: React.FC<BpmnViewerProps> = ({ xml }) => {
   const [alertSeverity, setAlertSeverity] = useState<
     "error" | "success" | "info" | "warning"
   >("error");
+  const [showAI, setShowAI] = useState<boolean>(false);
+  const [processData, setProcessData] = useState<any>(null);
 
   // Load CSS on client side only
   useEffect(() => {
@@ -266,6 +270,65 @@ const BpmnViewer: React.FC<BpmnViewerProps> = ({ xml }) => {
 
         // Apply our custom arrow markers
         applyBpmnArrows();
+
+        // Try to load the corresponding JSON data for AI
+        try {
+          let bpmnFileName = null;
+
+          if (isPath) {
+            // Extract filename from path
+            bpmnFileName = xmlSource.split("/").pop();
+          } else {
+            // Try to extract filename from element ID or other source
+            // For demo pages, they might be using 1_apollo.bpmn content
+            const matches = diagramXML.match(/id="([^"]*)"/) || [];
+            if (matches && matches.length > 1) {
+              // Just check if this is apollo, channel_selection, etc.
+              if (matches[1].includes("Apollo")) {
+                bpmnFileName = "1_apollo.bpmn";
+              } else if (matches[1].includes("Channel")) {
+                bpmnFileName = "4_channel_selection.bpmn";
+              } else if (matches[1].includes("Marketing")) {
+                bpmnFileName = "0_marketing_effectiveness.bpmn";
+              } else if (matches[1].includes("Joiner")) {
+                bpmnFileName = "0_new_joiner_onboarding.bpmn";
+              } else if (matches[1].includes("Product")) {
+                bpmnFileName = "product_sprint.bpmn";
+              } else {
+                bpmnFileName = "template.bpmn";
+              }
+              console.log(`[BpmnViewer] Detected diagram: ${bpmnFileName}`);
+            }
+          }
+
+          if (bpmnFileName) {
+            // Assume file is named like "filename.bpmn"
+            const jsonFileName = bpmnFileName.replace(".bpmn", ".json");
+            const jsonPath = `/json/${jsonFileName}`;
+
+            console.log(
+              `[BpmnViewer] Attempting to load JSON data from: ${jsonPath}`
+            );
+            const jsonResponse = await fetch(jsonPath);
+
+            if (jsonResponse.ok) {
+              const jsonData = await jsonResponse.json();
+              console.log("[BpmnViewer] Successfully loaded JSON data");
+              setProcessData(jsonData);
+            } else {
+              console.warn(`[BpmnViewer] JSON file not found: ${jsonPath}`);
+              setProcessData(null);
+            }
+          } else {
+            console.warn(
+              "[BpmnViewer] Could not determine diagram filename for JSON loading"
+            );
+            setProcessData(null);
+          }
+        } catch (jsonErr) {
+          console.error("[BpmnViewer] Error loading JSON data:", jsonErr);
+          setProcessData(null);
+        }
 
         setLoading(false);
       } catch (err: unknown) {
@@ -790,14 +853,26 @@ const BpmnViewer: React.FC<BpmnViewerProps> = ({ xml }) => {
               <InfoIcon fontSize="small" />
             </IconButton>
           </Tooltip>
+          <Tooltip title={showAI ? "Hide AI Assistant" : "Show AI Assistant"}>
+            <IconButton
+              onClick={() => setShowAI(!showAI)}
+              disabled={!processData}
+              sx={{
+                color: showAI ? "primary.main" : "text.primary",
+                bgcolor: showAI ? "rgba(25, 118, 210, 0.08)" : "transparent",
+              }}
+            >
+              <SmartToyIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
         </ButtonGroup>
       </Box>
 
-      {/* Pan Controls */}
+      {/* Pan Controls - Adjusted to not overlap with AI panel */}
       <Box
         sx={{
           position: "absolute",
-          right: "16px",
+          right: showAI ? "420px" : "16px", // Move left when AI panel is shown
           top: "50%",
           transform: "translateY(-50%)",
           zIndex: 5,
@@ -806,6 +881,7 @@ const BpmnViewer: React.FC<BpmnViewerProps> = ({ xml }) => {
           bgcolor: "rgba(255,255,255,0.9)",
           p: 0.5,
           border: "1px solid #e0e0e0",
+          transition: "right 0.3s ease-in-out", // Smooth transition
         }}
       >
         <IconButton
@@ -840,36 +916,68 @@ const BpmnViewer: React.FC<BpmnViewerProps> = ({ xml }) => {
         </IconButton>
       </Box>
 
-      {/* Canvas Container */}
+      {/* Canvas and AI Container */}
       <Box
         sx={{
           flex: 1,
-          position: "relative",
+          display: "flex",
+          flexDirection: "row",
           overflow: "hidden",
-          // Simplified container - flat design
-          bgcolor: "#fff",
-          border: "1px solid #e0e0e0",
         }}
       >
-        {loading && (
+        {/* Canvas Container */}
+        <Box
+          sx={{
+            flex: showAI ? 3 : 1,
+            position: "relative",
+            overflow: "hidden",
+            // Simplified container - flat design
+            bgcolor: "#fff",
+            border: "1px solid #e0e0e0",
+            transition: "flex 0.3s ease-in-out",
+          }}
+        >
+          {loading && (
+            <Box
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "rgba(255, 255, 255, 0.7)",
+                zIndex: 10,
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          )}
+          <div ref={canvasRef} className={styles.canvasContainer}></div>
+        </Box>
+
+        {/* AI Panel */}
+        {showAI && processData && (
           <Box
             sx={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
+              flex: 1,
+              borderLeft: "1px solid rgba(0,0,0,0.12)",
+              height: "100%",
+              maxWidth: "400px",
+              minWidth: "320px",
+              transition: "all 0.3s ease-in-out",
               display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "rgba(255, 255, 255, 0.7)",
-              zIndex: 10,
+              overflow: "hidden",
             }}
           >
-            <CircularProgress />
+            <AIPanel
+              processData={processData}
+              onClose={() => setShowAI(false)}
+            />
           </Box>
         )}
-        <div ref={canvasRef} className={styles.canvasContainer}></div>
       </Box>
 
       {/* Global Alert */}
